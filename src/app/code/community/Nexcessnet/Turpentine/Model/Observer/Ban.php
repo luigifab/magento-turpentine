@@ -44,7 +44,7 @@ class Nexcessnet_Turpentine_Model_Observer_Ban extends Varien_Event_Observer {
         $eventName = $eventObject->getEvent()->getName();
         if (Mage::helper('turpentine/esi')->getEsiEnabled() &&
                 ! in_array($eventName, $this->_esiClearFlag)) {
-            $sessionId = Mage::app()->getRequest()->getCookie('frontend');
+            $sessionId = Mage::app()->getRequest()->getCookie('om_frontend');
             if ($sessionId) {
                 $result = $this->_getVarnishAdmin()->flushExpression(
                     'obj.http.X-Varnish-Session', '==', $sessionId,

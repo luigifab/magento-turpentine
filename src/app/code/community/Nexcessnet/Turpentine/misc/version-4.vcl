@@ -45,11 +45,11 @@ import directors;
 
 {{generate_session_start}}
 sub generate_session {
-    # generate a UUID and add `frontend=$UUID` to the Cookie header, or use SID
+    # generate a UUID and add `om_frontend=$UUID` to the Cookie header, or use SID
     # from SID URL param
     if (req.url ~ ".*[&?]SID=([^&]+).*") {
         set req.http.X-Varnish-Faked-Session = regsub(
-            req.url, ".*[&?]SID=([^&]+).*", "frontend=\1");
+            req.url, ".*[&?]SID=([^&]+).*", "om_frontend=\1");
     } else {
         C{
             char uuid_buf [50];
@@ -166,11 +166,11 @@ sub vcl_recv {
         }
         {{allowed_hosts}}
         # no frontend cookie was sent to us AND this is not an ESI or AJAX call
-        if (req.http.Cookie !~ "frontend=" && !req.http.X-Varnish-Esi-Method) {
+        if (req.http.Cookie !~ "om_frontend=" && !req.http.X-Varnish-Esi-Method) {
             if ({{real_ip}} ~ crawler_acl ||
                     req.http.User-Agent ~ "^(?:{{crawler_user_agent_regex}})$") {
                 # it's a crawler, give it a fake cookie
-                set req.http.Cookie = "frontend=crawler-session";
+                set req.http.Cookie = "om_frontend=crawler-session";
             } else {
                 # it's a real user, make up a new session for them
                 {{generate_session}}
@@ -288,9 +288,9 @@ sub vcl_hash {
     }
 
     if (req.http.X-Varnish-Esi-Access == "private" &&
-            req.http.Cookie ~ "frontend=") {
-        std.log("hash_data - frontend cookie: " + regsub(req.http.Cookie, "^.*?frontend=([^;]*);*.*$", "\1"));
-        hash_data(regsub(req.http.Cookie, "^.*?frontend=([^;]*);*.*$", "\1"));
+            req.http.Cookie ~ "om_frontend=") {
+        std.log("hash_data - frontend cookie: " + regsub(req.http.Cookie, "^.*?om_frontend=([^;]*);*.*$", "\1"));
+        hash_data(regsub(req.http.Cookie, "^.*?om_frontend=([^;]*);*.*$", "\1"));
         {{advanced_session_validation}}
 
     }
@@ -369,10 +369,10 @@ sub vcl_backend_response {
                 } elseif (bereq.http.X-Varnish-Esi-Method) {
                     # it's a ESI request
                     if (bereq.http.X-Varnish-Esi-Access == "private" &&
-                            bereq.http.Cookie ~ "frontend=") {
+                            bereq.http.Cookie ~ "om_frontend=") {
                         # set this header so we can ban by session from Turpentine
                         set beresp.http.X-Varnish-Session = regsub(bereq.http.Cookie,
-                            "^.*?frontend=([^;]*);*.*$", "\1");
+                            "^.*?om_frontend=([^;]*);*.*$", "\1");
                     }
                     if (bereq.http.X-Varnish-Esi-Method == "ajax" &&
                             bereq.http.X-Varnish-Esi-Access == "public") {

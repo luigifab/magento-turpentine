@@ -38,11 +38,11 @@ C{
 ## Custom Subroutines
 
 sub generate_session {
-    # generate a UUID and add `frontend=$UUID` to the Cookie header, or use SID
+    # generate a UUID and add `om_frontend=$UUID` to the Cookie header, or use SID
     # from SID URL param
     if (req.url ~ ".*[&?]SID=([^&]+).*") {
         set req.http.X-Varnish-Faked-Session = regsub(
-            req.url, ".*[&?]SID=([^&]+).*", "frontend=\1");
+            req.url, ".*[&?]SID=([^&]+).*", "om_frontend=\1");
     } else {
         C{
             char uuid_buf [50];
@@ -168,11 +168,11 @@ sub vcl_recv {
             remove req.http.Accept-Encoding;
         }
         # no frontend cookie was sent to us
-        if (req.http.Cookie !~ "frontend=") {
+        if (req.http.Cookie !~ "om_frontend=") {
             if ({{real_ip}} ~ crawler_acl ||
                     req.http.User-Agent ~ "^(?:{{crawler_user_agent_regex}})$") {
                 # it's a crawler, give it a fake cookie
-                set req.http.Cookie = "frontend=crawler-session";
+                set req.http.Cookie = "om_frontend=crawler-session";
             } else {
                 # it's a real user, make up a new session for them
                 call generate_session;
@@ -273,8 +273,8 @@ sub vcl_hash {
     }
 
     if (req.http.X-Varnish-Esi-Access == "private" &&
-            req.http.Cookie ~ "frontend=") {
-        set req.hash += regsub(req.http.Cookie, "^.*?frontend=([^;]*);*.*$", "\1");
+            req.http.Cookie ~ "om_frontend=") {
+        set req.hash += regsub(req.http.Cookie, "^.*?om_frontend=([^;]*);*.*$", "\1");
         {{advanced_session_validation}}
     }
 
@@ -349,10 +349,10 @@ sub vcl_fetch {
                     # it's a ESI request
                     # TODO: make the TTLs properly dynamic
                     if (req.http.X-Varnish-Esi-Access == "private") {
-                        if (req.http.Cookie ~ "frontend=") {
+                        if (req.http.Cookie ~ "om_frontend=") {
                             # set this header so we can ban by session from Turpentine
                             set beresp.http.X-Varnish-Session = regsub(req.http.Cookie,
-                                "^.*?frontend=([^;]*);*.*$", "\1");
+                                "^.*?om_frontend=([^;]*);*.*$", "\1");
                         }
                         if (req.http.X-Varnish-Esi-Method == "ajax") {
                             set beresp.ttl = {{grace_period}}s;
