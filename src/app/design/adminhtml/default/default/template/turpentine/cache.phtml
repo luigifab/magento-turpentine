@@ -1,0 +1,95 @@
+<?php
+/**
+ * Nexcess.net Turpentine Extension for Magento
+ * Copyright (C) 2012  Nexcess.net L.L.C.
+ *
+ * This program is free software, you can redistribute it or modify
+ * it under the terms of the GNU General Public License (GPL) as published
+ * by the free software foundation, either version 2 of the license, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but without any warranty, without even the implied warranty of
+ * merchantability or fitness for a particular purpose. See the
+ * GNU General Public License (GPL) for more details.
+ */
+?>
+
+<?php if (Mage::getSingleton('admin/session')->isAllowed('system/turpentine')): ?>
+	<br />
+	<div class="content-header">
+		<table cellspacing="0">
+			<tr>
+				<td>
+					<h3><?php echo $this->__('Turpentine Varnish Management') ?></h3>
+				</td>
+				<td class="form-buttons"></td>
+			</tr>
+		</table>
+	</div>
+	<table class="form-list">
+		<tr>
+			<td class="scope-label">
+				<button onclick="setLocation('<?php echo $this->getApplyConfigUrl() ?>')" type="button" class="scalable save">
+					<span><?php echo $this->__('Apply Varnish Config') ?></span>
+				</button>
+			</td>
+			<td class="scope-label">
+				<?php echo $this->__('Update the VCL configuration on the running Varnish instances.') ?>
+			</td>
+		</tr>
+		<tr>
+			<td class="scope-label">
+				<button onclick="setLocation('<?php echo $this->getSaveConfigUrl() ?>')" type="button" class="scalable save">
+					<span><?php echo $this->__('Save Varnish Config') ?></span>
+				</button>
+			</td>
+			<td class="scope-label">
+				<?php echo $this->__('Save the configuration to a VCL file.') ?>
+			</td>
+		</tr>
+		<tr>
+			<td class="scope-label">
+				<button onclick="setLocation('<?php echo $this->getGetConfigUrl() ?>')" type="button" class="scalable">
+					<span><?php echo $this->__('Download Varnish Config') ?></span>
+				</button>
+			</td>
+			<td class="scope-label">
+				<?php echo $this->__('Download the generated VCL file.') ?>
+			</td>
+		</tr>
+		<tr>
+			<?php if ($this->helper('turpentine/varnish')->isBypassEnabled()): ?>
+				<td class="scope-label">
+					<button onclick="setLocation('<?php echo $this->getSwitchNavigationUrl('varnish') ?>')" type="button" class="scalable back">
+						<span><?php echo $this->__('Deactivate Varnish Bypass') ?></span>
+					</button>
+				</td>
+				<td class="scope-label">
+					<?php echo $this->__('Remove the bypass cookie and use again Varnish.') ?>
+				</td>
+			<?php else: ?>
+				<td class="scope-label">
+					<button onclick="setLocation('<?php echo $this->getSwitchNavigationUrl('default') ?>')" type="button" class="scalable delete">
+						<span><?php echo $this->__('Activate Varnish Bypass') ?></span>
+					</button>
+				</td>
+				<td class="scope-label">
+					<?php echo $this->__('Create a cookie to bypass Varnish only for your session.') ?>
+				</td>
+			<?php endif ?>
+		</tr>
+		<tr>
+			<td colspan="2" class="scope-label">
+				<form action="<?php echo $this->getFlushPartialUrl() ?>" method="post">
+					<?php echo $this->getBlockHtml('formkey') ?>
+					<button type="submit" class="scalable delete">
+						<span><?php echo $this->__('Flush matching URLs') ?></span>
+					</button>
+					<input type="text" name="pattern" placeholder="<?php echo $this->escapeHtml($this->__('Enter a (relative) regex to flush matching URLs')) ?>" style="width:295px; margin-left:5px;" class="input-text required-entry" />
+				</form>
+			</td>
+		</tr>
+	</table>
+	<?php echo $this->getChildHtml() ?>
+<?php endif ?>
