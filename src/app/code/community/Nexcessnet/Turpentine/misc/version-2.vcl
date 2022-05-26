@@ -286,13 +286,6 @@ sub vcl_hash {
     return (hash);
 }
 
-# This doesn't work in Varnish 2.1
-# sub vcl_hit {
-#     if (obj.hits > 0) {
-#         set obj.ttl = obj.ttl + {{lru_factor}}s;
-#     }
-# }
-
 # sub vcl_miss {
 #     return (fetch);
 # }

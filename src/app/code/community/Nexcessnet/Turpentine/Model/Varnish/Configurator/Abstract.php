@@ -568,17 +568,6 @@ EOS;
     }
 
     /**
-     * Get the time to increase a cached objects TTL on cache hit (in seconds).
-     *
-     * This should be set very low since it gets added to every hit.
-     *
-     * @return string
-     */
-    protected function _getLruFactor() {
-        return Mage::getStoreConfig('turpentine_vcl/ttls/lru_factor');
-    }
-
-    /**
      * Get the advanced session validation restrictions
      *
      * Note that if User-Agent Normalization is on then the normalized user-agent
@@ -1175,7 +1164,6 @@ EOS;
             'secret_handshake'  => Mage::helper('turpentine/varnish')
                 ->getSecretHandshake(),
             'crawler_user_agent_regex'  => $this->_getCrawlerUserAgents(),
-            // 'lru_factor'    => $this->_getLruFactor(),
             'debug_acl'     => $this->_vcl_acl('debug_acl',
                 $this->_getDebugIps()),
             'custom_c_code' => file_get_contents(

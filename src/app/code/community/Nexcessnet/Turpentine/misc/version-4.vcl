@@ -303,14 +303,6 @@ sub vcl_hash {
     return (lookup);
 }
 
-sub vcl_hit {
-    # this seems to cause cache object contention issues so removed for now
-    # TODO: use obj.hits % something maybe
-    # if (obj.hits > 0) {
-    #     set obj.ttl = obj.ttl + {{lru_factor}}s;
-    # }
-}
-
 # sub vcl_miss {
 #     return (fetch);
 # }
