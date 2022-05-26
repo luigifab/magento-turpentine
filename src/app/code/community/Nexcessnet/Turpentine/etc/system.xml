@@ -16,16 +16,16 @@
 
 <config>
 	<tabs>
-		<Nexcessnet_Turpentine translate="label">
+		<Nexcessnet_Turpentine>
 			<label>Turpentine</label>
-			<sort_order>999999</sort_order>
+			<sort_order>999900</sort_order>
 		</Nexcessnet_Turpentine>
 	</tabs>
 	<sections>
 		<turpentine_varnish translate="label">
-			<label>Varnish Options</label>
+			<label>Turpentine Varnish Options</label>
 			<tab>Nexcessnet_Turpentine</tab>
-			<sort_order>10</sort_order>
+			<sort_order>61</sort_order>
 			<show_in_default>1</show_in_default>
 			<show_in_website>0</show_in_website>
 			<show_in_store>0</show_in_store>
@@ -294,9 +294,9 @@
 			</groups>
 		</turpentine_varnish>
 		<turpentine_vcl translate="label">
-			<label>Caching Options</label>
+			<label>Turpentine Caching Options</label>
 			<tab>Nexcessnet_Turpentine</tab>
-			<sort_order>20</sort_order>
+			<sort_order>62</sort_order>
 			<show_in_default>1</show_in_default>
 			<show_in_website>0</show_in_website>
 			<show_in_store>0</show_in_store>

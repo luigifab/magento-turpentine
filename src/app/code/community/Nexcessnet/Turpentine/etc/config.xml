@@ -500,31 +500,6 @@
 				</turpentine>
 			</updates>
 		</layout>
-		<acl>
-			<resources>
-				<admin>
-					<children>
-						<system>
-							<children>
-								<turpentine translate="title">
-									<title>Turpentine Varnish Management</title>
-								</turpentine>
-								<config>
-									<children>
-										<turpentine_varnish translate="title">
-											<title>Turpentine Varnish Options</title>
-										</turpentine_varnish>
-										<turpentine_vcl translate="title">
-											<title>Turpentine Caching Options</title>
-										</turpentine_vcl>
-									</children>
-								</config>
-							</children>
-						</system>
-					</children>
-				</admin>
-			</resources>
-		</acl>
 	</adminhtml>
 	<crontab>
 		<jobs>

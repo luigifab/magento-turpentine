@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+ * Nexcess.net Turpentine Extension for Magento
+ * Copyright (C) 2012  Nexcess.net L.L.C.
+ *
+ * This program is free software, you can redistribute it or modify
+ * it under the terms of the GNU General Public License (GPL) as published
+ * by the free software foundation, either version 2 of the license, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but without any warranty, without even the implied warranty of
+ * merchantability or fitness for a particular purpose. See the
+ * GNU General Public License (GPL) for more details.
+-->
+
+<config>
+	<acl>
+		<resources>
+			<admin>
+				<children>
+					<system>
+						<children>
+							<turpentine translate="title">
+								<title>Turpentine Varnish Management</title>
+							</turpentine>
+							<config>
+								<children>
+									<turpentine_varnish translate="title">
+										<title>Turpentine Varnish Options</title>
+										<sort_order>999961</sort_order>
+									</turpentine_varnish>
+									<turpentine_vcl translate="title">
+										<title>Turpentine Caching Options</title>
+										<sort_order>999962</sort_order>
+									</turpentine_vcl>
+								</children>
+							</config>
+						</children>
+					</system>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>
