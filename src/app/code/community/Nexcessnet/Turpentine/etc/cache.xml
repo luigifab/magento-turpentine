@@ -15,12 +15,12 @@
 -->
 
 <config>
-    <placeholders>
-        <turpentine_notices>
-            <block>turpentine/notices</block>
-            <placeholder>TURPENTINE_NOTICES</placeholder>
-            <container>Nexcessnet_Turpentine_Model_PageCache_Container_Notices</container>
-            <cache_lifetime>false</cache_lifetime>
-        </turpentine_notices>
-    </placeholders>
+	<placeholders>
+		<turpentine_notices>
+			<block>turpentine/notices</block>
+			<placeholder>TURPENTINE_NOTICES</placeholder>
+			<container>Nexcessnet_Turpentine_Model_PageCache_Container_Notices</container>
+			<cache_lifetime>false</cache_lifetime>
+		</turpentine_notices>
+	</placeholders>
 </config>

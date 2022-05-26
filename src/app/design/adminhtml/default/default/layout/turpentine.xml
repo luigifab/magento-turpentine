@@ -15,12 +15,9 @@
 -->
 
 <layout version="0.1.0">
-    <adminhtml_cache_index>
-        <reference name="content">
-            <block type="turpentine/management"
-                name="turpentine_management"
-                after="cache.additional"
-                template="turpentine/varnish_management.phtml" />
-        </reference>
-    </adminhtml_cache_index>
+	<adminhtml_cache_index>
+		<reference name="content">
+			<block type="turpentine/management" name="turpentine_management" after="cache.additional" template="turpentine/varnish_management.phtml" />
+		</reference>
+	</adminhtml_cache_index>
 </layout>

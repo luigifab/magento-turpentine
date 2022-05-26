@@ -15,536 +15,527 @@
 -->
 
 <config>
-    <modules>
-        <Nexcessnet_Turpentine>
-            <version>0.7.5</version>
-        </Nexcessnet_Turpentine>
-    </modules>
-    <default>
-        <turpentine_varnish>
-            <general>
-                <auto_apply_on_save>1</auto_apply_on_save>
-                <strip_vcl_whitespace>always</strip_vcl_whitespace>
-                <varnish_debug>0</varnish_debug>
-                <vcl_fix>1</vcl_fix>
-                <real_ip>0</real_ip>
-                <block_debug>0</block_debug>
-                <ajax_messages>1</ajax_messages>
-                <fix_product_toolbar>0</fix_product_toolbar>
-                <crawler_enable>0</crawler_enable>
-                <crawler_debug>0</crawler_debug>
-                <crawler_batchsize>0</crawler_batchsize>
-                <crawler_batchwait>0</crawler_batchwait>
-            </general>
-            <logging>
-                <use_custom_log_file>0</use_custom_log_file>
-                <custom_log_file_name>turpentine.log</custom_log_file_name>
-            </logging>
-            <servers>
-                <version>auto</version>
-                <server_list>127.0.0.1:6082</server_list>
-                <config_file>{{root_dir}}/var/default.vcl</config_file>
-                <custom_include_file>{{root_dir}}/app/code/community/Nexcessnet/Turpentine/misc/custom_include.vcl</custom_include_file>
-                <custom_include_file_top>{{root_dir}}/app/code/community/Nexcessnet/Turpentine/misc/custom_include_top.vcl</custom_include_file_top>
-                <custom_vcl_template></custom_vcl_template>
-            </servers>
-        </turpentine_varnish>
-        <turpentine_vcl>
-            <backend>
-                <load_balancing>no</load_balancing>
-                <backend_host>127.0.0.1</backend_host>
-                <backend_port>8080</backend_port>
-                <backend_nodes>127.0.0.1:8080</backend_nodes>
-                <backend_probe_url/>
-                <backend_probe_timeout>3s</backend_probe_timeout>
-                <backend_probe_interval>8s</backend_probe_interval>
-                <backend_probe_window>5</backend_probe_window>
-                <backend_probe_threshold>3</backend_probe_threshold>
-                <backend_nodes_admin>127.0.0.1:8080</backend_nodes_admin>
-                <backend_probe_url_admin/>
-                <frontend_timeout>300</frontend_timeout>
-                <admin_timeout>21600</admin_timeout>
-                <crawlers>127.0.0.1</crawlers>
-                <crawler_user_agents><![CDATA[ApacheBench/.*,.*Googlebot.*,.*APIs-Google.*,.*Mediapartners-Google.*,.*AdsBot-Google.*,JoeDog/.*,.*Siege/.*,magespeedtest\.com,Nexcessnet_Turpentine/.*,.*PTST.*,.*bingbot.*,.*msnbot.*,.*Baiduspider.*]]></crawler_user_agents>
-            </backend>
-            <normalization>
-                <encoding>1</encoding>
-                <user_agent>0</user_agent>
-                <user_agent_mobile_regexp><![CDATA[iP(?:hone|ad|od)|BlackBerry|Palm|Googlebot-Mobile|Mobile|mobile|mobi|Windows Mobile|Safari Mobile|Android|Opera (?:Mini|Mobi)]]></user_agent_mobile_regexp>
-                <host>0</host>
-            </normalization>
-            <ttls>
-                <grace_period>15</grace_period>
-                <default_ttl>3600</default_ttl>
-                <static_ttl>28800</static_ttl>
-                <!--
-                <lru_factor>15</lru_factor>
-                -->
-            </ttls>
-            <urls>
-                <url_blacklist><![CDATA[cron\.php]]></url_blacklist>
-            </urls>
-            <params>
-                <get_params>__SID,XDEBUG_PROFILE</get_params>
-                <ignore_get_params>utm_source,utm_medium,utm_campaign,utm_content,utm_term,gclid,cx,ie,cof,siteurl</ignore_get_params>
-                <transfer_unmodified_url>0</transfer_unmodified_url>
-            </params>
-            <static>
-                <force_static>1</force_static>
-                <exts>css,js,jpe?g,png,gif,ico,swf</exts>
-                <simple_hash>1</simple_hash>
-            </static>
-        </turpentine_vcl>
-    </default>
-    <global>
-        <!--
-        This disables Magento visitor logging for Turpentine ESI
-        requests. The logging was pointless and caused AJAX blocks to
-        take much more time then they otherwise would to load (most of
-        the time was spent doing database writes)
-        -->
-        <!-- Disabled because if the visitor doesn't have any entries in the
-        visitor log the product comparison block won't work for non-logged-in
-        visitors.
-        @see Mage/Catalog/controllers/Product/CompareController.php#79
-
-        <ignoredModules>
-            <entities>
-                <turpentine/>
-            </entities>
-        </ignoredModules>
-        -->
-        <blocks>
-            <turpentine>
-                <class>Nexcessnet_Turpentine_Block</class>
-            </turpentine>
-            <!--
-            The core/messages block is rewritten because it doesn't use a
-            template we can replace with an ESI include tag, just dumps out a
-            block of hard-coded HTML and also frequently skips the toHtml method
-
-            However, since class rewrites aren't conditional and we only want to
-            do this rewrite if the Enable Flash Messages option is enabled the
-            rewrite is actually added at runtime (controller_front_init_before),
-            see observer_esi::addMessagesBlockRewrite . Leaving this rewrite
-            here but commented out for clarity
-            -->
-            <!--
-            <core>
-                <rewrite>
-                    <messages>Nexcessnet_Turpentine_Block_Core_Messages</messages>
-                </rewrite>
-            </core>
-            -->
-            <!--
-            Rewrite the poll ActivePoll block, as it uses its own custom
-            template setting methods.
-            -->
-            <poll>
-                <rewrite>
-                    <activePoll>Nexcessnet_Turpentine_Block_Poll_ActivePoll</activePoll>
-                </rewrite>
-            </poll>
-
-            <!--
-            Rewrite the compared and viewed product block. Default behavior returns '' if
-            no items to display, which prevents display of the ESI url, causing caching problems
-            -->
-            <reports>
-                <rewrite>
-                    <product_compared>Nexcessnet_Turpentine_Block_Product_Compared</product_compared>
-                    <product_viewed>Nexcessnet_Turpentine_Block_Product_Viewed</product_viewed>
-                </rewrite>
-            </reports>
-
-            <adminhtml>
-                <rewrite>
-                    <cache_grid>Nexcessnet_Turpentine_Block_Adminhtml_Cache_Grid</cache_grid>
-                </rewrite>
-            </adminhtml>
-        </blocks>
-        <helpers>
-            <turpentine>
-                <class>Nexcessnet_Turpentine_Helper</class>
-            </turpentine>
-        </helpers>
-        <models>
-            <turpentine>
-                <class>Nexcessnet_Turpentine_Model</class>
-            </turpentine>
-            <core>
-                <rewrite>
-                    <session>Nexcessnet_Turpentine_Model_Core_Session</session>
-                </rewrite>
-            </core>
-        </models>
-        <cache>
-            <types>
-                <!--
-                These aren't used to actually store anything in Magento's cache,
-                we just use them to signal Varnish to purge it's cache. Note
-                that the type names must match the MAGE_CACHE_NAME constant in
-                the Varnish and ESI helpers.
-                -->
-                <turpentine_pages>
-                    <label>Varnish Pages</label>
-                    <description>Full pages cached in Varnish (will also flush ESI blocks)</description>
-                    <tags>TURPENTINE_FAKE_PAGE_TAG</tags>
-                </turpentine_pages>
-                <turpentine_esi_blocks>
-                    <label>Varnish ESI Blocks</label>
-                    <description>ESI blocks cached in Varnish (this should not be disabled except for debugging)</description>
-                    <!--
-                    This is helpful to prevent blocks from being double ESI-
-                    included, which ends up resulting in the "ESI processing
-                    not enabled" error
-                    -->
-                    <tags>BLOCK_HTML</tags>
-                </turpentine_esi_blocks>
-            </types>
-        </cache>
-        <events>
-            <!-- Varnish Events -->
-            <http_response_send_before>
-                <observers>
-                    <turpentine_varnish_http_response_send_before>
-                        <class>turpentine/observer_varnish</class>
-                        <method>setCacheFlagHeader</method>
-                    </turpentine_varnish_http_response_send_before>
-                </observers>
-            </http_response_send_before>
-
-            <admin_system_config_changed_section_turpentine_varnish>
-                <observers>
-                    <turpentine_varnish_admin_system_config_changed_section_turpentine_varnish>
-                        <class>turpentine/observer_varnish</class>
-                        <method>adminSystemConfigChangedSection</method>
-                    </turpentine_varnish_admin_system_config_changed_section_turpentine_varnish>
-                </observers>
-            </admin_system_config_changed_section_turpentine_varnish>
-            <admin_system_config_changed_section_turpentine_vcl>
-                <observers>
-                    <turpentine_varnish_admin_system_config_changed_section_turpentine_vcl>
-                        <class>turpentine/observer_varnish</class>
-                        <method>adminSystemConfigChangedSection</method>
-                    </turpentine_varnish_admin_system_config_changed_section_turpentine_vcl>
-                </observers>
-            </admin_system_config_changed_section_turpentine_vcl>
-
-            <!-- ESI Events -->
-            <core_block_abstract_to_html_before>
-                <observers>
-                    <turpentine_esi_core_block_abstract_to_html_before>
-                        <type>singleton</type>
-                        <class>turpentine/observer_esi</class>
-                        <method>injectEsi</method>
-                    </turpentine_esi_core_block_abstract_to_html_before>
-                </observers>
-            </core_block_abstract_to_html_before>
-            <http_response_send_before>
-                <observers>
-                    <turpentine_esi_http_response_send_before>
-                        <class>turpentine/observer_esi</class>
-                        <method>setFlagHeaders</method>
-                    </turpentine_esi_http_response_send_before>
-                    <turpentine_esi_replace_form_key_placeholder>
-                        <class>turpentine/observer_esi</class>
-                        <method>replaceFormKeyPlaceholder</method>
-                    </turpentine_esi_replace_form_key_placeholder>
-                </observers>
-            </http_response_send_before>
-            <controller_action_layout_generate_blocks_after>
-                <observers>
-                    <turpentine_esi_controller_action_layout_generate_blocks_after>
-                        <class>turpentine/observer_esi</class>
-                        <method>checkCacheFlag</method>
-                    </turpentine_esi_controller_action_layout_generate_blocks_after>
-                </observers>
-            </controller_action_layout_generate_blocks_after>
-            <customer_login>
-                <observers>
-                    <turpentine_customer_login_cookie>
-                        <class>turpentine/observer_esi</class>
-                        <method>setCustomerGroupCookie</method>
-                    </turpentine_customer_login_cookie>
-                </observers>
-            </customer_login>
-            <customer_logout>
-                <observers>
-                    <turpentine_customer_logout_remove_cookie>
-                        <class>turpentine/observer_esi</class>
-                        <method>removeCustomerGroupCookie</method>
-                    </turpentine_customer_logout_remove_cookie>
-                </observers>
-            </customer_logout>
-            <!--
-            Magento sometimes sees the last URL as being the
-            turpentine/esi/getBlock url, and then redirects to it which is not
-            good. We need to check and intercept it if it happens
-            -->
-            <controller_response_redirect>
-                <observers>
-                    <turpentine_esi_controller_response_redirect>
-                        <class>turpentine/observer_esi</class>
-                        <method>checkRedirectUrl</method>
-                    </turpentine_esi_controller_response_redirect>
-                </observers>
-            </controller_response_redirect>
-
-            <!--
-            Load the ESI client cache clear events from stored config at
-            runtime
-            -->
-            <controller_front_init_before>
-                <observers>
-                    <turpentine_esi_controller_front_init_before>
-                        <class>turpentine/observer_esi</class>
-                        <method>loadCacheClearEvents</method>
-                    </turpentine_esi_controller_front_init_before>
-                    <turpentine_esi_controller_front_init_before2>
-                        <class>turpentine/observer_esi</class>
-                        <method>addMessagesBlockRewrite</method>
-                    </turpentine_esi_controller_front_init_before2>
-                    <turpentine_varnish_controller_front_init_before>
-                        <class>turpentine/observer_varnish</class>
-                        <method>addProductListToolbarRewrite</method>
-                    </turpentine_varnish_controller_front_init_before>
-                    <turpentine_varnish_fix_cm_redissession_locks>
-                        <class>turpentine/observer_varnish</class>
-                        <method>fixCmRedisSessionLocks</method>
-                    </turpentine_varnish_fix_cm_redissession_locks>
-                    <turpentine_esi_set_replace_form_key_flag>
-                        <class>turpentine/observer_esi</class>
-                        <method>setReplaceFormKeyFlag</method>
-                    </turpentine_esi_set_replace_form_key_flag>
-                </observers>
-            </controller_front_init_before>
-
-            <!-- Varnish cache clear events -->
-            <catalog_product_save_commit_after>
-                <observers>
-                    <turpentine_varnish_catalog_product_save_commit_after>
-                        <class>turpentine/observer_ban</class>
-                        <method>banProductPageCache</method>
-                    </turpentine_varnish_catalog_product_save_commit_after>
-                </observers>
-            </catalog_product_save_commit_after>
-            <review_save_after>
-                <observers>
-                    <turpentine_varnish_review_save_after>
-                        <class>turpentine/observer_ban</class>
-                        <method>banProductReview</method>
-                    </turpentine_varnish_review_save_after>
-                </observers>
-            </review_save_after>
-            <cataloginventory_stock_item_save_after>
-                <observers>
-                    <turpentine_varnish_cataloginventory_stock_item_save_after>
-                        <class>turpentine/observer_ban</class>
-                        <method>banProductPageCacheCheckStock</method>
-                    </turpentine_varnish_cataloginventory_stock_item_save_after>
-                </observers>
-             </cataloginventory_stock_item_save_after>
-            <catalog_category_save_commit_after>
-                <observers>
-                    <turpentine_varnish_catalog_category_save_commit_after>
-                        <class>turpentine/observer_ban</class>
-                        <method>banCategoryCache</method>
-                    </turpentine_varnish_catalog_category_save_commit_after>
-                </observers>
-            </catalog_category_save_commit_after>
-            <!--
-                This is disabled because it causes broken images on cached pages
-            -->
-            <!--
-            <clean_media_cache_after>
-                <observers>
-                    <turpentine_varnish_clean_media_cache_after>
-                        <class>turpentine/observer_ban</class>
-                        <method>banMediaCache</method>
-                    </turpentine_varnish_clean_media_cache_after>
-                </observers>
-            </clean_media_cache_after>
-            <clean_catalog_images_cache_after>
-                <observers>
-                    <turpentine_varnish_clean_catalog_images_cache_after>
-                        <class>turpentine/observer_ban</class>
-                        <method>banCatalogImagesCache</method>
-                    </turpentine_varnish_clean_catalog_images_cache_after>
-                </observers>
-            </clean_catalog_images_cache_after>
-            -->
-            <cms_page_save_commit_after>
-                <observers>
-                    <turpentine_varnish_cms_page_save_commit_after>
-                        <class>turpentine/observer_ban</class>
-                        <method>banCmsPageCache</method>
-                    </turpentine_varnish_cms_page_save_commit_after>
-                </observers>
-            </cms_page_save_commit_after>
-            <enterprise_cms_revision_save_commit_after>
-                <observers>
-                    <turpentine_varnish_enterprise_cms_revision_save_commit_after>
-                        <class>turpentine/observer_ban</class>
-                        <method>banCmsPageRevisionCache</method>
-                        <type>singleton</type>
-                    </turpentine_varnish_enterprise_cms_revision_save_commit_after>
-                </observers>
-            </enterprise_cms_revision_save_commit_after>
-            <adminhtml_cache_flush_system>
-                <observers>
-                    <turpentine_varnish_adminhtml_cache_flush_system>
-                        <class>turpentine/observer_ban</class>
-                        <method>banAllCache</method>
-                    </turpentine_varnish_adminhtml_cache_flush_system>
-                </observers>
-            </adminhtml_cache_flush_system>
-            <adminhtml_cache_flush_all>
-                <observers>
-                    <turpentine_varnish_adminhtml_cache_flush_all>
-                        <class>turpentine/observer_ban</class>
-                        <method>banAllCache</method>
-                    </turpentine_varnish_adminhtml_cache_flush_all>
-                </observers>
-            </adminhtml_cache_flush_all>
-            <adminhtml_cache_refresh_type>
-                <observers>
-                    <turpentine_varnish_adminhtml_cache_refresh_type>
-                        <class>turpentine/observer_ban</class>
-                        <method>banCacheType</method>
-                    </turpentine_varnish_adminhtml_cache_refresh_type>
-                </observers>
-            </adminhtml_cache_refresh_type>
-            <!-- Cron/Crawler events -->
-            <turpentine_ban_all_cache>
-                <observers>
-                    <turpentine_cron_turpentine_ban_all_cache>
-                        <class>turpentine/observer_cron</class>
-                        <method>queueAllUrls</method>
-                    </turpentine_cron_turpentine_ban_all_cache>
-                </observers>
-            </turpentine_ban_all_cache>
-        </events>
-    </global>
-    <frontend>
-        <routers>
-            <turpentine>
-                <use>standard</use>
-                <args>
-                    <module>Nexcessnet_Turpentine</module>
-                    <frontName>turpentine</frontName>
-                </args>
-            </turpentine>
-        </routers>
-        <layout>
-            <updates>
-                <!--
-                This file should never be edited by a user since it will
-                be overwritten on extension updates
-                -->
-                <turpentine_esi>
-                    <file>turpentine_esi.xml</file>
-                </turpentine_esi>
-            </updates>
-        </layout>
-        <events>
-            <controller_action_predispatch>
-                <observers>
-                    <controller_action_before>
-                        <class>turpentine/observer_esi</class>
-                        <method>hookToControllerActionPreDispatch</method>
-                    </controller_action_before>
-                </observers>
-            </controller_action_predispatch>
-            <!--controller_action_postdispatch>
-                <observers>
-                    <controller_action_after>
-                        <class>turpentine/observer_esi</class>
-                        <method>hookToControllerActionPostDispatch</method>
-                    </controller_action_after>
-                </observers>
-            </controller_action_postdispatch-->
-            <add_to_cart_before>
-                <observers>
-                    <add_to_cart_before>
-                        <class>turpentine/observer_esi</class>
-                        <method>hookToAddToCartBefore</method>
-                    </add_to_cart_before>
-                </observers>
-            </add_to_cart_before>
-            <!--add_to_cart_after>
-                <observers>
-                    <add_to_cart_after>
-                        <class>turpentine/observer_esi</class>
-                        <method>hookToAddToCartAfter</method>
-                    </add_to_cart_after>
-                </observers>
-            </add_to_cart_after-->
-            <wishlist_index_index_before>
-                <observers>
-                    <wishlist_index_index_before>
-                        <class>turpentine/observer_esi</class>
-                        <method>hookToAddToWishlistBefore</method>
-                    </wishlist_index_index_before>
-                </observers>
-            </wishlist_index_index_before>
-        </events>
-    </frontend>
-    <admin>
-        <routers>
-            <adminhtml>
-                <args>
-                    <modules>
-                        <turpentine after="Mage_Adminhtml">Nexcessnet_Turpentine</turpentine>
-                    </modules>
-                </args>
-            </adminhtml>
-        </routers>
-    </admin>
-    <adminhtml>
-        <layout>
-            <updates>
-                <turpentine>
-                    <file>turpentine.xml</file>
-                </turpentine>
-            </updates>
-        </layout>
-        <acl>
-            <resources>
-                <admin>
-                    <children>
-                        <system>
-                            <children>
-                                <turpentine translate="title">
-                                    <title>Turpentine Varnish Management</title>
-                                </turpentine>
-                                <config>
-                                    <children>
-                                        <turpentine_varnish translate="title">
-                                            <title>Turpentine Varnish Options</title>
-                                        </turpentine_varnish>
-                                        <turpentine_vcl translate="title">
-                                            <title>Turpentine Caching Options</title>
-                                        </turpentine_vcl>
-                                    </children>
-                                </config>
-                            </children>
-                        </system>
-                    </children>
-                </admin>
-            </resources>
-        </acl>
-    </adminhtml>
-    <crontab>
-        <jobs>
-            <turpentine_crawl_urls>
-                <schedule>
-                    <cron_expr>0,10,20,30,40,50 * * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>turpentine/observer_cron::crawlUrls</model>
-                </run>
-            </turpentine_crawl_urls>
-        </jobs>
-    </crontab>
+	<modules>
+		<Nexcessnet_Turpentine>
+			<version>0.7.5</version>
+		</Nexcessnet_Turpentine>
+	</modules>
+	<default>
+		<turpentine_varnish>
+			<general>
+				<auto_apply_on_save>1</auto_apply_on_save>
+				<strip_vcl_whitespace>always</strip_vcl_whitespace>
+				<varnish_debug>0</varnish_debug>
+				<vcl_fix>1</vcl_fix>
+				<real_ip>0</real_ip>
+				<block_debug>0</block_debug>
+				<ajax_messages>1</ajax_messages>
+				<fix_product_toolbar>0</fix_product_toolbar>
+				<crawler_enable>0</crawler_enable>
+				<crawler_debug>0</crawler_debug>
+				<crawler_batchsize>0</crawler_batchsize>
+				<crawler_batchwait>0</crawler_batchwait>
+			</general>
+			<logging>
+				<use_custom_log_file>0</use_custom_log_file>
+				<custom_log_file_name>turpentine.log</custom_log_file_name>
+			</logging>
+			<servers>
+				<version>auto</version>
+				<server_list>127.0.0.1:6082</server_list>
+				<config_file>{{root_dir}}/var/default.vcl</config_file>
+				<custom_include_file>{{root_dir}}/app/code/community/Nexcessnet/Turpentine/misc/custom_include.vcl</custom_include_file>
+				<custom_include_file_top>{{root_dir}}/app/code/community/Nexcessnet/Turpentine/misc/custom_include_top.vcl</custom_include_file_top>
+				<custom_vcl_template />
+			</servers>
+		</turpentine_varnish>
+		<turpentine_vcl>
+			<backend>
+				<load_balancing>no</load_balancing>
+				<backend_host>127.0.0.1</backend_host>
+				<backend_port>8080</backend_port>
+				<backend_nodes>127.0.0.1:8080</backend_nodes>
+				<backend_probe_url />
+				<backend_probe_timeout>3s</backend_probe_timeout>
+				<backend_probe_interval>8s</backend_probe_interval>
+				<backend_probe_window>5</backend_probe_window>
+				<backend_probe_threshold>3</backend_probe_threshold>
+				<backend_nodes_admin>127.0.0.1:8080</backend_nodes_admin>
+				<backend_probe_url_admin />
+				<frontend_timeout>300</frontend_timeout>
+				<admin_timeout>21600</admin_timeout>
+				<crawlers>127.0.0.1</crawlers>
+				<crawler_user_agents><![CDATA[ApacheBench/.*,.*Googlebot.*,.*APIs-Google.*,.*Mediapartners-Google.*,.*AdsBot-Google.*,JoeDog/.*,.*Siege/.*,magespeedtest\.com,Nexcessnet_Turpentine/.*,.*PTST.*,.*bingbot.*,.*msnbot.*,.*Baiduspider.*]]></crawler_user_agents>
+			</backend>
+			<normalization>
+				<encoding>1</encoding>
+				<user_agent>0</user_agent>
+				<user_agent_mobile_regexp><![CDATA[iP(?:hone|ad|od)|BlackBerry|Palm|Googlebot-Mobile|Mobile|mobile|mobi|Windows Mobile|Safari Mobile|Android|Opera (?:Mini|Mobi)]]></user_agent_mobile_regexp>
+				<host>0</host>
+			</normalization>
+			<ttls>
+				<grace_period>15</grace_period>
+				<default_ttl>3600</default_ttl>
+				<static_ttl>28800</static_ttl>
+				<!-- lru_factor>15</lru_factor -->
+			</ttls>
+			<urls>
+				<url_blacklist><![CDATA[cron\.php]]></url_blacklist>
+			</urls>
+			<params>
+				<get_params>__SID,XDEBUG_PROFILE</get_params>
+				<ignore_get_params>utm_source,utm_medium,utm_campaign,utm_content,utm_term,gclid,cx,ie,cof,siteurl</ignore_get_params>
+				<transfer_unmodified_url>0</transfer_unmodified_url>
+			</params>
+			<static>
+				<force_static>1</force_static>
+				<exts>css,js,jpe?g,png,gif,ico,swf</exts>
+				<simple_hash>1</simple_hash>
+			</static>
+		</turpentine_vcl>
+	</default>
+	<global>
+		<!--
+			This disables Magento visitor logging for Turpentine ESI
+			requests. The logging was pointless and caused AJAX blocks to
+			take much more time then they otherwise would to load (most of
+			the time was spent doing database writes)
+		-->
+		<!--
+			Disabled because if the visitor doesn't have any entries in the
+			visitor log the product comparison block won't work for non-logged-in
+			visitors.
+			@see Mage/Catalog/controllers/Product/CompareController.php#79
+		<ignoredModules>
+			<entities>
+				<turpentine/>
+			</entities>
+		</ignoredModules>
+		-->
+		<blocks>
+			<turpentine>
+				<class>Nexcessnet_Turpentine_Block</class>
+			</turpentine>
+			<!--
+				The core/messages block is rewritten because it doesn't use a
+				template we can replace with an ESI include tag, just dumps out a
+				block of hard-coded HTML and also frequently skips the toHtml method
+				However, since class rewrites aren't conditional and we only want to
+				do this rewrite if the Enable Flash Messages option is enabled the
+				rewrite is actually added at runtime (controller_front_init_before),
+				see observer_esi::addMessagesBlockRewrite . Leaving this rewrite
+				here but commented out for clarity
+			-->
+			<!--
+			<core>
+				<rewrite>
+					<messages>Nexcessnet_Turpentine_Block_Core_Messages</messages>
+				</rewrite>
+			</core>
+			-->
+			<!--
+				Rewrite the poll ActivePoll block, as it uses its own custom
+				template setting methods.
+			-->
+			<poll>
+				<rewrite>
+					<activePoll>Nexcessnet_Turpentine_Block_Poll_ActivePoll</activePoll>
+				</rewrite>
+			</poll>
+			<!--
+				Rewrite the compared and viewed product block. Default behavior returns '' if
+				no items to display, which prevents display of the ESI url, causing caching problems
+			-->
+			<reports>
+				<rewrite>
+					<product_compared>Nexcessnet_Turpentine_Block_Product_Compared</product_compared>
+					<product_viewed>Nexcessnet_Turpentine_Block_Product_Viewed</product_viewed>
+				</rewrite>
+			</reports>
+			<adminhtml>
+				<rewrite>
+					<cache_grid>Nexcessnet_Turpentine_Block_Adminhtml_Cache_Grid</cache_grid>
+				</rewrite>
+			</adminhtml>
+		</blocks>
+		<helpers>
+			<turpentine>
+				<class>Nexcessnet_Turpentine_Helper</class>
+			</turpentine>
+		</helpers>
+		<models>
+			<turpentine>
+				<class>Nexcessnet_Turpentine_Model</class>
+			</turpentine>
+			<core>
+				<rewrite>
+					<session>Nexcessnet_Turpentine_Model_Core_Session</session>
+				</rewrite>
+			</core>
+		</models>
+		<cache>
+			<types>
+				<!--
+					These aren't used to actually store anything in Magento's cache,
+					we just use them to signal Varnish to purge it's cache. Note
+					that the type names must match the MAGE_CACHE_NAME constant in
+					the Varnish and ESI helpers.
+				-->
+				<turpentine_pages>
+					<label>Varnish Pages</label>
+					<description>Full pages cached in Varnish (will also flush ESI blocks)</description>
+					<tags>TURPENTINE_FAKE_PAGE_TAG</tags>
+				</turpentine_pages>
+				<turpentine_esi_blocks>
+					<label>Varnish ESI Blocks</label>
+					<description>ESI blocks cached in Varnish (this should not be disabled except for debugging)</description>
+					<!--
+						This is helpful to prevent blocks from being double ESI-
+						included, which ends up resulting in the "ESI processing
+						not enabled" error
+					-->
+					<tags>BLOCK_HTML</tags>
+				</turpentine_esi_blocks>
+			</types>
+		</cache>
+		<events>
+			<!-- Varnish Events -->
+			<http_response_send_before>
+				<observers>
+					<turpentine_varnish_http_response_send_before>
+						<class>turpentine/observer_varnish</class>
+						<method>setCacheFlagHeader</method>
+					</turpentine_varnish_http_response_send_before>
+				</observers>
+			</http_response_send_before>
+			<admin_system_config_changed_section_turpentine_varnish>
+				<observers>
+					<turpentine_varnish_admin_system_config_changed_section_turpentine_varnish>
+						<class>turpentine/observer_varnish</class>
+						<method>adminSystemConfigChangedSection</method>
+					</turpentine_varnish_admin_system_config_changed_section_turpentine_varnish>
+				</observers>
+			</admin_system_config_changed_section_turpentine_varnish>
+			<admin_system_config_changed_section_turpentine_vcl>
+				<observers>
+					<turpentine_varnish_admin_system_config_changed_section_turpentine_vcl>
+						<class>turpentine/observer_varnish</class>
+						<method>adminSystemConfigChangedSection</method>
+					</turpentine_varnish_admin_system_config_changed_section_turpentine_vcl>
+				</observers>
+			</admin_system_config_changed_section_turpentine_vcl>
+			<!-- ESI Events -->
+			<core_block_abstract_to_html_before>
+				<observers>
+					<turpentine_esi_core_block_abstract_to_html_before>
+						<type>singleton</type>
+						<class>turpentine/observer_esi</class>
+						<method>injectEsi</method>
+					</turpentine_esi_core_block_abstract_to_html_before>
+				</observers>
+			</core_block_abstract_to_html_before>
+			<http_response_send_before>
+				<observers>
+					<turpentine_esi_http_response_send_before>
+						<class>turpentine/observer_esi</class>
+						<method>setFlagHeaders</method>
+					</turpentine_esi_http_response_send_before>
+					<turpentine_esi_replace_form_key_placeholder>
+						<class>turpentine/observer_esi</class>
+						<method>replaceFormKeyPlaceholder</method>
+					</turpentine_esi_replace_form_key_placeholder>
+				</observers>
+			</http_response_send_before>
+			<controller_action_layout_generate_blocks_after>
+				<observers>
+					<turpentine_esi_controller_action_layout_generate_blocks_after>
+						<class>turpentine/observer_esi</class>
+						<method>checkCacheFlag</method>
+					</turpentine_esi_controller_action_layout_generate_blocks_after>
+				</observers>
+			</controller_action_layout_generate_blocks_after>
+			<customer_login>
+				<observers>
+					<turpentine_customer_login_cookie>
+						<class>turpentine/observer_esi</class>
+						<method>setCustomerGroupCookie</method>
+					</turpentine_customer_login_cookie>
+				</observers>
+			</customer_login>
+			<customer_logout>
+				<observers>
+					<turpentine_customer_logout_remove_cookie>
+						<class>turpentine/observer_esi</class>
+						<method>removeCustomerGroupCookie</method>
+					</turpentine_customer_logout_remove_cookie>
+				</observers>
+			</customer_logout>
+			<!--
+				Magento sometimes sees the last URL as being the
+				turpentine/esi/getBlock url, and then redirects to it which is not
+				good. We need to check and intercept it if it happens
+			-->
+			<controller_response_redirect>
+				<observers>
+					<turpentine_esi_controller_response_redirect>
+						<class>turpentine/observer_esi</class>
+						<method>checkRedirectUrl</method>
+					</turpentine_esi_controller_response_redirect>
+				</observers>
+			</controller_response_redirect>
+			<!--
+				Load the ESI client cache clear events from stored config at
+				runtime
+			-->
+			<controller_front_init_before>
+				<observers>
+					<turpentine_esi_controller_front_init_before>
+						<class>turpentine/observer_esi</class>
+						<method>loadCacheClearEvents</method>
+					</turpentine_esi_controller_front_init_before>
+					<turpentine_esi_controller_front_init_before2>
+						<class>turpentine/observer_esi</class>
+						<method>addMessagesBlockRewrite</method>
+					</turpentine_esi_controller_front_init_before2>
+					<turpentine_varnish_controller_front_init_before>
+						<class>turpentine/observer_varnish</class>
+						<method>addProductListToolbarRewrite</method>
+					</turpentine_varnish_controller_front_init_before>
+					<turpentine_varnish_fix_cm_redissession_locks>
+						<class>turpentine/observer_varnish</class>
+						<method>fixCmRedisSessionLocks</method>
+					</turpentine_varnish_fix_cm_redissession_locks>
+					<turpentine_esi_set_replace_form_key_flag>
+						<class>turpentine/observer_esi</class>
+						<method>setReplaceFormKeyFlag</method>
+					</turpentine_esi_set_replace_form_key_flag>
+				</observers>
+			</controller_front_init_before>
+			<!-- Varnish cache clear events -->
+			<catalog_product_save_commit_after>
+				<observers>
+					<turpentine_varnish_catalog_product_save_commit_after>
+						<class>turpentine/observer_ban</class>
+						<method>banProductPageCache</method>
+					</turpentine_varnish_catalog_product_save_commit_after>
+				</observers>
+			</catalog_product_save_commit_after>
+			<review_save_after>
+				<observers>
+					<turpentine_varnish_review_save_after>
+						<class>turpentine/observer_ban</class>
+						<method>banProductReview</method>
+					</turpentine_varnish_review_save_after>
+				</observers>
+			</review_save_after>
+			<cataloginventory_stock_item_save_after>
+				<observers>
+					<turpentine_varnish_cataloginventory_stock_item_save_after>
+						<class>turpentine/observer_ban</class>
+						<method>banProductPageCacheCheckStock</method>
+					</turpentine_varnish_cataloginventory_stock_item_save_after>
+				</observers>
+			</cataloginventory_stock_item_save_after>
+			<catalog_category_save_commit_after>
+				<observers>
+					<turpentine_varnish_catalog_category_save_commit_after>
+						<class>turpentine/observer_ban</class>
+						<method>banCategoryCache</method>
+					</turpentine_varnish_catalog_category_save_commit_after>
+				</observers>
+			</catalog_category_save_commit_after>
+			<!--
+				This is disabled because it causes broken images on cached pages
+			-->
+			<!--
+			<clean_media_cache_after>
+				<observers>
+					<turpentine_varnish_clean_media_cache_after>
+						<class>turpentine/observer_ban</class>
+						<method>banMediaCache</method>
+					</turpentine_varnish_clean_media_cache_after>
+				</observers>
+			</clean_media_cache_after>
+			<clean_catalog_images_cache_after>
+				<observers>
+					<turpentine_varnish_clean_catalog_images_cache_after>
+						<class>turpentine/observer_ban</class>
+						<method>banCatalogImagesCache</method>
+					</turpentine_varnish_clean_catalog_images_cache_after>
+				</observers>
+			</clean_catalog_images_cache_after>
+			-->
+			<cms_page_save_commit_after>
+				<observers>
+					<turpentine_varnish_cms_page_save_commit_after>
+						<class>turpentine/observer_ban</class>
+						<method>banCmsPageCache</method>
+					</turpentine_varnish_cms_page_save_commit_after>
+				</observers>
+			</cms_page_save_commit_after>
+			<enterprise_cms_revision_save_commit_after>
+				<observers>
+					<turpentine_varnish_enterprise_cms_revision_save_commit_after>
+						<class>turpentine/observer_ban</class>
+						<method>banCmsPageRevisionCache</method>
+						<type>singleton</type>
+					</turpentine_varnish_enterprise_cms_revision_save_commit_after>
+				</observers>
+			</enterprise_cms_revision_save_commit_after>
+			<adminhtml_cache_flush_system>
+				<observers>
+					<turpentine_varnish_adminhtml_cache_flush_system>
+						<class>turpentine/observer_ban</class>
+						<method>banAllCache</method>
+					</turpentine_varnish_adminhtml_cache_flush_system>
+				</observers>
+			</adminhtml_cache_flush_system>
+			<adminhtml_cache_flush_all>
+				<observers>
+					<turpentine_varnish_adminhtml_cache_flush_all>
+						<class>turpentine/observer_ban</class>
+						<method>banAllCache</method>
+					</turpentine_varnish_adminhtml_cache_flush_all>
+				</observers>
+			</adminhtml_cache_flush_all>
+			<adminhtml_cache_refresh_type>
+				<observers>
+					<turpentine_varnish_adminhtml_cache_refresh_type>
+						<class>turpentine/observer_ban</class>
+						<method>banCacheType</method>
+					</turpentine_varnish_adminhtml_cache_refresh_type>
+				</observers>
+			</adminhtml_cache_refresh_type>
+			<!-- Cron/Crawler events -->
+			<turpentine_ban_all_cache>
+				<observers>
+					<turpentine_cron_turpentine_ban_all_cache>
+						<class>turpentine/observer_cron</class>
+						<method>queueAllUrls</method>
+					</turpentine_cron_turpentine_ban_all_cache>
+				</observers>
+			</turpentine_ban_all_cache>
+		</events>
+	</global>
+	<frontend>
+		<routers>
+			<turpentine>
+				<use>standard</use>
+				<args>
+					<module>Nexcessnet_Turpentine</module>
+					<frontName>turpentine</frontName>
+				</args>
+			</turpentine>
+		</routers>
+		<layout>
+			<updates>
+				<!--
+					This file should never be edited by a user since it will
+					be overwritten on extension updates
+				-->
+				<turpentine_esi>
+					<file>turpentine_esi.xml</file>
+				</turpentine_esi>
+			</updates>
+		</layout>
+		<events>
+			<controller_action_predispatch>
+				<observers>
+					<controller_action_before>
+						<class>turpentine/observer_esi</class>
+						<method>hookToControllerActionPreDispatch</method>
+					</controller_action_before>
+				</observers>
+			</controller_action_predispatch>
+			<!--controller_action_postdispatch>
+				<observers>
+					<controller_action_after>
+					<class>turpentine/observer_esi</class>
+					<method>hookToControllerActionPostDispatch</method>
+					</controller_action_after>
+				</observers>
+			</controller_action_postdispatch-->
+			<add_to_cart_before>
+				<observers>
+					<add_to_cart_before>
+						<class>turpentine/observer_esi</class>
+						<method>hookToAddToCartBefore</method>
+					</add_to_cart_before>
+				</observers>
+			</add_to_cart_before>
+			<!--add_to_cart_after>
+				<observers>
+					<add_to_cart_after>
+					<class>turpentine/observer_esi</class>
+					<method>hookToAddToCartAfter</method>
+					</add_to_cart_after>
+				</observers>
+			</add_to_cart_after-->
+			<wishlist_index_index_before>
+				<observers>
+					<wishlist_index_index_before>
+						<class>turpentine/observer_esi</class>
+						<method>hookToAddToWishlistBefore</method>
+					</wishlist_index_index_before>
+				</observers>
+			</wishlist_index_index_before>
+		</events>
+	</frontend>
+	<admin>
+		<routers>
+			<adminhtml>
+				<args>
+					<modules>
+						<turpentine after="Mage_Adminhtml">Nexcessnet_Turpentine</turpentine>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
+	</admin>
+	<adminhtml>
+		<layout>
+			<updates>
+				<turpentine>
+					<file>turpentine.xml</file>
+				</turpentine>
+			</updates>
+		</layout>
+		<acl>
+			<resources>
+				<admin>
+					<children>
+						<system>
+							<children>
+								<turpentine translate="title">
+									<title>Turpentine Varnish Management</title>
+								</turpentine>
+								<config>
+									<children>
+										<turpentine_varnish translate="title">
+											<title>Turpentine Varnish Options</title>
+										</turpentine_varnish>
+										<turpentine_vcl translate="title">
+											<title>Turpentine Caching Options</title>
+										</turpentine_vcl>
+									</children>
+								</config>
+							</children>
+						</system>
+					</children>
+				</admin>
+			</resources>
+		</acl>
+	</adminhtml>
+	<crontab>
+		<jobs>
+			<turpentine_crawl_urls>
+				<schedule>
+					<cron_expr>0,10,20,30,40,50 * * * *</cron_expr>
+				</schedule>
+				<run>
+					<model>turpentine/observer_cron::crawlUrls</model>
+				</run>
+			</turpentine_crawl_urls>
+		</jobs>
+	</crontab>
 </config>

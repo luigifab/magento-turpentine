@@ -15,10 +15,10 @@
 -->
 
 <config>
-    <modules>
-        <Nexcessnet_Turpentine>
-            <active>true</active>
-            <codePool>community</codePool>
-        </Nexcessnet_Turpentine>
-    </modules>
+	<modules>
+		<Nexcessnet_Turpentine>
+			<active>true</active>
+			<codePool>community</codePool>
+		</Nexcessnet_Turpentine>
+	</modules>
 </config>
