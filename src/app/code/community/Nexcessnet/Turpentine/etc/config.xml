@@ -433,7 +433,7 @@
 					be overwritten on extension updates
 				-->
 				<turpentine_esi>
-					<file>turpentine_esi.xml</file>
+					<file>turpentine.xml</file>
 				</turpentine_esi>
 			</updates>
 		</layout>
