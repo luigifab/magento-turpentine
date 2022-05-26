@@ -25,7 +25,6 @@
         <turpentine_varnish translate="label" module="turpentine">
             <label>Varnish Options</label>
             <tab>Nexcessnet_Turpentine</tab>
-            <frontend_type>text</frontend_type>
             <sort_order>10</sort_order>
             <show_in_default>1</show_in_default>
             <show_in_website>0</show_in_website>
@@ -33,7 +32,6 @@
             <groups>
                 <general translate="label" module="turpentine">
                     <label>General Options</label>
-                    <frontend_type>text</frontend_type>
                     <sort_order>10</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>0</show_in_website>
@@ -177,7 +175,6 @@
                         <crawler_batchsize translate="label" module="turpentine">
                             <label>Crawler Batch Size</label>
                             <comment>Number of URLs to crawl per batch, when 0 requests will not be batched</comment>
-                            <frontend_type>text</frontend_type>
                             <sort_order>90</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -189,7 +186,6 @@
                         <crawler_batchwait translate="label" module="turpentine">
                             <label>Crawler Batch Wait</label>
                             <comment>Time in seconds to wait between batches</comment>
-                            <frontend_type>text</frontend_type>
                             <sort_order>100</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -219,7 +215,6 @@
                         </use_custom_log_file>
                         <custom_log_file_name translate="label,comment" module="turpentine">
                             <label>Custom log file name</label>
-                            <frontend_type>text</frontend_type>
                             <sort_order>20</sort_order>
                             <comment>Only enter a file name, no paths.</comment>
 		            <show_in_default>1</show_in_default>
@@ -233,7 +228,6 @@
                 </logging>
                 <servers translate="label" module="turpentine">
                     <label>Servers</label>
-                    <frontend_type>text</frontend_type>
                     <sort_order>20</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>0</show_in_website>
@@ -259,7 +253,6 @@
                         </server_list>
                         <auth_key translate="label" module="turpentine">
                             <label>Varnish Authentication Key</label>
-                            <frontend_type>text</frontend_type>
                             <comment>Authentication key for Varnish CLI access. This should be the exact contents of the secret file (if used), newlines can be written as \n</comment>
                             <sort_order>25</sort_order>
                             <show_in_default>1</show_in_default>
@@ -268,7 +261,6 @@
                         </auth_key>
                         <config_file translate="label" module="turpentine">
                             <label>Config File Location</label>
-                            <frontend_type>text</frontend_type>
                             <comment>Specify where the Varnish VCL file should be saved</comment>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
@@ -277,7 +269,6 @@
                         </config_file>
                         <custom_include_file_top translate="label" module="turpentine">
                             <label>Custom VCL File - Top</label>
-                            <frontend_type>text</frontend_type>
                             <comment>If this file exists, its content will be prepended to the VCL.</comment>
                             <sort_order>40</sort_order>
                             <show_in_default>1</show_in_default>
@@ -286,7 +277,6 @@
                         </custom_include_file_top>
                         <custom_include_file translate="label" module="turpentine">
                             <label>Custom VCL File - Bottom</label>
-                            <frontend_type>text</frontend_type>
                             <comment>If this file exists, its content will be appended to the VCL.</comment>
                             <sort_order>41</sort_order>
                             <show_in_default>1</show_in_default>
@@ -295,7 +285,6 @@
                         </custom_include_file>
 			<custom_vcl_template>
                             <label>Custom VCL Template</label>
-                            <frontend_type>text</frontend_type>
                             <comment>If defined and present, this template will be used instead of the default VCL template appropriate for the version of Varnish.</comment>
                             <sort_order>50</sort_order>
                             <show_in_default>1</show_in_default>
@@ -309,7 +298,6 @@
         <turpentine_vcl translate="label" module="turpentine">
             <label>Caching Options</label>
             <tab>Nexcessnet_Turpentine</tab>
-            <frontend_type>text</frontend_type>
             <sort_order>20</sort_order>
             <show_in_default>1</show_in_default>
             <show_in_website>0</show_in_website>
@@ -317,7 +305,6 @@
             <groups>
                 <backend translate="label" module="turpentine">
                     <label>Backend</label>
-                    <frontend_type>text</frontend_type>
                     <sort_order>5</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>0</show_in_website>
@@ -334,7 +321,6 @@
                         </load_balancing>
                         <backend_host translate="label" module="turpentine">
                             <label>Backend Host</label>
-                            <frontend_type>text</frontend_type>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -345,7 +331,6 @@
                         </backend_host>
                         <backend_port translate="label" module="turpentine">
                             <label>Backend Port</label>
-                            <frontend_type>text</frontend_type>
                             <validate>validate-greater-than-zero</validate>
                             <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
@@ -370,7 +355,6 @@
                         <backend_probe_url translate="label comment" module="turpentine">
                             <label>Backend Check URL</label>
                             <comment>URL where Varnish can probe if a node is available. Leave empty to disable probing.</comment>
-                            <frontend_type>text</frontend_type>
                             <sort_order>23</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -382,7 +366,6 @@
                         <backend_probe_timeout translate="label comment" module="turpentine">
                             <label>Backend Probe Timeout</label>
                             <comment>Maximum timeout for requests. If the request takes longer than the maximum timeout, it will be marked as a failed response.</comment>
-                            <frontend_type>text</frontend_type>
                             <sort_order>24</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -394,7 +377,6 @@
                         <backend_probe_interval translate="label comment" module="turpentine">
                             <label>Backend Probe Interval</label>
                             <comment>How often to check a backend.</comment>
-                            <frontend_type>text</frontend_type>
                             <sort_order>25</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -406,7 +388,6 @@
                         <backend_probe_window translate="label comment" module="turpentine">
                             <label>Backend Probe Window</label>
                             <comment>Total number of responses in a window of health.</comment>
-                            <frontend_type>text</frontend_type>
                             <sort_order>26</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -418,7 +399,6 @@
                         <backend_probe_threshold translate="label comment" module="turpentine">
                             <label>Backend Probe Threshold</label>
                             <comment>Number of needed successful responses in the backend probe window.</comment>
-                            <frontend_type>text</frontend_type>
                             <sort_order>27</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -440,7 +420,6 @@
                         </backend_nodes_admin>
                         <backend_probe_url_admin translate="label" module="turpentine">
                             <label>Backend Check URL for Admin</label>
-                            <frontend_type>text</frontend_type>
                             <sort_order>29</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -451,7 +430,6 @@
                         </backend_probe_url_admin>
                         <frontend_timeout translate="label" module="turpentine">
                             <label>Frontend Timeout</label>
-                            <frontend_type>text</frontend_type>
                             <validate>validate-greater-than-zero</validate>
                             <sort_order>30</sort_order>
                             <comment>Timeout in seconds for Varnish to get a response from Magento's frontend</comment>
@@ -461,7 +439,6 @@
                         </frontend_timeout>
                         <admin_timeout translate="label" module="turpentine">
                             <label>Admin Timeout</label>
-                            <frontend_type>text</frontend_type>
                             <validate>validate-greater-than-zero</validate>
                             <sort_order>40</sort_order>
                             <comment>Timeout in seconds for Varnish to get a response from Magento's backend</comment>
@@ -471,7 +448,6 @@
                         </admin_timeout>
                         <crawlers translate="label" module="turpentine">
                             <label>Crawler IP Addresses</label>
-                            <frontend_type>text</frontend_type>
                             <sort_order>50</sort_order>
                             <comment>Comma-separated list of IP addresses that should bypass Turpentine's frontend cookie requirement. Also useful for performance testing tools as they also typically don't support cookies. Note - if you are using something like Pound to terminate SSL before Varnish, setting this to the same IP could cause users to end up sharing the crawler session.</comment>
                             <show_in_default>1</show_in_default>
@@ -480,7 +456,6 @@
                         </crawlers>
                         <crawler_user_agents translate="label" module="turpentine">
                             <label>Crawler User Agents</label>
-                            <frontend_type>text</frontend_type>
                             <sort_order>60</sort_order>
                             <comment>Comma-separated list of User-Agents (regexes) to serve cached pages to on initial visit</comment>
                             <show_in_default>1</show_in_default>
@@ -491,7 +466,6 @@
                 </backend>
                 <normalization translate="label" module="turpentine">
                     <label>Normalization Options</label>
-                    <frontend_type>text</frontend_type>
                     <sort_order>15</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>0</show_in_website>
@@ -520,7 +494,6 @@
                         <user_agent_mobile_regexp translate="label" module="turpentine">
                             <label>Regexp for Mobile User-Agent</label>
                             <comment><![CDATA[See for example http://magebase.com/magento-tutorials/magento-design-exceptions-explained/]]></comment>
-                            <frontend_type>text</frontend_type>
                             <sort_order>25</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -542,7 +515,6 @@
                         <host_target translate="label" module="turpentine">
                             <label>Normalized Host Target</label>
                             <comment>Domain to force requests to, defaults to the domain in the base URL</comment>
-                            <frontend_type>text</frontend_type>
                             <depends>
                                 <host>1</host>
                             </depends>
@@ -554,7 +526,6 @@
                         <cookie_regex translate="label" module="turpentine">
                             <label>Normalize Cookie Regex</label>
                             <comment>Cookie regex to match to override initial cookie domain</comment>
-                            <frontend_type>text</frontend_type>
                             <sort_order>50</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -563,7 +534,6 @@
                         <cookie_target translate="label" module="turpentine">
                             <label>Normalized Cookie Target</label>
                             <comment>Domain to force cookies to which the regex matches</comment>
-                            <frontend_type>text</frontend_type>
                             <sort_order>60</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -573,7 +543,6 @@
                 </normalization>
                 <ttls translate="label" module="turpentine">
                     <label>TTLs</label>
-                    <frontend_type>text</frontend_type>
                     <sort_order>20</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>0</show_in_website>
@@ -582,7 +551,6 @@
                         <grace_period translate="label" module="turpentine">
                             <label>Grace Period (seconds)</label>
                             <comment>Time for using dirty/expired entries while new copies are fetched and hit_for_pass timeout</comment>
-                            <frontend_type>text</frontend_type>
                             <validate>validate-greater-than-zero</validate>
                             <sort_order>5</sort_order>
                             <show_in_default>1</show_in_default>
@@ -591,7 +559,6 @@
                         </grace_period>
                         <default_ttl translate="label" module="turpentine">
                             <label>Default Page TTL (seconds)</label>
-                            <frontend_type>text</frontend_type>
                             <validate>validate-greater-than-zero</validate>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
@@ -609,7 +576,6 @@
                         </url_ttls>
                         <static_ttl translate="label" module="turpentine">
                             <label>Static File TTL (seconds)</label>
-                            <frontend_type>text</frontend_type>
                             <validate>validate-greater-than-zero</validate>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
@@ -620,7 +586,6 @@
                         <lru_factor translate="label" module="turpentine">
                             <label>Cache Hit Extension Time</label>
                             <comment>Time (in seconds) to add to cache object TTL on a cache hit (this should be set very low)</comment>
-                            <frontend_type>text</frontend_type>
                             <validate>validate-greater-than-zero</validate>
                             <sort_order>70</sort_order>
                             <show_in_default>1</show_in_default>
@@ -632,7 +597,6 @@
                 </ttls>
                 <urls translate="label" module="turpentine">
                     <label>URL-based Caching</label>
-                    <frontend_type>text</frontend_type>
                     <sort_order>30</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>0</show_in_website>
@@ -661,7 +625,6 @@
                 </urls>
                 <params translate="label" module="turpentine">
                     <label>Parameter-based Caching</label>
-                    <frontend_type>text</frontend_type>
                     <sort_order>40</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>0</show_in_website>
@@ -669,7 +632,6 @@
                     <fields>
                         <get_params translate="label" module="turpentine">
                             <label>GET Parameters</label>
-                            <frontend_type>text</frontend_type>
                             <comment>Comma-separated list of GET variables that prevent caching</comment>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
@@ -703,7 +665,6 @@
                 </params>
                 <static translate="label" module="turpentine">
                     <label>Static Caching</label>
-                    <frontend_type>text</frontend_type>
                     <sort_order>45</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>0</show_in_website>
@@ -721,7 +682,6 @@
                         </force_static>
                         <exts translate="label" module="turpentine">
                             <label>Static Asset Extensions</label>
-                            <frontend_type>text</frontend_type>
                             <comment>Comma-separated list of static asset file extensions</comment>
                             <depends>
                                 <force_static>1</force_static>
@@ -748,7 +708,6 @@
                 </static>
                 <customers translate="label" module="turpentine">
                     <label>Customers Group Caching</label>
-                    <frontend_type>text</frontend_type>
                     <sort_order>50</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>0</show_in_website>
@@ -768,7 +727,6 @@
                 </customers>
                 <maintenance translate="label" module="turpentine">
                     <label>Maintenance mode</label>
-                    <frontend_type>text</frontend_type>
                     <sort_order>46</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>0</show_in_website>
