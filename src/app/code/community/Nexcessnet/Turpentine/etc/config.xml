@@ -442,7 +442,7 @@
                 This file should never be edited by a user since it will
                 be overwritten on extension updates
                 -->
-                <turpentine_esi module="turpentine">
+                <turpentine_esi>
                     <file>turpentine_esi.xml</file>
                 </turpentine_esi>
             </updates>
@@ -504,7 +504,7 @@
     <adminhtml>
         <layout>
             <updates>
-                <turpentine module="turpentine">
+                <turpentine>
                     <file>turpentine.xml</file>
                 </turpentine>
             </updates>
@@ -515,15 +515,15 @@
                     <children>
                         <system>
                             <children>
-                                <turpentine translate="title" module="turpentine">
+                                <turpentine translate="title">
                                     <title>Turpentine Varnish Management</title>
                                 </turpentine>
                                 <config>
                                     <children>
-                                        <turpentine_varnish translate="title" module="turpentine">
+                                        <turpentine_varnish translate="title">
                                             <title>Turpentine Varnish Options</title>
                                         </turpentine_varnish>
-                                        <turpentine_vcl translate="title" module="turpentine">
+                                        <turpentine_vcl translate="title">
                                             <title>Turpentine Caching Options</title>
                                         </turpentine_vcl>
                                     </children>
