@@ -41,7 +41,7 @@
                             <label>Apply VCL On Config Change</label>
                             <comment>Automatically generate and apply the new VCL when a change is made to the Varnish or Caching options</comment>
                             <frontend_type>select</frontend_type>
-                            <source_model>turpentine/config_select_toggle</source_model>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -101,7 +101,7 @@
                             <label>Enable Debug Info</label>
                             <comment>It is a major security vulnerability, to leave this enabled on production sites</comment>
                             <frontend_type>select</frontend_type>
-                            <source_model>turpentine/config_select_toggle</source_model>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -111,7 +111,7 @@
                             <label>Enable Varnish Command Logging</label>
                             <comment>Log all commands sent to Varnish by Turpentine in the log specified (custom if enabled). Caution - can cause logs to grow quickly!</comment>
                             <frontend_type>select</frontend_type>
-                            <source_model>turpentine/config_select_toggle</source_model>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <sort_order>45</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -121,7 +121,7 @@
                             <label>Enable Block Logging</label>
                             <comment>Log block names for adding ESI, only enable when needed to avoid performance hit</comment>
                             <frontend_type>select</frontend_type>
-                            <source_model>turpentine/config_select_toggle</source_model>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <sort_order>50</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -133,7 +133,7 @@
                             <label>Enable AJAX Flash Messages</label>
                             <comment>Enable fixing the messages block to load via AJAX, disable if you already have an extension that does this</comment>
                             <frontend_type>select</frontend_type>
-                            <source_model>turpentine/config_select_toggle</source_model>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <sort_order>60</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -143,7 +143,7 @@
                             <label>Fix Product List Toolbar</label>
                             <comment>Enable this to prevent caching the visitor's view preferences of the product list</comment>
                             <frontend_type>select</frontend_type>
-                            <source_model>turpentine/config_select_toggle</source_model>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <sort_order>65</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -153,7 +153,7 @@
                             <label>Enable Site Crawler</label>
                             <comment>Enable to allow Turpentine to automatically warm the cache</comment>
                             <frontend_type>select</frontend_type>
-                            <source_model>turpentine/config_select_toggle</source_model>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <sort_order>70</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -163,7 +163,7 @@
                             <label>Enable Crawler Debug</label>
                             <comment>Enable debug info from the site crawler</comment>
                             <frontend_type>select</frontend_type>
-                            <source_model>turpentine/config_select_toggle</source_model>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <sort_order>80</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -207,7 +207,7 @@
                             <label>Use custom log file</label>
                             <comment>Log to custom log file rather than system.log</comment>
                             <frontend_type>select</frontend_type>
-                            <source_model>turpentine/config_select_toggle</source_model>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -475,7 +475,7 @@
                             <label>Normalize Encoding</label>
                             <comment>Simplify the Accept-Encoding header recieved from clients</comment>
                             <frontend_type>select</frontend_type>
-                            <source_model>turpentine/config_select_toggle</source_model>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -485,7 +485,7 @@
                             <label>Normalize User-Agent</label>
                             <comment>Simplify the User-Agent header recieved from clients</comment>
                             <frontend_type>select</frontend_type>
-                            <source_model>turpentine/config_select_toggle</source_model>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -506,7 +506,7 @@
                             <label>Normalize Host</label>
                             <comment>Force requests to be for a specific domain name, will probably break most multi-store setups</comment>
                             <frontend_type>select</frontend_type>
-                            <source_model>turpentine/config_select_toggle</source_model>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -615,7 +615,7 @@
                             <label>Bypass Varnish if base URL is not found within a store?</label>
                             <comment>If enabled any URL in the client that does not start with a store URL will bypass the cache</comment>
                             <frontend_type>select</frontend_type>
-                            <source_model>turpentine/config_select_toggle</source_model>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <sort_order>11</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -674,7 +674,7 @@
                             <label>Force Static Asset Caching</label>
                             <comment>Always cache static assets</comment>
                             <frontend_type>select</frontend_type>
-                            <source_model>turpentine/config_select_toggle</source_model>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -698,7 +698,7 @@
                                 <force_static>1</force_static>
                             </depends>
                             <frontend_type>select</frontend_type>
-                            <source_model>turpentine/config_select_toggle</source_model>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -735,7 +735,7 @@
                         <enable translate="label">
                             <label>Enable Maintenance Mode</label>
                             <frontend_type>select</frontend_type>
-                            <source_model>turpentine/config_select_toggle</source_model>
+                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
                             <comment>If enabled IP's not in 'developer client restrictions' will receive the following error page</comment>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
