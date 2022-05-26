@@ -20,10 +20,10 @@ class Nexcessnet_Turpentine_Model_Config_Select_LoadBalancing {
      */
     public function toOptionArray() {
         $helper = Mage::helper('turpentine');
-        return array(
-            array('value'=>'no', 'label'=>$helper->__('No, use only one backend server')),
-            array('value'=>'yes', 'label'=>$helper->__('Yes, use load balancing')),
-            array('value'=>'yes_admin', 'label'=>$helper->__('Yes, with separate settings for Admin')),
-        );
+        return [
+            ['value'=>'no', 'label'=>$helper->__('No, use only one backend server')],
+            ['value'=>'yes', 'label'=>$helper->__('Yes, use load balancing')],
+            ['value'=>'yes_admin', 'label'=>$helper->__('Yes, with separate settings for Admin')],
+        ];
     }
 }

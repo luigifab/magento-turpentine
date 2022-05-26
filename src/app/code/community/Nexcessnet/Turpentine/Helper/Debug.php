@@ -150,7 +150,7 @@ class Nexcessnet_Turpentine_Helper_Debug extends Mage_Core_Helper_Abstract {
      */
     public function log($message) {
         $args = func_get_args();
-        return call_user_func_array(array($this, 'logDebug'), $args);
+        return call_user_func_array([$this, 'logDebug'], $args);
     }
 
     /**
@@ -246,7 +246,7 @@ class Nexcessnet_Turpentine_Helper_Debug extends Mage_Core_Helper_Abstract {
     protected function _backtrace_formatArgs($args) {
         return implode(', ',
             array_map(
-                array($this, '_backtrace_formatArgsHelper'),
+                [$this, '_backtrace_formatArgsHelper'],
                 $args
             )
         );
@@ -266,7 +266,7 @@ class Nexcessnet_Turpentine_Helper_Debug extends Mage_Core_Helper_Abstract {
             $value = 'RESOURCE';
         } elseif (is_array($arg)) {
             $value = 'ARRAY[%s](%s)';
-            $c = array();
+            $c = [];
             foreach ($arg as $k => $v) {
                 $c[] = sprintf('%s => %s', $k,
                     $this->_backtrace_formatArgsHelper($v));

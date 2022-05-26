@@ -16,7 +16,7 @@
 
 class Nexcessnet_Turpentine_Model_Core_Session extends Mage_Core_Model_Session
 {
-    public function __construct($data = array())
+    public function __construct($data = [])
     {
         $name = isset($data['name']) ? $data['name'] : null;
         $this->init('core', $name);

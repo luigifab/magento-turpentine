@@ -23,7 +23,7 @@ class Nexcessnet_Turpentine_Helper_Ban extends Mage_Core_Helper_Abstract {
      * @return string
      */
     public function getProductBanRegex($product) {
-        $urlPatterns = array();
+        $urlPatterns = [];
         foreach ($this->getParentProducts($product) as $parentProduct) {
             if ($parentProduct->getUrlKey()) {
                 $urlPatterns[] = $parentProduct->getUrlKey();
@@ -46,8 +46,8 @@ class Nexcessnet_Turpentine_Helper_Ban extends Mage_Core_Helper_Abstract {
      * @return array
      */
     public function getParentProducts($childProduct) {
-        $parentProducts = array();
-        foreach (array('configurable', 'grouped') as $pType) {
+        $parentProducts = [];
+        foreach (['configurable', 'grouped'] as $pType) {
             foreach (Mage::getModel('catalog/product_type_'.$pType)
                     ->getParentIdsByChild($childProduct->getId()) as $parentId) {
                 $parentProducts[] = Mage::getModel('catalog/product')

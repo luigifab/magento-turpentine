@@ -38,16 +38,16 @@ abstract class Nexcessnet_Turpentine_Model_Varnish_Configurator_Abstract {
             case '4.1':
                 return Mage::getModel(
                     'turpentine/varnish_configurator_version4',
-                    array('socket' => $socket) );
+                    ['socket' => $socket] );
 
             case '3.0':
                 return Mage::getModel(
                     'turpentine/varnish_configurator_version3',
-                        array('socket' => $socket) );
+                        ['socket' => $socket] );
             case '2.1':
                 return Mage::getModel(
                     'turpentine/varnish_configurator_version2',
-                        array('socket' => $socket) );
+                        ['socket' => $socket] );
             default:
                 Mage::throwException('Unsupported Varnish version');
         }
@@ -64,11 +64,11 @@ abstract class Nexcessnet_Turpentine_Model_Varnish_Configurator_Abstract {
      *
      * @var array
      */
-    protected $_options = array(
+    protected $_options = [
         'vcl_template'  => null,
-    );
+    ];
 
-    public function __construct($options = array()) {
+    public function __construct($options = []) {
         $this->_options = array_merge($this->_options, $options);
     }
 
@@ -88,15 +88,15 @@ abstract class Nexcessnet_Turpentine_Model_Varnish_Configurator_Abstract {
             // this umask is probably redundant, but just in case...
             if ( ! mkdir($dir, 0777 & ~umask(), true)) {
                 $err = error_get_last();
-                return array(false, $err);
+                return [false, $err];
             }
         }
         if (strlen($generatedConfig) !==
                 file_put_contents($filename, $generatedConfig)) {
             $err = error_get_last();
-            return array(false, $err);
+            return [false, $err];
         }
-        return array(true, null);
+        return [true, null];
     }
 
     /**
@@ -118,7 +118,7 @@ abstract class Nexcessnet_Turpentine_Model_Varnish_Configurator_Abstract {
     protected function _getVclFilename() {
         return $this->_formatTemplate(
             Mage::getStoreConfig('turpentine_varnish/servers/config_file'),
-            array('root_dir' => Mage::getBaseDir()) );
+            ['root_dir' => Mage::getBaseDir()] );
     }
 
     /**
@@ -131,7 +131,7 @@ abstract class Nexcessnet_Turpentine_Model_Varnish_Configurator_Abstract {
         $key .= ($position) ? '_'.$position : '';
         return $this->_formatTemplate(
             Mage::getStoreConfig('turpentine_varnish/servers/'.$key),
-            array('root_dir' => Mage::getBaseDir()) );
+            ['root_dir' => Mage::getBaseDir()] );
     }
 
 
@@ -144,7 +144,7 @@ abstract class Nexcessnet_Turpentine_Model_Varnish_Configurator_Abstract {
     protected function _getCustomTemplateFilename() {
         $filePath = $this->_formatTemplate(
             Mage::getStoreConfig('turpentine_varnish/servers/custom_vcl_template'),
-            array('root_dir' => Mage::getBaseDir())
+            ['root_dir' => Mage::getBaseDir()]
         );
         if (is_file($filePath)) { return $filePath; } else { return null; }
     }
@@ -227,7 +227,7 @@ abstract class Nexcessnet_Turpentine_Model_Varnish_Configurator_Abstract {
      * @return string
      */
     public function getAllowedHostsRegex() {
-        $hosts = array();
+        $hosts = [];
         foreach (Mage::app()->getStores() as $store) {
             $hosts[] = parse_url($store->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB, false), PHP_URL_HOST);
         }
@@ -250,8 +250,8 @@ abstract class Nexcessnet_Turpentine_Model_Varnish_Configurator_Abstract {
             return (pass);
         }
 EOS;
-        return $this->_formatTemplate($tpl, array(
-            'allowed_hosts_regex' => $this->getAllowedHostsRegex() ));
+        return $this->_formatTemplate($tpl, [
+            'allowed_hosts_regex' => $this->getAllowedHostsRegex() ]);
     }
 
     /**
@@ -275,11 +275,11 @@ EOS;
      * @return array
      */
     protected function _getBaseUrlPaths() {
-        $paths = array();
-        $linkTypes = array(Mage_Core_Model_Store::URL_TYPE_LINK,
+        $paths = [];
+        $linkTypes = [Mage_Core_Model_Store::URL_TYPE_LINK,
                             Mage_Core_Model_Store::URL_TYPE_JS,
                             Mage_Core_Model_Store::URL_TYPE_SKIN,
-                            Mage_Core_Model_Store::URL_TYPE_MEDIA);
+                            Mage_Core_Model_Store::URL_TYPE_MEDIA];
         foreach (Mage::app()->getStores() as $store) {
             foreach ($linkTypes as $linkType) {
                 $paths[] = parse_url($store->getBaseUrl($linkType, false),
@@ -302,7 +302,7 @@ EOS;
      */
     protected function _getUrlExcludes() {
         $urls = Mage::getStoreConfig('turpentine_vcl/urls/url_blacklist');
-        return implode('|', array_merge(array($this->_getAdminFrontname(), 'api'),
+        return implode('|', array_merge([$this->_getAdminFrontname(), 'api'],
             Mage::helper('turpentine/data')->cleanExplode(PHP_EOL, $urls)));
     }
 
@@ -322,10 +322,10 @@ EOS;
      */
     protected function _getDefaultBackend() {
         $timeout = Mage::getStoreConfig('turpentine_vcl/backend/frontend_timeout');
-        $default_options = array(
+        $default_options = [
             'first_byte_timeout'    => $timeout.'s',
             'between_bytes_timeout' => $timeout.'s',
-        );
+        ];
         if (Mage::getStoreConfig('turpentine_vcl/backend/load_balancing') != 'no') {
             return $this->_vcl_director('default', $default_options);
         } else {
@@ -343,10 +343,10 @@ EOS;
      */
     protected function _getAdminBackend() {
         $timeout = Mage::getStoreConfig('turpentine_vcl/backend/admin_timeout');
-        $admin_options = array(
+        $admin_options = [
             'first_byte_timeout'    => $timeout.'s',
             'between_bytes_timeout' => $timeout.'s',
-        );
+        ];
         if (Mage::getStoreConfig('turpentine_vcl/backend/load_balancing') != 'no') {
             return $this->_vcl_director('admin', $admin_options);
         } else {
@@ -492,10 +492,10 @@ EOS;
      * @return string
      */
     protected function _getUrlTtls() {
-        $str = array();
+        $str = [];
         $configTtls = Mage::helper('turpentine/data')->cleanExplode(PHP_EOL,
             Mage::getStoreConfig('turpentine_vcl/ttls/url_ttls'));
-        $ttls = array();
+        $ttls = [];
         foreach ($configTtls as $line) {
             $ttls[] = explode(',', trim($line));
         }
@@ -587,7 +587,7 @@ EOS;
      * @return string
      */
     protected function _getAdvancedSessionValidationTargets() {
-        $validation = array();
+        $validation = [];
         if (Mage::getStoreConfig('web/session/use_remote_addr')) {
             $validation[] = 'client.ip';
         }
@@ -617,7 +617,7 @@ EOS;
             array_filter(
                 Mage::helper('turpentine/data')
                     ->cleanExplode(PHP_EOL, $dirtyVcl),
-                array($this, '_cleanVclHelper')
+                [$this, '_cleanVclHelper']
             )
         );
     }
@@ -644,18 +644,18 @@ EOS;
      * @param  array  $options options
      * @return string
      */
-    protected function _vcl_backend($name, $host, $port, $options = array()) {
+    protected function _vcl_backend($name, $host, $port, $options = []) {
         $tpl = <<<EOS
 backend {{name}} {
     .host = "{{host}}";
     .port = "{{port}}";
 
 EOS;
-        $vars = array(
+        $vars = [
             'host'  => $host,
             'port'  => $port,
             'name'  => $name,
-        );
+        ];
         $str = $this->_formatTemplate($tpl, $vars);
         foreach ($options as $key => $value) {
             $str .= sprintf('   .%s = %s;', $key, $value).PHP_EOL;
@@ -701,10 +701,10 @@ EOS;
             $backends .= $this->_vcl_director_backend($host, $port, $prefix.$number, $probeUrl, $backendOptions);
 			$number++;
         }
-        $vars = array(
+        $vars = [
             'name' => $name,
             'backends' => $backends
-        );
+        ];
         return $this->_formatTemplate($tpl, $vars);
     }
 
@@ -718,7 +718,7 @@ EOS;
      * @param array  $options  extra options for backend
      * @return string
      */
-    protected function _vcl_director_backend($host, $port, $descriptor = '', $probeUrl = '', $options = array()) {
+    protected function _vcl_director_backend($host, $port, $descriptor = '', $probeUrl = '', $options = []) {
         $tpl = <<<EOS
     {
         .backend {$descriptor} = {
@@ -727,11 +727,11 @@ EOS;
 {{probe}}
 
 EOS;
-        $vars = array(
+        $vars = [
             'host'  => $host,
             'port'  => $port,
             'probe' => ''
-        );
+        ];
         if ( ! empty($probeUrl)) {
             $vars['probe'] = $this->_vcl_get_probe($probeUrl);
         }
@@ -777,14 +777,14 @@ EOS;
             $window = Mage::getStoreConfig('turpentine_vcl/backend/backend_probe_window');
             $threshold = Mage::getStoreConfig('turpentine_vcl/backend/backend_probe_threshold');
 
-            return $this->_formatTemplate($tpl, array(
+            return $this->_formatTemplate($tpl, [
                 'probe_host' => $urlParts['host'],
                 'probe_path' => $urlParts['path'],
                 'timeout'    => $timeout,
                 'interval'   => $interval,
                 'window'     => $window,
                 'threshold'  => $threshold,
-            ));
+            ]);
         }
     }
 
@@ -802,10 +802,10 @@ acl {{name}} {
 }
 EOS;
         $fmtHost = create_function('$h', 'return sprintf(\'"%s";\',$h);');
-        $vars = array(
+        $vars = [
             'name'  => $name,
             'hosts' => implode("\n    ", array_map($fmtHost, $hosts)),
-        );
+        ];
         return $this->_formatTemplate($tpl, $vars);
     }
 
@@ -867,8 +867,8 @@ EOS;
 set req.http.Host = "{{normalize_host_target}}";
 
 EOS;
-        return $this->_formatTemplate($tpl, array(
-            'normalize_host_target' => $this->_getNormalizeHostTarget() ));
+        return $this->_formatTemplate($tpl, [
+            'normalize_host_target' => $this->_getNormalizeHostTarget() ]);
     }
 
     /**
@@ -942,8 +942,8 @@ if (req.http.X-Forwarded-For) {
 EOS;
         }
 
-        return $this->_formatTemplate($tpl, array(
-            'debug_ips' => Mage::getStoreConfig('dev/restrict/allow_ips') ));
+        return $this->_formatTemplate($tpl, [
+            'debug_ips' => Mage::getStoreConfig('dev/restrict/allow_ips') ]);
     }
 
     /**
@@ -967,7 +967,7 @@ EOS;
      */
     protected function _vcl_sub_https_redirect_fix() {
 
-        $hostRegex = array();
+        $hostRegex = [];
         foreach ($this->_getHostNames() as $host) {
             $hostRegex[] = 'req.http.host ~ "^(?i)'.$host.'"';
         }
@@ -997,9 +997,9 @@ EOS;
     protected function _getHostNames() {
 
         $baseUrl = $this->_stripHost(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB));
-        $hosts = array(
+        $hosts = [
             $baseUrl => $baseUrl
-        );
+        ];
 
         foreach (Mage::app()->getWebsites() as $website) {
             foreach ($website->getGroups() as $group) {
@@ -1018,7 +1018,7 @@ EOS;
     }
 
     protected function _stripHost ($baseUrl){
-        return  rtrim(str_replace(array('http://', 'https://'), '', $baseUrl), '/');
+        return  rtrim(str_replace(['http://', 'https://'], '', $baseUrl), '/');
     }
 
     /**
@@ -1058,8 +1058,8 @@ sub vcl_error {
 EOS;
         }
 
-        return $this->_formatTemplate($tpl, array(
-            'vcl_synth_content' => Mage::getStoreConfig('turpentine_vcl/maintenance/custom_vcl_synth')));
+        return $this->_formatTemplate($tpl, [
+            'vcl_synth_content' => Mage::getStoreConfig('turpentine_vcl/maintenance/custom_vcl_synth')]);
     }
 
     /**
@@ -1105,7 +1105,7 @@ sub vcl_synth {
     {
         $tpl = '';
         /** @var Mage_Core_Model_Store $store */
-        $domain2cookie = array();
+        $domain2cookie = [];
         foreach (Mage::app()->getStores() as $store) {
             $cookieDomain = $store->getConfig(Mage_Core_Model_Cookie::XML_PATH_COOKIE_DOMAIN);
             if (!$cookieDomain) {
@@ -1139,7 +1139,7 @@ EOS;
      * @return array
      */
     protected function _getTemplateVars() {
-        $vars = array(
+        $vars = [
             'default_backend'   => $this->_getDefaultBackend(),
             'admin_backend'     => $this->_getAdminBackend(),
             'admin_frontname'   => $this->_getAdminFrontname(),
@@ -1184,7 +1184,7 @@ EOS;
                 ->getDefaultEsiTtl(),
             'real_ip' => $this->_getRealIp(),
             'set_cookie_domain' => $this->_vcl_sub_set_cookie_domain(),
-        );
+        ];
 
         if ((bool) Mage::getStoreConfig('turpentine_vcl/urls/bypass_cache_store_url')) {
             $vars['allowed_hosts'] = $this->_vcl_sub_allowed_hosts_regex();
@@ -1224,7 +1224,7 @@ EOS;
             }
         }
 
-        foreach (array('', 'top') as $position) {
+        foreach (['', 'top'] as $position) {
             $customIncludeFile = $this->_getCustomIncludeFilename($position);
             if (is_readable($customIncludeFile)) {
                 $key = 'custom_vcl_include';

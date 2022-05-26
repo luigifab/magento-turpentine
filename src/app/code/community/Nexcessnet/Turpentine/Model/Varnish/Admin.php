@@ -35,7 +35,7 @@ class Nexcessnet_Turpentine_Model_Varnish_Admin {
      * @return bool
      */
     public function flushUrl($subPattern) {
-        $result = array();
+        $result = [];
         foreach (Mage::helper('turpentine/varnish')->getSockets() as $socket) {
             $socketName = $socket->getConnectionString();
             try {
@@ -59,11 +59,11 @@ class Nexcessnet_Turpentine_Model_Varnish_Admin {
      */
     public function flushExpression() {
         $args = func_get_args();
-        $result = array();
+        $result = [];
         foreach (Mage::helper('turpentine/varnish')->getSockets() as $socket) {
             $socketName = $socket->getConnectionString();
             try {
-                call_user_func_array(array($socket, 'ban'), $args);
+                call_user_func_array([$socket, 'ban'], $args);
             } catch (Mage_Core_Exception $e) {
                 $result[$socketName] = $e->getMessage();
                 continue;
@@ -90,7 +90,7 @@ class Nexcessnet_Turpentine_Model_Varnish_Admin {
      * @return bool
      */
     public function applyConfig() {
-        $result = array();
+        $result = [];
         $helper = Mage::helper('turpentine');
         foreach (Mage::helper('turpentine/varnish')->getSockets() as $socket) {
             $cfgr = Nexcessnet_Turpentine_Model_Varnish_Configurator_Abstract::getFromSocket($socket);

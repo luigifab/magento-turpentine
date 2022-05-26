@@ -84,6 +84,6 @@ class Nexcessnet_Turpentine_Block_Management
      * @return string
      */
     public function getSwitchNavigationUrl($type) {
-        return $this->getUrl('*/varnish_management/switchNavigation', array('type' => $type));
+        return $this->getUrl('*/varnish_management/switchNavigation', ['type' => $type]);
     }
 }

@@ -88,7 +88,7 @@ class Nexcessnet_Turpentine_Model_Varnish_Admin_Socket {
     /**
      * VCL config versions, should match config select values
      */
-    static protected $_VERSIONS = array('2.1', '3.0', '4.0', '4.1');
+    static protected $_VERSIONS = ['2.1', '3.0', '4.0', '4.1'];
 
     /**
      * Varnish socket connection
@@ -103,7 +103,7 @@ class Nexcessnet_Turpentine_Model_Varnish_Admin_Socket {
     protected $_timeout = 5;
     protected $_version = null; //auto-detect
 
-    public function __construct(array $options = array()) {
+    public function __construct(array $options = []) {
         foreach ($options as $key => $value) {
             switch ($key) {
                 case 'host':
@@ -155,7 +155,7 @@ class Nexcessnet_Turpentine_Model_Varnish_Admin_Socket {
     public function __call($name, $args) {
         array_unshift($args, self::CODE_OK);
         array_unshift($args, $this->_translateCommandMethod($name));
-        return call_user_func_array(array($this, '_command'), $args);
+        return call_user_func_array([$this, '_command'], $args);
     }
 
     /**
@@ -407,7 +407,7 @@ class Nexcessnet_Turpentine_Model_Varnish_Admin_Socket {
             if (preg_match($regexp, $cliBufferResponse['text'], $match)) {
                 $realLimit = (int) $match[1];
                 if (isset($match[2])) {
-                    $factors = array('b'=>0, 'k'=>1, 'm'=>2, 'g'=>3);
+                    $factors = ['b'=>0, 'k'=>1, 'm'=>2, 'g'=>3];
                     $realLimit *= pow(1024, $factors[$match[2]]);
                 }
             } else {
@@ -454,7 +454,7 @@ class Nexcessnet_Turpentine_Model_Varnish_Admin_Socket {
         if (is_null($code)) {
             Mage::throwException('Failed to read response code from Varnish');
         } else {
-            $response = array('code' => $code, 'text' => '');
+            $response = ['code' => $code, 'text' => ''];
             while ( ! feof($this->_varnishConn) &&
                     strlen($response['text']) < $len) {
                 $response['text'] .= fgets($this->_varnishConn,
@@ -477,14 +477,14 @@ class Nexcessnet_Turpentine_Model_Varnish_Admin_Socket {
         array_shift($params);
         //remove $okCode (if it exists)
         array_shift($params);
-        $cleanedParams = array();
+        $cleanedParams = [];
         foreach ($params as $param) {
             $cp = addcslashes($param, "\"\\");
             $cp = str_replace(PHP_EOL, '\n', $cp);
             $cleanedParams[] = sprintf('"%s"', $cp);
         }
         $data = implode(' ', array_merge(
-            array(sprintf('"%s"', $verb)),
+            [sprintf('"%s"', $verb)],
             $cleanedParams ));
         $response = $this->_write($data)->_read();
         if ($response['code'] !== $okCode && ! is_null($okCode)) {

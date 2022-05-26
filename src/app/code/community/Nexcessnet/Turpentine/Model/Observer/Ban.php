@@ -28,7 +28,7 @@ class Nexcessnet_Turpentine_Model_Observer_Ban extends Varien_Event_Observer {
      * Flag to prevent doing the ESI cache clear more than once per request
      * @var boolean
      */
-    protected $_esiClearFlag = array();
+    protected $_esiClearFlag = [];
 
     /**
      * Clear the ESI block cache for a specific client
@@ -293,7 +293,7 @@ class Nexcessnet_Turpentine_Model_Observer_Ban extends Varien_Event_Observer {
      */
     public function banProductReview($eventObject) {
         if (Mage::helper('turpentine/varnish')->getVarnishEnabled()) {
-            $patterns = array();
+            $patterns = [];
             /* @var $review \Mage_Review_Model_Review*/
             $review = $eventObject->getObject();
 
@@ -309,7 +309,7 @@ class Nexcessnet_Turpentine_Model_Observer_Ban extends Varien_Event_Observer {
                 implode('|', array_unique($productIds)));
             $patterns[] = sprintf('/review/product/view/id/%d/',
                 $review->getEntityId());
-            $productPatterns = array();
+            $productPatterns = [];
             foreach ($products as $p) {
                 $urlKey = $p->getUrlModel()->formatUrlKey($p->getName());
                 if ($urlKey) {

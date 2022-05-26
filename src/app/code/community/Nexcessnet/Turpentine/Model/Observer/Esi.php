@@ -281,20 +281,20 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
             $esiData = $this->_getEsiData($blockObject, $esiOptions)->toArray();
             ksort($esiData);
             $frozenData = $dataHelper->freeze($esiData);
-            $urlOptions = array(
+            $urlOptions = [
                 $methodParam    => $esiOptions[$methodParam],
                 $cacheTypeParam => $esiOptions[$cacheTypeParam],
                 $ttlParam       => $esiOptions[$ttlParam],
                 $hmacParam      => $dataHelper->getHmac($frozenData),
                 $dataParam      => $frozenData,
-            );
+            ];
             if ($esiOptions[$methodParam] == 'ajax') {
                 $urlOptions['_secure'] = Mage::app()->getStore()
                     ->isCurrentlySecure();
             }
             if ($esiOptions[$scopeParam] == 'page') {
                 $urlOptions[$referrerParam] = Mage::helper('core')->urlEncode(
-                    Mage::getUrl('*/*/*', array('_use_rewrite' => true, '_current' => true))
+                    Mage::getUrl('*/*/*', ['_use_rewrite' => true, '_current' => true])
                 );
                 // If scope is 'page': Keep params from original url
                 $urlOptions['_query'] = Mage::app()->getRequest()->getParams();
@@ -308,7 +308,7 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
             $blockObject->setEsiUrl($esiUrl);
             // avoid caching the ESI template output to prevent the double-esi-
             // include/"ESI processing not enabled" bug
-            foreach (array('lifetime', 'tags', 'key') as $dataKey) {
+            foreach (['lifetime', 'tags', 'key'] as $dataKey) {
                 $blockObject->unsetData('cache_'.$dataKey);
             }
             if (strlen($esiUrl) > 2047) {
@@ -336,12 +336,12 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
         $esiData = new Varien_Object();
         $esiData->setStoreId(Mage::app()->getStore()->getId());
         $esiData->setDesignPackage(Mage::getDesign()->getPackageName());
-        $esiData->setDesignTheme(array(
+        $esiData->setDesignTheme([
             'layout' => Mage::getDesign()->getTheme('layout'),
             'template' => Mage::getDesign()->getTheme('template'),
             'skin' => Mage::getDesign()->getTheme('skin'),
             'locale' => Mage::getDesign()->getTheme('locale')
-        ));
+        ]);
         $esiData->setNameInLayout($blockObject->getNameInLayout());
         $esiData->setBlockType(get_class($blockObject));
         $esiData->setLayoutHandles($this->_getBlockLayoutHandles($blockObject));
@@ -360,7 +360,7 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
             $esiData->setParentUrl(Mage::app()->getRequest()->getRequestString());
         }
         if (is_array($esiOptions['dummy_blocks'])) {
-            $dummyBlocks = array();
+            $dummyBlocks = [];
             foreach ($esiOptions['dummy_blocks'] as $key => $value) {
                 $dummyBlocks[] = (empty($value) && ! is_numeric($key)) ? $key : $value;
             }
@@ -370,8 +370,8 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
                 'Invalid dummy_blocks for block: %s',
                 $blockObject->getNameInLayout() );
         }
-        $simpleRegistry = array();
-        $complexRegistry = array();
+        $simpleRegistry = [];
+        $complexRegistry = [];
         if (is_array($esiOptions['registry_keys'])) {
             foreach ($esiOptions['registry_keys'] as $key => $options) {
                 $value = Mage::registry($key);
@@ -420,7 +420,7 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
         Varien_Profiler::start('turpentine::observer::esi::_getBlockLayoutHandles');
         $layout = $block->getLayout();
         $layoutXml = Mage::helper('turpentine/esi')->getLayoutXml();
-        $activeHandles = array();
+        $activeHandles = [];
         // get the xml node representing the block we're working on (from the
         // default handle probably)
         $blockNode = Mage::helper('turpentine/esi')->getEsiLayoutBlockNode(
@@ -456,13 +456,13 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
         $ttlParam = $esiHelper->getEsiTtlParam();
         $methodParam = $esiHelper->getEsiMethodParam();
         $cacheTypeParam = $esiHelper->getEsiCacheTypeParam();
-        $defaults = array(
+        $defaults = [
             $esiHelper->getEsiMethodParam()         => 'esi',
             $esiHelper->getEsiScopeParam()          => 'global',
             $esiHelper->getEsiCacheTypeParam()      => 'public',
-            'dummy_blocks'      => array(),
-            'registry_keys'     => array(),
-        );
+            'dummy_blocks'      => [],
+            'registry_keys'     => [],
+        ];
         $options = array_merge($defaults, $options);
 
         // set the default TTL
@@ -500,10 +500,10 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
         $model = @$valueOptions['model'] ?
             $valueOptions['model'] : Mage::helper('turpentine/data')
                 ->getModelName($value);
-        $data = array(
+        $data = [
             'model'         => $model,
             'id'            => $value->{$idMethod}(),
-        );
+        ];
         return $data;
     }
 
@@ -546,16 +546,16 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
 
     public function hookToControllerActionPreDispatch($observer) {
         if (Mage::helper('turpentine/data')->getVclFix() == 0 && $observer->getEvent()->getControllerAction()->getFullActionName() == 'checkout_cart_add') {
-            Mage::dispatchEvent("add_to_cart_before", array('request' => $observer->getControllerAction()->getRequest()));
+            Mage::dispatchEvent("add_to_cart_before", ['request' => $observer->getControllerAction()->getRequest()]);
         }
         if ($observer->getEvent()->getControllerAction()->getFullActionName() == 'wishlist_index_index') {
-            Mage::dispatchEvent('wishlist_index_index_before', array('request' => $observer->getControllerAction()->getRequest()));
+            Mage::dispatchEvent('wishlist_index_index_before', ['request' => $observer->getControllerAction()->getRequest()]);
         }
     }
 
     public function hookToControllerActionPostDispatch($observer) {
         if ($observer->getEvent()->getControllerAction()->getFullActionName() == 'checkout_cart_add') {
-            Mage::dispatchEvent("add_to_cart_after", array('request' => $observer->getControllerAction()->getRequest()));
+            Mage::dispatchEvent("add_to_cart_after", ['request' => $observer->getControllerAction()->getRequest()]);
         }
     }
 

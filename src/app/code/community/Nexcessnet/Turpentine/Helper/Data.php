@@ -124,8 +124,8 @@ class Nexcessnet_Turpentine_Helper_Data extends Mage_Core_Helper_Abstract {
      */
     public function urlBase64Encode($str) {
         return str_replace(
-            array('/', '+'),
-            array('_', '-'),
+            ['/', '+'],
+            ['_', '-'],
             base64_encode($str) );
     }
 
@@ -138,8 +138,8 @@ class Nexcessnet_Turpentine_Helper_Data extends Mage_Core_Helper_Abstract {
     public function urlBase64Decode($str) {
         return base64_decode(
             str_replace(
-                array('_', '-'),
-                array('/', '+'),
+                ['_', '-'],
+                ['/', '+'],
                 $str ) );
     }
 
@@ -327,7 +327,7 @@ class Nexcessnet_Turpentine_Helper_Data extends Mage_Core_Helper_Abstract {
     protected function _getChildBlockNames($blockNode) {
         Varien_Profiler::start('turpentine::helper::data::_getChildBlockNames');
         if ($blockNode instanceof Mage_Core_Model_Layout_Element) {
-            $blockNames = array((string) $blockNode['name']);
+            $blockNames = [(string) $blockNode['name']];
             foreach ($blockNode->xpath('./block | ./reference') as $childBlockNode) {
                 $blockNames = array_merge($blockNames,
                     $this->_getChildBlockNames($childBlockNode));
@@ -342,7 +342,7 @@ class Nexcessnet_Turpentine_Helper_Data extends Mage_Core_Helper_Abstract {
                 }
             }
         } else {
-            $blockNames = array();
+            $blockNames = [];
         }
         Varien_Profiler::stop('turpentine::helper::data::_getChildBlockNames');
         return $blockNames;

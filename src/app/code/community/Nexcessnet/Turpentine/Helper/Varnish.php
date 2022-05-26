@@ -90,7 +90,7 @@ class Nexcessnet_Turpentine_Helper_Varnish extends Mage_Core_Helper_Abstract {
      */
     public function getSocket($host, $port, $secretKey = null, $version = null) {
         $socket = Mage::getModel('turpentine/varnish_admin_socket',
-            array('host' => $host, 'port' => $port));
+            ['host' => $host, 'port' => $port]);
         if ($secretKey) {
             $socket->setAuthSecret($secretKey);
         }
@@ -106,7 +106,7 @@ class Nexcessnet_Turpentine_Helper_Varnish extends Mage_Core_Helper_Abstract {
      * @return array
      */
     public function getSockets() {
-        $sockets = array();
+        $sockets = [];
         $servers = Mage::helper('turpentine/data')->cleanExplode(PHP_EOL,
             Mage::getStoreConfig('turpentine_varnish/servers/server_list'));
         $key = str_replace('\n', PHP_EOL,

@@ -68,7 +68,7 @@ class Nexcessnet_Turpentine_Varnish_ManagementController
         } else {
             $pattern = $postData['pattern'];
             Mage::dispatchEvent('turpentine_varnish_flush_partial',
-                array('pattern' => $pattern));
+                ['pattern' => $pattern]);
             $result = Mage::getModel('turpentine/varnish_admin')
                 ->flushUrl($pattern);
             foreach ($result as $name => $value) {
@@ -98,7 +98,7 @@ class Nexcessnet_Turpentine_Varnish_ManagementController
         } else {
             $ctype = $postData['ctype'];
             Mage::dispatchEvent('turpentine_varnish_flush_content_type',
-                array('ctype' => $ctype));
+                ['ctype' => $ctype]);
             $result = Mage::getModel('turpentine/varnish_admin')
                 ->flushContentType($ctype);
             foreach ($result as $name => $value) {
@@ -154,7 +154,7 @@ class Nexcessnet_Turpentine_Varnish_ManagementController
                 $this->__('Failed to load configurator') );
         } else {
             Mage::dispatchEvent('turpentine_varnish_save_config',
-                array('cfgr' => $cfgr));
+                ['cfgr' => $cfgr]);
             $result = $cfgr->save($cfgr->generate(
                 Mage::helper('turpentine')->shouldStripVclWhitespace('save') ));
             if ($result[0]) {

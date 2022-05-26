@@ -199,7 +199,7 @@ class Nexcessnet_Turpentine_EsiController extends Mage_Core_Controller_Front_Act
         // - Dispatch event for adding handles to layout update
         Mage::dispatchEvent(
             'controller_action_layout_load_before',
-            array('action'=>$this, 'layout'=>$layout)
+            ['action'=>$this, 'layout'=>$layout]
         );
 
         // - Load the Layout by Update Handles
@@ -214,7 +214,7 @@ class Nexcessnet_Turpentine_EsiController extends Mage_Core_Controller_Front_Act
         if ( ! $this->getFlag('', self::FLAG_NO_DISPATCH_BLOCK_EVENT)) {
             Mage::dispatchEvent(
                 'controller_action_layout_generate_xml_before',
-                array('action'=>$this, 'layout'=>$layout)
+                ['action'=>$this, 'layout'=>$layout]
             );
         }
 
@@ -264,7 +264,7 @@ class Nexcessnet_Turpentine_EsiController extends Mage_Core_Controller_Front_Act
         if ( ! $this->getFlag('', self::FLAG_NO_DISPATCH_BLOCK_EVENT)) {
             Mage::dispatchEvent(
                 'controller_action_layout_generate_blocks_before',
-                array('action'=>$this, 'layout'=>$layout)
+                ['action'=>$this, 'layout'=>$layout]
             );
         }
 
@@ -278,7 +278,7 @@ class Nexcessnet_Turpentine_EsiController extends Mage_Core_Controller_Front_Act
 
         // - Add the formKey blocks
         if ($roots = $layout->getNode()->xpath('//block[@name=\'root\']')) {
-            foreach (array('formkey') as $globalBlock) {
+            foreach (['formkey'] as $globalBlock) {
                 if ($blocks = $layout->getNode()->xpath(sprintf('//block[@name=\'%s\']', $globalBlock))) {
                     $dummy = $roots[0]->addChild('reference');
                     $dummy->appendChild($blocks[0]);
@@ -294,7 +294,7 @@ class Nexcessnet_Turpentine_EsiController extends Mage_Core_Controller_Front_Act
         if ( ! $this->getFlag('', self::FLAG_NO_DISPATCH_BLOCK_EVENT)) {
             Mage::dispatchEvent(
                 'controller_action_layout_generate_blocks_after',
-                array('action'=>$this, 'layout'=>$layout)
+                ['action'=>$this, 'layout'=>$layout]
             );
         }
 
@@ -316,9 +316,9 @@ class Nexcessnet_Turpentine_EsiController extends Mage_Core_Controller_Front_Act
      */
     protected function _swapCustomerHandles($handles) {
         if (Mage::helper('customer')->isLoggedIn()) {
-            $replacement = array('customer_logged_out', 'customer_logged_in');
+            $replacement = ['customer_logged_out', 'customer_logged_in'];
         } else {
-            $replacement = array('customer_logged_in', 'customer_logged_out');
+            $replacement = ['customer_logged_in', 'customer_logged_out'];
         }
         if (($pos = array_search($replacement[0], $handles)) !== false) {
             $handles[$pos] = $replacement[1];

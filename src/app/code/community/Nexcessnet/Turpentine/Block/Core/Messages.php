@@ -43,7 +43,7 @@ class Nexcessnet_Turpentine_Block_Core_Messages extends Mage_Core_Block_Messages
      * Must be listed here because there's no other way to get this info.
      * @var array
      */
-    protected $_messageStorageTypes = array(
+    protected $_messageStorageTypes = [
         'catalog',
         'checkout',
         'tag',
@@ -52,7 +52,7 @@ class Nexcessnet_Turpentine_Block_Core_Messages extends Mage_Core_Block_Messages
         'wishlist',
         'core',
         'newsletter',
-    );
+    ];
 
     /**
      * Storage for used types of message storages
@@ -61,7 +61,7 @@ class Nexcessnet_Turpentine_Block_Core_Messages extends Mage_Core_Block_Messages
      *
      * @var array
      */
-    protected $_usedStorageTypes = array('core/session');
+    protected $_usedStorageTypes = ['core/session'];
 
     public function _prepareLayout() {
         if ($this->_fixMessages()) {
@@ -110,7 +110,7 @@ class Nexcessnet_Turpentine_Block_Core_Messages extends Mage_Core_Block_Messages
      */
     public function addMessage(Mage_Core_Model_Message_Abstract $message) {
         if ($this->_fixMessages()) {
-            $this->_saveMessages(array($message));
+            $this->_saveMessages([$message]);
         } else {
             parent::addMessage($message);
         }

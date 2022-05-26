@@ -195,10 +195,10 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
      * @return string[]
      */
     public function getDefaultCacheClearEvents() {
-        $events = array(
+        $events = [
             'customer_login',
             'customer_logout',
-        );
+        ];
         return $events;
     }
 
@@ -214,7 +214,7 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
         if (is_null($events) || $events === false) {
             $events = $this->_loadEsiCacheClearEvents();
             Mage::app()->saveCache(serialize($events), $cacheKey,
-                array('LAYOUT_GENERAL_CACHE_TAG'));
+                ['LAYOUT_GENERAL_CACHE_TAG']);
         }
         Varien_Profiler::stop('turpentine::helper::esi::getCacheClearEvents');
         return array_merge($this->getDefaultCacheClearEvents(), $events);
@@ -274,7 +274,7 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
                 $this->_layoutXml = $this->_loadLayoutXml();
                 if ($useCache) {
                     Mage::app()->saveCache($this->_layoutXml->asXML(),
-                        $cacheKey, array('LAYOUT_GENERAL_CACHE_TAG'));
+                        $cacheKey, ['LAYOUT_GENERAL_CACHE_TAG']);
                 }
             }
         }
@@ -290,13 +290,13 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
     public function getCacheClearEventsCacheKey() {
         $design = Mage::getDesign();
         return Mage::helper('turpentine/data')
-            ->getCacheKeyHash(array(
+            ->getCacheKeyHash([
                 'FILE_LAYOUT_ESI_CACHE_EVENTS',
                 $design->getArea(),
                 $design->getPackageName(),
                 $design->getTheme('layout'),
                 Mage::app()->getStore()->getId(),
-            ));
+            ]);
     }
 
     /**
@@ -307,13 +307,13 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
     public function getFileLayoutUpdatesXmlCacheKey() {
         $design = Mage::getDesign();
         return Mage::helper('turpentine/data')
-            ->getCacheKeyHash(array(
+            ->getCacheKeyHash([
                 'FILE_LAYOUT_UPDATES_XML',
                 $design->getArea(),
                 $design->getPackageName(),
                 $design->getTheme('layout'),
                 Mage::app()->getStore()->getId(),
-            ));
+            ]);
     }
 
     /**
@@ -349,12 +349,12 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
      * @return string
      */
     public function getFormKeyEsiUrl() {
-        $urlOptions = array(
+        $urlOptions = [
             $this->getEsiTtlParam()         => $this->getDefaultEsiTtl(),
             $this->getEsiMethodParam()      => 'esi',
             $this->getEsiScopeParam()       => 'global',
             $this->getEsiCacheTypeParam()   => 'private',
-        );
+        ];
         $esiUrl = Mage::getUrl('turpentine/esi/getFormKey', $urlOptions);
         // setting [web/unsecure/base_url] can be https://... but ESI can never be HTTPS
         $esiUrl = preg_replace('|^https://|i', 'http://', $esiUrl);
@@ -405,7 +405,7 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
                     'return (string)$e->getName();'),
                 $events ));
         } else {
-            $events = array();
+            $events = [];
         }
         Varien_Profiler::stop('turpentine::helper::esi::_loadEsiCacheClearEvents');
         return $events;

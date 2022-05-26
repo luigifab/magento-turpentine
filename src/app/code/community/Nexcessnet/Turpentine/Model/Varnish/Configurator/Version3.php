@@ -59,10 +59,10 @@ class Nexcessnet_Turpentine_Model_Varnish_Configurator_Version3
             $this->_getAdvancedSessionValidation();
 
         //dispatch event to allow other extensions to add custom vcl template variables
-        Mage::dispatchEvent('turpentine_get_templatevars_after', array(
+        Mage::dispatchEvent('turpentine_get_templatevars_after', [
             'vars' => &$vars,
             'vcl_version'=> self::VCL_VERSION
-        ));
+        ]);
 
         return $vars;
     }

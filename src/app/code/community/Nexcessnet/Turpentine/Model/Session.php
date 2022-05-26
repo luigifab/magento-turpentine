@@ -17,12 +17,12 @@
 class Nexcessnet_Turpentine_Model_Session extends Mage_Core_Model_Session_Abstract {
     protected $_namespace = 'turpentine';
 
-    public function __construct($data = array()) {
+    public function __construct($data = []) {
         $sessionName = isset($data['name']) ? $data['name'] : null;
         $this->init($this->_namespace, $sessionName);
         Mage::dispatchEvent(
             sprintf('%s_session_init', $this->_namespace),
-            array(sprintf('%s_session', $this->_namespace) => $this) );
+            [sprintf('%s_session', $this->_namespace) => $this] );
     }
 
     /**
@@ -50,7 +50,7 @@ class Nexcessnet_Turpentine_Model_Session extends Mage_Core_Model_Session_Abstra
         if (is_array(@$messages[$blockName])) {
             return $messages[$blockName];
         } else {
-            return array();
+            return [];
         }
     }
 
@@ -74,7 +74,7 @@ class Nexcessnet_Turpentine_Model_Session extends Mage_Core_Model_Session_Abstra
     public function getMessages($clear = false) {
         $messages = $this->getData('messages');
         if ( ! is_array($messages)) {
-            $messages = array();
+            $messages = [];
         }
         return $messages;
     }

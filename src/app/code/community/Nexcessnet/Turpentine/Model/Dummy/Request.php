@@ -507,7 +507,7 @@ class Nexcessnet_Turpentine_Model_Dummy_Request extends
      * @return null
      */
     protected function _initFakeSuperGlobals() {
-        $this->GET = array();
+        $this->GET = [];
         $this->POST = $_POST;
         $this->SERVER = $_SERVER;
         $this->ENV = $_ENV;
@@ -766,14 +766,14 @@ class Nexcessnet_Turpentine_Model_Dummy_Request extends
 
         $identifier = trim($this->getPathInfo(), '/');
 
-        $condition = new Varien_Object(array(
+        $condition = new Varien_Object([
             'identifier' => $identifier,
             'continue'   => true
-        ));
-        Mage::dispatchEvent('cms_controller_router_match_before', array(
+        ]);
+        Mage::dispatchEvent('cms_controller_router_match_before', [
             'router'    => $router,
             'condition' => $condition
-        ));
+        ]);
         $identifier = $condition->getIdentifier();
 
         if ($condition->getRedirectUrl()) {

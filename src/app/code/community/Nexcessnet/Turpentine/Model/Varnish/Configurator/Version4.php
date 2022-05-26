@@ -70,10 +70,10 @@ class Nexcessnet_Turpentine_Model_Varnish_Configurator_Version4
         }
 
         //dispatch event to allow other extensions to add custom vcl template variables
-        Mage::dispatchEvent('turpentine_get_templatevars_after', array(
+        Mage::dispatchEvent('turpentine_get_templatevars_after', [
             'vars' => &$vars,
             'vcl_version'=> self::VCL_VERSION
-        ));
+        ]);
 
         return $vars;
     }
@@ -111,7 +111,7 @@ EOS;
 EOS;
         }
 
-        $vars = array();
+        $vars = [];
 
         return $this->_formatTemplate($tpl, $vars);
     }
@@ -154,10 +154,10 @@ EOS;
 
             $number++;
         }
-        $vars = array(
+        $vars = [
             'name' => $name,
             'backends' => $backends
-        );
+        ];
         return $this->_formatTemplate($tpl, $vars);
     }
 
@@ -171,7 +171,7 @@ EOS;
      * @param array  $options    extra options for backend
      * @return string
      */
-    protected function _vcl_director_backend($host, $port, $descriptor = '', $probeUrl = '', $options = array()) {
+    protected function _vcl_director_backend($host, $port, $descriptor = '', $probeUrl = '', $options = []) {
         $tpl = <<<EOS
         backend web{$descriptor} {
             .host = "{{host}}";
@@ -179,11 +179,11 @@ EOS;
 {{probe}}
 
 EOS;
-        $vars = array(
+        $vars = [
             'host'  => $host,
             'port'  => $port,
             'probe' => ''
-        );
+        ];
         if ( ! empty($probeUrl)) {
             $vars['probe'] = $this->_vcl_get_probe($probeUrl);
         }
