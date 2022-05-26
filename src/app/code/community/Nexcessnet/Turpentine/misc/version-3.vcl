@@ -1,22 +1,17 @@
 # Nexcess.net Turpentine Extension for Magento
 # Copyright (C) 2012  Nexcess.net L.L.C.
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
+# This program is free software, you can redistribute it or modify
+# it under the terms of the GNU General Public License (GPL) as published
+# by the free software foundation, either version 2 of the license, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+# but without any warranty, without even the implied warranty of
+# merchantability or fitness for a particular purpose. See the
+# GNU General Public License (GPL) for more details.
 
 ## Nexcessnet_Turpentine Varnish v3 VCL Template
-
 ## Custom C Code
 
 C{
@@ -73,7 +68,7 @@ sub generate_session {
     } else {
         set req.http.Cookie = req.http.X-Varnish-Faked-Session;
     }
-} 
+}
 
 sub generate_session_expires {
     # sets X-Varnish-Cookie-Expires to now + esi_private_ttl in format:
@@ -290,7 +285,7 @@ sub vcl_hash {
             req.http.Cookie ~ "customer_group=") {
         hash_data(regsub(req.http.Cookie, "^.*?customer_group=([^;]*);*.*$", "\1"));
     }
-    
+
     return (hash);
 }
 

@@ -1,22 +1,17 @@
 <?php
-
 /**
  * Nexcess.net Turpentine Extension for Magento
  * Copyright (C) 2012  Nexcess.net L.L.C.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * This program is free software, you can redistribute it or modify
+ * it under the terms of the GNU General Public License (GPL) as published
+ * by the free software foundation, either version 2 of the license, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * but without any warranty, without even the implied warranty of
+ * merchantability or fitness for a particular purpose. See the
+ * GNU General Public License (GPL) for more details.
  */
 
 class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
@@ -236,12 +231,12 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
             $debugHelper->logInfo("-- block testing: shouldResponseUseEsi = ".$esiHelper->shouldResponseUseEsi());
             $debugHelper->logInfo("-- block testing: instanceof Mage_Core_Block_Template = ".$blockObject instanceof Mage_Core_Block_Template);
             $debugHelper->logInfo("-- block testing: Esi Options = ".print_r($blockObject->getEsiOptions(), true));
-        }        
+        }
         if ($esiHelper->shouldResponseUseEsi() &&
                 $blockObject instanceof Mage_Core_Block_Template &&
                 $esiOptions = $blockObject->getEsiOptions()) {
 
-            if ((isset($esiOptions['disableEsiInjection'])) && ($esiOptions['disableEsiInjection'] == 1)) { 
+            if ((isset($esiOptions['disableEsiInjection'])) && ($esiOptions['disableEsiInjection'] == 1)) {
                 if ($esiHelper->getEsiBlockLogEnabled()) {
                     $debugHelper->logInfo("-- ESI Injection disabled");
                 }
@@ -304,7 +299,7 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
                 // If scope is 'page': Keep params from original url
                 $urlOptions['_query'] = Mage::app()->getRequest()->getParams();
             }
-            
+
             $esiUrl = Mage::getUrl('turpentine/esi/getBlock', $urlOptions);
             if ($esiOptions[$methodParam] == 'esi') {
                 // setting [web/unsecure/base_url] can be https://... but ESI can never be HTTPS
@@ -563,7 +558,7 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
             Mage::dispatchEvent("add_to_cart_after", array('request' => $observer->getControllerAction()->getRequest()));
         }
     }
-    
+
     public function hookToAddToCartBefore($observer) {
         //Mage::log("hookToAddToCartBefore-antes ".print_r($observer->getEvent()->getRequest()->getParams(),true)." will be added to cart.", null, 'carrinho.log', true);
         $key = Mage::getSingleton('core/session')->getFormKey();

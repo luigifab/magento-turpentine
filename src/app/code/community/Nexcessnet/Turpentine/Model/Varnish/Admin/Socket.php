@@ -1,22 +1,17 @@
 <?php
-
 /**
  * Nexcess.net Turpentine Extension for Magento
  * Copyright (C) 2012  Nexcess.net L.L.C.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * This program is free software, you can redistribute it or modify
+ * it under the terms of the GNU General Public License (GPL) as published
+ * by the free software foundation, either version 2 of the license, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * but without any warranty, without even the implied warranty of
+ * merchantability or fitness for a particular purpose. See the
+ * GNU General Public License (GPL) for more details.
  */
 
 /**
@@ -365,7 +360,7 @@ class Nexcessnet_Turpentine_Model_Varnish_Admin_Socket {
             // Varnish before 3.0.4 does not spit out a version number
             $resp = $this->_write('help')->_read();
             if (strpos($resp['text'], 'ban.url') !== false) {
-                // Varnish versions 3.0 through 3.0.3 do not return a version banner. 
+                // Varnish versions 3.0 through 3.0.3 do not return a version banner.
                 // To differentiate between 2.1 and 3.0, we check the existence of the ban.url command.
                 return '3.0';
             }
@@ -499,7 +494,7 @@ class Nexcessnet_Turpentine_Model_Varnish_Admin_Socket {
                 "Got unexpected response code from Varnish: %d\n%s",
                 $response['code'], $response['text'] ));
         } else {
-            if (Mage::getStoreConfig('turpentine_varnish/general/varnish_log_commands')) { 
+            if (Mage::getStoreConfig('turpentine_varnish/general/varnish_log_commands')) {
                 Mage::helper('turpentine/debug')->logDebug('VARNISH command sent: '.$data);
             }
             return $response;
