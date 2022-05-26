@@ -1,19 +1,29 @@
 {
-    "name": "nexcess/magento-turpentine",
     "type": "magento-module",
-    "license": "GPL-2.0+",
-    "description": "A Varnish extension for Magento.",
-    "homepage": "http://www.magentocommerce.com/magento-connect/2984.html",
+    "name": "luigifab/openmage-turpentine-varnish",
+    "description": "Updated version of Varnish connector for OpenMage.",
+    "keywords": ["openmage", "openmage-module"],
+    "homepage": "https://github.com/luigifab/openmage-turpentine-varnish",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "Alex Headley",
             "email": "aheadley@nexcess.net"
         }
     ],
-    "replace": {
-        "connect20/nexcessnet_turpentine": "self.version"
-    },
     "require": {
-        "magento-hackathon/magento-composer-installer": "*"
+        "php": ">=7.2.0",
+        "openmage/magento-lts": ">=19.4.0"
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "map": [
+            ["src/app/etc/modules/Nexcessnet_Turpentine.xml", "app/etc/modules/Nexcessnet_Turpentine.xml"],
+            ["src/app/code/community/Nexcessnet/Turpentine/", "app/code/community/Nexcessnet/Turpentine/"],
+            ["src/app/design/adminhtml/default/default/layout/turpentine.xml", "app/design/adminhtml/default/default/layout/turpentine.xml"],
+            ["src/app/design/adminhtml/default/default/template/turpentine/", "app/design/adminhtml/default/default/template/turpentine/"],
+            ["src/app/design/frontend/base/default/layout/turpentine.xml", "app/design/frontend/base/default/layout/turpentine.xml"],
+            ["src/app/design/frontend/base/default/template/turpentine/", "app/design/frontend/base/default/template/turpentine/"]
+        ]
     }
 }
