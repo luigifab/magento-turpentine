@@ -46,7 +46,6 @@
 				<config_file>{{root_dir}}/var/default.vcl</config_file>
 				<custom_include_file>{{root_dir}}/app/code/community/Nexcessnet/Turpentine/misc/custom_include.vcl</custom_include_file>
 				<custom_include_file_top>{{root_dir}}/app/code/community/Nexcessnet/Turpentine/misc/custom_include_top.vcl</custom_include_file_top>
-				<custom_vcl_template />
 			</servers>
 		</turpentine_varnish>
 		<turpentine_vcl>
@@ -94,23 +93,6 @@
 		</turpentine_vcl>
 	</default>
 	<global>
-		<!--
-			This disables Magento visitor logging for Turpentine ESI
-			requests. The logging was pointless and caused AJAX blocks to
-			take much more time then they otherwise would to load (most of
-			the time was spent doing database writes)
-		-->
-		<!--
-			Disabled because if the visitor doesn't have any entries in the
-			visitor log the product comparison block won't work for non-logged-in
-			visitors.
-			@see Mage/Catalog/controllers/Product/CompareController.php#79
-		<ignoredModules>
-			<entities>
-				<turpentine/>
-			</entities>
-		</ignoredModules>
-		-->
 		<blocks>
 			<turpentine>
 				<class>Nexcessnet_Turpentine_Block</class>
@@ -182,23 +164,22 @@
 				-->
 				<turpentine_pages>
 					<label>Varnish Pages</label>
-					<description>Full pages cached in Varnish (will also flush ESI blocks)</description>
+					<description>Full pages cached in Varnish (will also flush ESI blocks).</description>
 					<tags>TURPENTINE_FAKE_PAGE_TAG</tags>
 				</turpentine_pages>
+				<!--
+					This is helpful to prevent blocks from being double ESI-
+					included, which ends up resulting in the "ESI processing
+					not enabled" error
+				-->
 				<turpentine_esi_blocks>
 					<label>Varnish ESI Blocks</label>
-					<description>ESI blocks cached in Varnish (this should not be disabled except for debugging)</description>
-					<!--
-						This is helpful to prevent blocks from being double ESI-
-						included, which ends up resulting in the "ESI processing
-						not enabled" error
-					-->
+					<description>ESI blocks cached in Varnish (this should not be disabled except for debugging).</description>
 					<tags>BLOCK_HTML</tags>
 				</turpentine_esi_blocks>
 			</types>
 		</cache>
 		<events>
-			<!-- Varnish Events -->
 			<http_response_send_before>
 				<observers>
 					<turpentine_varnish_http_response_send_before>
@@ -223,11 +204,9 @@
 					</turpentine_varnish_admin_system_config_changed_section_turpentine_vcl>
 				</observers>
 			</admin_system_config_changed_section_turpentine_vcl>
-			<!-- ESI Events -->
 			<core_block_abstract_to_html_before>
 				<observers>
 					<turpentine_esi_core_block_abstract_to_html_before>
-						<type>singleton</type>
 						<class>turpentine/observer_esi</class>
 						<method>injectEsi</method>
 					</turpentine_esi_core_block_abstract_to_html_before>
@@ -269,11 +248,6 @@
 					</turpentine_customer_logout_remove_cookie>
 				</observers>
 			</customer_logout>
-			<!--
-				Magento sometimes sees the last URL as being the
-				turpentine/esi/getBlock url, and then redirects to it which is not
-				good. We need to check and intercept it if it happens
-			-->
 			<controller_response_redirect>
 				<observers>
 					<turpentine_esi_controller_response_redirect>
@@ -282,10 +256,6 @@
 					</turpentine_esi_controller_response_redirect>
 				</observers>
 			</controller_response_redirect>
-			<!--
-				Load the ESI client cache clear events from stored config at
-				runtime
-			-->
 			<controller_front_init_before>
 				<observers>
 					<turpentine_esi_controller_front_init_before>
@@ -310,7 +280,6 @@
 					</turpentine_esi_set_replace_form_key_flag>
 				</observers>
 			</controller_front_init_before>
-			<!-- Varnish cache clear events -->
 			<catalog_product_save_commit_after>
 				<observers>
 					<turpentine_varnish_catalog_product_save_commit_after>
@@ -343,27 +312,6 @@
 					</turpentine_varnish_catalog_category_save_commit_after>
 				</observers>
 			</catalog_category_save_commit_after>
-			<!--
-				This is disabled because it causes broken images on cached pages
-			-->
-			<!--
-			<clean_media_cache_after>
-				<observers>
-					<turpentine_varnish_clean_media_cache_after>
-						<class>turpentine/observer_ban</class>
-						<method>banMediaCache</method>
-					</turpentine_varnish_clean_media_cache_after>
-				</observers>
-			</clean_media_cache_after>
-			<clean_catalog_images_cache_after>
-				<observers>
-					<turpentine_varnish_clean_catalog_images_cache_after>
-						<class>turpentine/observer_ban</class>
-						<method>banCatalogImagesCache</method>
-					</turpentine_varnish_clean_catalog_images_cache_after>
-				</observers>
-			</clean_catalog_images_cache_after>
-			-->
 			<cms_page_save_commit_after>
 				<observers>
 					<turpentine_varnish_cms_page_save_commit_after>
@@ -377,7 +325,6 @@
 					<turpentine_varnish_enterprise_cms_revision_save_commit_after>
 						<class>turpentine/observer_ban</class>
 						<method>banCmsPageRevisionCache</method>
-						<type>singleton</type>
 					</turpentine_varnish_enterprise_cms_revision_save_commit_after>
 				</observers>
 			</enterprise_cms_revision_save_commit_after>
@@ -405,7 +352,6 @@
 					</turpentine_varnish_adminhtml_cache_refresh_type>
 				</observers>
 			</adminhtml_cache_refresh_type>
-			<!-- Cron/Crawler events -->
 			<turpentine_ban_all_cache>
 				<observers>
 					<turpentine_cron_turpentine_ban_all_cache>
@@ -428,10 +374,6 @@
 		</routers>
 		<layout>
 			<updates>
-				<!--
-					This file should never be edited by a user since it will
-					be overwritten on extension updates
-				-->
 				<turpentine_esi>
 					<file>turpentine.xml</file>
 				</turpentine_esi>
@@ -446,14 +388,6 @@
 					</controller_action_before>
 				</observers>
 			</controller_action_predispatch>
-			<!--controller_action_postdispatch>
-				<observers>
-					<controller_action_after>
-					<class>turpentine/observer_esi</class>
-					<method>hookToControllerActionPostDispatch</method>
-					</controller_action_after>
-				</observers>
-			</controller_action_postdispatch-->
 			<add_to_cart_before>
 				<observers>
 					<add_to_cart_before>
@@ -462,14 +396,6 @@
 					</add_to_cart_before>
 				</observers>
 			</add_to_cart_before>
-			<!--add_to_cart_after>
-				<observers>
-					<add_to_cart_after>
-					<class>turpentine/observer_esi</class>
-					<method>hookToAddToCartAfter</method>
-					</add_to_cart_after>
-				</observers>
-			</add_to_cart_after-->
 			<wishlist_index_index_before>
 				<observers>
 					<wishlist_index_index_before>

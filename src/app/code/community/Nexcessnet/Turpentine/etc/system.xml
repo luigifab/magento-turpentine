@@ -491,7 +491,7 @@
 						</user_agent>
 						<user_agent_mobile_regexp translate="label">
 							<label>Regexp for Mobile User-Agent</label>
-							<comment><![CDATA[See for example http://magebase.com/magento-tutorials/magento-design-exceptions-explained/]]></comment>
+							<comment>See for example http://magebase.com/magento-tutorials/magento-design-exceptions-explained/</comment>
 							<sort_order>25</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>0</show_in_website>
