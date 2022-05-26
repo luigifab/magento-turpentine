@@ -448,4 +448,3 @@ sub vcl_deliver {
 ## Custom VCL Logic - Bottom
 
 {{custom_vcl_include}}
-
