@@ -505,7 +505,7 @@
 		<jobs>
 			<turpentine_crawl_urls>
 				<schedule>
-					<cron_expr>0,10,20,30,40,50 * * * *</cron_expr>
+					<cron_expr>*/10 * * * *</cron_expr>
 				</schedule>
 				<run>
 					<model>turpentine/observer_cron::crawlUrls</model>
