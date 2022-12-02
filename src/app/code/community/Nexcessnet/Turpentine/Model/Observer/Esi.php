@@ -28,7 +28,7 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
         $cookie = Mage::getSingleton('core/cookie');
         $customerGroups = explode(",", Mage::getStoreConfig('turpentine_vcl/customers/customer_group'));
 
-        if(!in_array($customer->getGroupId(), $customerGroups) && strlen($customerGroups[0]) > 0) {
+        if (!in_array($customer->getGroupId(), $customerGroups) && strlen($customerGroups[0]) > 0) {
             return;
         }
 
@@ -111,7 +111,7 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
         $referer = Mage::helper('core/http')->getHttpReferer();
         $dummyUrl = $esiHelper->getDummyUrl();
         $reqUenc = Mage::helper('core')->urlDecode(
-            Mage::app()->getRequest()->getParam('uenc') );
+            Mage::app()->getRequest()->getParam('uenc', '') );
 
         if ($this->_checkIsEsiUrl($url)) {
             if ($this->_checkIsNotEsiUrl($reqUenc) &&
@@ -347,7 +347,7 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
         $esiData->setLayoutHandles($this->_getBlockLayoutHandles($blockObject));
         $esiData->setEsiMethod($esiOptions[$methodParam]);
         if ($esiOptions[$cacheTypeParam] == 'private' || $esiOptions[$cacheTypeParam] == 'customer_group') {
-            if (is_array(@$esiOptions['flush_events'])) {
+            if (isset($esiOptions['flush_events']) && is_array($esiOptions['flush_events'])) {
                 $esiData->setFlushEvents(array_merge(
                     $esiHelper->getDefaultCacheClearEvents(),
                     array_keys($esiOptions['flush_events']) ));
@@ -376,19 +376,14 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
             foreach ($esiOptions['registry_keys'] as $key => $options) {
                 $value = Mage::registry($key);
                 if ($value) {
-                    if (is_object($value) &&
-                            $value instanceof Mage_Core_Model_Abstract) {
-                        $complexRegistry[$key] =
-                            $this->_getComplexRegistryData($options, $value);
-                    } else {
+                    if ($value instanceof Mage_Core_Model_Abstract)
+                        $complexRegistry[$key] = $this->_getComplexRegistryData($options, $value);
+                    else
                         $simpleRegistry[$key] = $value;
-                    }
                 }
             }
         } else {
-            Mage::helper('turpentine/debug')->logWarn(
-                'Invalid registry_keys for block: %s',
-                $blockObject->getNameInLayout() );
+            Mage::helper('turpentine/debug')->logWarn('Invalid registry_keys for block: %s', $blockObject->getNameInLayout());
         }
         $esiData->setSimpleRegistry($simpleRegistry);
         $esiData->setComplexRegistry($complexRegistry);
@@ -495,9 +490,9 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
      * @return array
      */
     protected function _getComplexRegistryData($valueOptions, $value) {
-        $idMethod = @$valueOptions['id_method'] ?
+        $idMethod = !empty($valueOptions['id_method']) ?
             $valueOptions['id_method'] : 'getId';
-        $model = @$valueOptions['model'] ?
+        $model = !empty($valueOptions['model']) ?
             $valueOptions['model'] : Mage::helper('turpentine/data')
                 ->getModelName($value);
         $data = [

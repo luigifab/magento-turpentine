@@ -47,7 +47,7 @@ class Nexcessnet_Turpentine_Model_Session extends Mage_Core_Model_Session_Abstra
      */
     public function loadMessages($blockName) {
         $messages = $this->getMessages();
-        if (is_array(@$messages[$blockName])) {
+        if (isset($messages[$blockName]) && is_array($messages[$blockName])) {
             return $messages[$blockName];
         } else {
             return [];

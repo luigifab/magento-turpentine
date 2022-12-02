@@ -172,7 +172,7 @@ class Nexcessnet_Turpentine_Helper_Debug extends Mage_Core_Helper_Abstract {
             $this->log('TRACEBACK: #%02d: %s:%d',
                 $i, $line['file'], $line['line']);
             $this->log('TRACEBACK: ==> %s%s%s(%s)',
-                (is_object(@$line['object']) ?
+                ((!empty($line['object']) && is_object($line['object'])) ?
                     get_class($line['object']) : @$line['class']),
                 @$line['type'],
                 $line['function'],

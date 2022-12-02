@@ -28,7 +28,7 @@ class Nexcessnet_Turpentine_Model_Shim_Mage_Core_Config extends Mage_Core_Model_
      */
     public function shim_setClassNameCache($groupType, $group, $class, $className) {
         $config = Mage::getConfig();
-        $prevValue = @$config->_classNameCache[$groupType][$group][$class];
+        $prevValue = $config->_classNameCache[$groupType][$group][$class] ?? null;
         $config->_classNameCache[$groupType][$group][$class] = $className;
         return $prevValue;
     }
