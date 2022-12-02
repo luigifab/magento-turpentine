@@ -37,7 +37,7 @@ class Nexcessnet_Turpentine_Model_Dummy_Request extends
         $this->_fixupFakeSuperGlobals($uri);
         try {
             parent::__construct($uri);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             Mage::helper('turpentine/debug')
                 ->logError('Bad URI given to dummy request: '.$uri);
             Mage::helper('turpentine/debug')
