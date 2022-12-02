@@ -1,4 +1,5 @@
 vcl 4.0;
+
 # Nexcess.net Turpentine Extension for Magento
 # Copyright (C) 2012  Nexcess.net L.L.C.
 #
@@ -102,6 +103,22 @@ sub vcl_init {
 }
 
 sub vcl_recv {
+
+    if (req.esi_level > 0) {
+        # ESI request should not be included in the profile.
+        # Instead you should profile them separately, each one
+        # in their dedicated profile.
+        # Removing the Blackfire header avoids to trigger the profiling.
+        # Not returning let it go trough your usual workflow as a regular
+        # ESI request without distinction.
+        unset req.http.X-Blackfire-Query;
+    }
+    if (req.http.X-Blackfire-Query) {
+        # If it's a Blackfire query and the client is authorized,
+        # just pass directly to the application.
+        return (pass);
+    }
+
     if (req.url ~ "{{url_base_regex}}{{admin_frontname}}") {
         set req.backend_hint = {{admin_backend_hint}};
     } else {
@@ -199,6 +216,7 @@ sub vcl_recv {
             # TODO: should this be pass or pipe?
             return (pass);
         }
+
         if (req.url ~ "[?&](utm_source|utm_medium|utm_campaign|gclid|cx|ie|cof|siteurl)=") {
             # Strip out Google related parameters
             set req.url = regsuball(req.url, "(?:(\?)?|&)(?:utm_source|utm_medium|utm_campaign|gclid|cx|ie|cof|siteurl)=[^&]+", "\1");
