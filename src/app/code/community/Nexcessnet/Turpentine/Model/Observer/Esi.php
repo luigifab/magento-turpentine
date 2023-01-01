@@ -140,7 +140,6 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
      * @return null
      */
     public function loadCacheClearEvents($eventObject) {
-        Varien_Profiler::start('turpentine::observer::esi::loadCacheClearEvents');
         $events = Mage::helper('turpentine/esi')->getCacheClearEvents();
         $appShim = Mage::getSingleton('turpentine/shim_mage_core_app');
         foreach ($events as $ccEvent) {
@@ -148,7 +147,6 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
                 'turpentine_ban_'.$ccEvent, 'singleton',
                 'turpentine/observer_ban', 'banClientEsiCache');
         }
-        Varien_Profiler::stop('turpentine::observer::esi::loadCacheClearEvents');
     }
 
     /**
@@ -163,11 +161,9 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
      */
     public function addMessagesBlockRewrite($eventObject) {
         if (Mage::helper('turpentine/esi')->shouldFixFlashMessages()) {
-            Varien_Profiler::start('turpentine::observer::esi::addMessagesBlockRewrite');
             Mage::getSingleton('turpentine/shim_mage_core_app')
                 ->shim_addClassRewrite('block', 'core', 'messages',
                     'Nexcessnet_Turpentine_Block_Core_Messages');
-            Varien_Profiler::stop('turpentine::observer::esi::addMessagesBlockRewrite');
         }
     }
 
@@ -253,7 +249,6 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
                 $debugHelper->logInfo('Block check passed, injecting block: %s',
                     $blockObject->getNameInLayout() ? $blockObject->getNameInLayout() : $blockObject->getModuleName());
             }
-            Varien_Profiler::start('turpentine::observer::esi::injectEsi');
             $ttlParam = $esiHelper->getEsiTtlParam();
             $cacheTypeParam = $esiHelper->getEsiCacheTypeParam();
             $dataParam = $esiHelper->getEsiDataParam();
@@ -316,7 +311,6 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
                     'ESI url is probably too long (%d > 2047 characters): %s',
                     strlen($esiUrl), $esiUrl );
             }
-            Varien_Profiler::stop('turpentine::observer::esi::injectEsi');
         } // else handle the block like normal and cache it inline with the page
     }
 
@@ -328,7 +322,6 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
      * @return Varien_Object
      */
     protected function _getEsiData($blockObject, $esiOptions) {
-        Varien_Profiler::start('turpentine::observer::esi::_getEsiData');
         $esiHelper = Mage::helper('turpentine/esi');
         $cacheTypeParam = $esiHelper->getEsiCacheTypeParam();
         $scopeParam = $esiHelper->getEsiScopeParam();
@@ -387,7 +380,6 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
         }
         $esiData->setSimpleRegistry($simpleRegistry);
         $esiData->setComplexRegistry($complexRegistry);
-        Varien_Profiler::stop('turpentine::observer::esi::_getEsiData');
         return $esiData;
     }
 
@@ -412,7 +404,6 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
      * @return array
      */
     protected function _getBlockLayoutHandles($block) {
-        Varien_Profiler::start('turpentine::observer::esi::_getBlockLayoutHandles');
         $layout = $block->getLayout();
         $layoutXml = Mage::helper('turpentine/esi')->getLayoutXml();
         $activeHandles = [];
@@ -437,7 +428,6 @@ class Nexcessnet_Turpentine_Model_Observer_Esi extends Varien_Event_Observer {
         if ( ! $activeHandles) {
             $activeHandles[] = 'default';
         }
-        Varien_Profiler::stop('turpentine::observer::esi::_getBlockLayoutHandles');
         return array_unique($activeHandles);
     }
 

@@ -153,14 +153,11 @@ class Nexcessnet_Turpentine_Helper_Data extends Mage_Core_Helper_Abstract {
      * @return string
      */
     public function freeze($data) {
-        Varien_Profiler::start('turpentine::helper::data::freeze');
-        $frozenData = $this->urlBase64Encode(
+        return $this->urlBase64Encode(
             $this->_getCrypt()->encrypt(
                 gzdeflate(
                     serialize($data),
                     self::COMPRESSION_LEVEL ) ) );
-        Varien_Profiler::stop('turpentine::helper::data::freeze');
-        return $frozenData;
     }
 
     /**
@@ -170,13 +167,10 @@ class Nexcessnet_Turpentine_Helper_Data extends Mage_Core_Helper_Abstract {
      * @return mixed
      */
     public function thaw($data) {
-        Varien_Profiler::start('turpentine::helper::data::thaw');
-        $thawedData = unserialize(
+        return unserialize(
             gzinflate(
                 $this->_getCrypt()->decrypt(
                     $this->urlBase64Decode($data) ) ) );
-        Varien_Profiler::stop('turpentine::helper::data::thaw');
-        return $thawedData;
     }
 
     /**
@@ -325,7 +319,6 @@ class Nexcessnet_Turpentine_Helper_Data extends Mage_Core_Helper_Abstract {
      * @return array
      */
     protected function _getChildBlockNames($blockNode) {
-        Varien_Profiler::start('turpentine::helper::data::_getChildBlockNames');
         if ($blockNode instanceof Mage_Core_Model_Layout_Element) {
             $blockNames = [(string) $blockNode['name']];
             foreach ($blockNode->xpath('./block | ./reference') as $childBlockNode) {
@@ -344,7 +337,6 @@ class Nexcessnet_Turpentine_Helper_Data extends Mage_Core_Helper_Abstract {
         } else {
             $blockNames = [];
         }
-        Varien_Profiler::stop('turpentine::helper::data::_getChildBlockNames');
         return $blockNames;
     }
 
