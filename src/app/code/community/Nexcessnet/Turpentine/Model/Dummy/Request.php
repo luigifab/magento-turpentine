@@ -14,17 +14,14 @@
  * GNU General Public License (GPL) for more details.
  */
 
-class Nexcessnet_Turpentine_Model_Dummy_Request extends
-    Mage_Core_Controller_Request_Http {
+class Nexcessnet_Turpentine_Model_Dummy_Request extends Mage_Core_Controller_Request_Http {
 
-    public $GET         = null;
-    public $POST        = null;
-    public $SERVER      = null;
-    public $ENV         = null;
+    public $GET    = null;
+    public $POST   = null;
+    public $SERVER = null;
+    public $ENV    = null;
 
     /**
-     * Constructor
-     *
      * If a $uri is passed, the object will attempt to populate itself using
      * that information.
      *
@@ -532,7 +529,11 @@ class Nexcessnet_Turpentine_Model_Dummy_Request extends
         } else {
             $this->SERVER['QUERY_STRING'] = null;
         }
-        parse_str($this->SERVER['QUERY_STRING'], $this->GET);
+        if (empty($this->SERVER['QUERY_STRING'])) {
+            $this->GET = [];
+        } else {
+            parse_str($this->SERVER['QUERY_STRING'], $this->GET);
+        }
         if (isset($this->SERVER['SCRIPT_URI'])) {
             $start = strpos($this->SERVER['SCRIPT_URI'], '/', 9);
             $sub = substr($this->SERVER['SCRIPT_URI'], $start);
@@ -569,8 +570,6 @@ class Nexcessnet_Turpentine_Model_Dummy_Request extends
     }
 
     /**
-     *
-     *
      * @return boolean
      */
     protected function _defaultRouterMatch() {
@@ -597,8 +596,6 @@ class Nexcessnet_Turpentine_Model_Dummy_Request extends
     }
 
     /**
-     *
-     *
      * @return bool
      */
     protected function _standardRouterMatch() {
@@ -757,8 +754,6 @@ class Nexcessnet_Turpentine_Model_Dummy_Request extends
     }
 
     /**
-     *
-     *
      * @return bool
      */
     protected function _cmsRouterMatch() {
