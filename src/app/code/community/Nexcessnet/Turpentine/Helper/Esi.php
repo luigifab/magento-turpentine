@@ -320,7 +320,8 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
      * @return string
      */
     public function buildEsiIncludeFragment($url) {
-        return sprintf('<esi:include src="%s" />', $url);
+        // https://github.com/PHOENIX-MEDIA/Magento-PageCache-powered-by-Varnish/issues/17#issuecomment-93674983
+        return sprintf('<esi:include src=\'%s\' />', $url);
     }
 
     /**
