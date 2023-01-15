@@ -19,7 +19,7 @@
 		<Nexcessnet_Turpentine>
 			<active>true</active>
 			<codePool>community</codePool>
-			<!-- see https://www.luigifab.fr/openmage/modules for more information -->
+			<!-- see https://github.com/luigifab/openmage-modules for more information -->
 			<update>https://raw.githubusercontent.com/luigifab/openmage-turpentine-varnish/devel/src/app/code/community/Nexcessnet/Turpentine/etc/config.xml</update>
 		</Nexcessnet_Turpentine>
 	</modules>
