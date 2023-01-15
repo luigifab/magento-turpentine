@@ -30,6 +30,9 @@ class Nexcessnet_Turpentine_Model_Dummy_Request extends Mage_Core_Controller_Req
      * @throws Zend_Controller_Request_Exception when invalid URI passed
      */
     public function __construct($uri = null) {
+        if (!empty($uri)) {
+            $uri = str_replace('|', '%7C', $uri);
+        }
         $this->_initFakeSuperGlobals();
         $this->_fixupFakeSuperGlobals($uri);
         try {
