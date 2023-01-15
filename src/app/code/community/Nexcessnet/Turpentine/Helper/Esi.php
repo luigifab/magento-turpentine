@@ -129,8 +129,7 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
      * @return bool
      */
     public function getEsiDebugEnabled() {
-        return Mage::helper('turpentine/varnish')
-            ->getVarnishDebugEnabled();
+        return Mage::helper('turpentine/varnish')->getVarnishDebugEnabled();
     }
 
     /**
@@ -139,8 +138,7 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
      * @return bool
      */
     public function getEsiBlockLogEnabled() {
-        return (bool) Mage::getStoreConfig(
-            'turpentine_varnish/general/block_debug' );
+        return Mage::getStoreConfigFlag('turpentine_varnish/general/block_debug');
     }
 
     /**

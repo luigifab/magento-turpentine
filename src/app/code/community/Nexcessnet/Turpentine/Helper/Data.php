@@ -108,8 +108,7 @@ class Nexcessnet_Turpentine_Helper_Data extends Mage_Core_Helper_Abstract {
      * @return string
      */
     public function getVersion() {
-        return Mage::getConfig()
-            ->getModuleConfig('Nexcessnet_Turpentine')->version;
+        return (string) Mage::getConfig()->getModuleConfig('Nexcessnet_Turpentine')->version;
     }
 
     /**
@@ -242,19 +241,16 @@ class Nexcessnet_Turpentine_Helper_Data extends Mage_Core_Helper_Abstract {
      * @return bool
      */
     public function useFlashMessagesFix() {
-        return (bool) Mage::getStoreConfig(
-            'turpentine_varnish/general/ajax_messages' );
+        return Mage::getStoreConfigFlag('turpentine_varnish/general/ajax_messages');
     }
 
     /**
-     * Check config to see if Turpentine should apply the product list toolbar
-     * fix
+     * Check config to see if Turpentine should apply the product list toolbar fix
      *
      * @return bool
      */
     public function useProductListToolbarFix() {
-        return (bool) Mage::getStoreConfig(
-            'turpentine_varnish/general/fix_product_toolbar' );
+        return Mage::getStoreConfigFlag('turpentine_varnish/general/fix_product_toolbar');
     }
 
     /**
@@ -263,8 +259,7 @@ class Nexcessnet_Turpentine_Helper_Data extends Mage_Core_Helper_Abstract {
      * @return bool
      */
     public function getAutoApplyOnSave() {
-        return (bool) Mage::getStoreConfig(
-            'turpentine_varnish/general/auto_apply_on_save' );
+        return Mage::getStoreConfigFlag('turpentine_varnish/general/auto_apply_on_save');
     }
 
     /**
@@ -273,8 +268,7 @@ class Nexcessnet_Turpentine_Helper_Data extends Mage_Core_Helper_Abstract {
      * @return string
      */
     public function getVclFix() {
-        return Mage::getStoreConfig(
-            'turpentine_varnish/general/vcl_fix' );
+        return Mage::getStoreConfig('turpentine_varnish/general/vcl_fix');
     }
 
     /**
@@ -283,8 +277,7 @@ class Nexcessnet_Turpentine_Helper_Data extends Mage_Core_Helper_Abstract {
      * @return string
      */
     public function getStripVclWhitespace() {
-        return Mage::getStoreConfig(
-            'turpentine_varnish/general/strip_vcl_whitespace' );
+        return Mage::getStoreConfig('turpentine_varnish/general/strip_vcl_whitespace');
     }
 
     /**

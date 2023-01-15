@@ -18,16 +18,10 @@ class Nexcessnet_Turpentine_Block_Poll_ActivePoll extends Mage_Poll_Block_Active
 
     public function setTemplate($template)
     {
-        if ((Mage::getConfig()->getModuleConfig('Mage_Poll')->is('active', 'true')) &&
-        (!Mage::getStoreConfig('advanced/modules_disable_output/Mage_Poll')))
-        {
+        if (Mage::helper('core')->isModuleEnabled('Mage_Poll') && !Mage::getStoreConfigFlag('advanced/modules_disable_output/Mage_Poll')) {
             $this->_template = $template;
             $this->setPollTemplate('turpentine/ajax.phtml', 'poll');
             $this->setPollTemplate('turpentine/ajax.phtml', 'results');
-        }
-        else
-        {
-            // Mage_Poll is disabled, so do nothing
         }
         return $this;
     }

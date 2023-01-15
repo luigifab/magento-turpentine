@@ -1181,7 +1181,7 @@ EOS;
             $vars['allowed_hosts'] = $this->_vcl_sub_allowed_hosts_regex();
         }
 
-        if (Mage::getStoreConfig('turpentine_vcl/normalization/encoding')) {
+        if (Mage::getStoreConfigFlag('turpentine_vcl/normalization/encoding')) {
             $vars['normalize_encoding'] = $this->_vcl_sub_normalize_encoding();
         }
         if (Mage::getStoreConfig('turpentine_vcl/normalization/user_agent')) {
