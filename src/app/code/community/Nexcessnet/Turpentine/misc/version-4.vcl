@@ -104,6 +104,13 @@ sub vcl_init {
 
 sub vcl_recv {
 
+    if (req.url ~ "https?: ") {
+        # Fix ESI URLs broken by Mod_PageSpeed
+        set req.http.Host = regsub( req.url, "^.*https?: ([\w\.\-]+(\s?\:[0-9]+)?).*$", "\1" );
+        set req.url = regsub( req.url, "^.*https?: ([\w\.\-]+(\s?\:[0-9]*)?)", "" );
+        set req.url = regsuball( req.url, " ", "/" );
+    }
+
     if (req.esi_level > 0) {
         # ESI request should not be included in the profile.
         # Instead you should profile them separately, each one
@@ -217,6 +224,7 @@ sub vcl_recv {
             return (pass);
         }
 
+        ## remove me?
         if (req.url ~ "[?&](utm_source|utm_medium|utm_campaign|gclid|cx|ie|cof|siteurl)=") {
             # Strip out Google related parameters
             set req.url = regsuball(req.url, "(?:(\?)?|&)(?:utm_source|utm_medium|utm_campaign|gclid|cx|ie|cof|siteurl)=[^&]+", "\1");
