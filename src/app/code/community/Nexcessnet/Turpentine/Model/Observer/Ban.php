@@ -14,9 +14,6 @@
  * GNU General Public License (GPL) for more details.
  */
 
-/**
- * Most of this is taken from @link https://github.com/huguesalary/Magento-Varnish
- */
 class Nexcessnet_Turpentine_Model_Observer_Ban extends Varien_Event_Observer {
 
     /**
