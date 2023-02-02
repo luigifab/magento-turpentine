@@ -15,14 +15,10 @@
  */
 
 class Nexcessnet_Turpentine_Model_Config_Select_Version {
+
     public function toOptionArray() {
-        $helper = Mage::helper('turpentine');
         return [
-            ['value' => '2.1', 'label' => $helper->__('2.1.x')],
-            ['value' => '3.0', 'label' => $helper->__('3.0.x')],
-            ['value' => '4.0', 'label' => $helper->__('4.0.x')],
-            ['value' => '4.1', 'label' => $helper->__('4.1.x')],
-            ['value' => 'auto', 'label' => $helper->__('Auto')],
+            ['value' => '4.0', 'label' => 'Varnish 4.x / 5.x / 6.x / 7.x (vcl 4.0)'],
         ];
     }
 }
