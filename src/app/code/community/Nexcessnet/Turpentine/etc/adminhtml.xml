@@ -21,16 +21,16 @@
 				<children>
 					<system>
 						<children>
-							<turpentine translate="title">
+							<turpentine>
 								<title>Turpentine Varnish Management</title>
 							</turpentine>
 							<config>
 								<children>
-									<turpentine_varnish translate="title">
+									<turpentine_varnish>
 										<title>Turpentine Varnish Options</title>
 										<sort_order>999961</sort_order>
 									</turpentine_varnish>
-									<turpentine_vcl translate="title">
+									<turpentine_vcl>
 										<title>Turpentine Caching Options</title>
 										<sort_order>999962</sort_order>
 									</turpentine_vcl>

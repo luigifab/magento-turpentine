@@ -22,7 +22,7 @@
 		</Nexcessnet_Turpentine>
 	</tabs>
 	<sections>
-		<turpentine_varnish translate="label">
+		<turpentine_varnish>
 			<label>Turpentine Varnish Options</label>
 			<tab>Nexcessnet_Turpentine</tab>
 			<sort_order>61</sort_order>
@@ -30,14 +30,14 @@
 			<show_in_website>0</show_in_website>
 			<show_in_store>0</show_in_store>
 			<groups>
-				<general translate="label">
+				<general>
 					<label>General Options</label>
 					<sort_order>10</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
 					<show_in_store>0</show_in_store>
 					<fields>
-						<auto_apply_on_save translate="label">
+						<auto_apply_on_save>
 							<label>Apply VCL On Config Change</label>
 							<comment>Automatically generate and apply the new VCL when a change is made to the Varnish or Caching options</comment>
 							<frontend_type>select</frontend_type>
@@ -47,7 +47,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</auto_apply_on_save>
-						<strip_vcl_whitespace translate="label,comment">
+						<strip_vcl_whitespace>
 							<label>Strip whitespace from VCL files</label>
 							<comment>If whitespace stripping is disabled, generated VCL files will get larger and may exceed the cli_buffer varnish config.</comment>
 							<frontend_type>select</frontend_type>
@@ -57,7 +57,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</strip_vcl_whitespace>
-						<vcl_fix translate="label comment">
+						<vcl_fix>
 							<label>Use VCL fix</label>
 							<comment>When Enable is selected, a VCL fix will be used to prevent formKey issues. If Disable is selected, an observer will be used.</comment>
 							<frontend_type>select</frontend_type>
@@ -67,7 +67,7 @@
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
 						</vcl_fix>
-						<https_proto_fix translate="label comment">
+						<https_proto_fix>
 							<label>Set X-Forwarded-Proto Header to HTTPS on port 443</label>
 							<comment>When using Varnish on port 80 and hitch on port 443 for HTTPS, the fix will set X-Forwarded-Proto header to HTTPS to prevent a re-direct loop.</comment>
 							<frontend_type>select</frontend_type>
@@ -77,7 +77,7 @@
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
 						</https_proto_fix>
-						<https_redirect_fix translate="label comment">
+						<https_redirect_fix>
 							<label>Fix HTTPS redirect</label>
 							<comment>When using Varnish as front door listen on port 80 and Nginx/Apache listen on port 443 for HTTPS, the fix will keep the url parameters when redirect from HTTP to HTTPS.</comment>
 							<frontend_type>select</frontend_type>
@@ -87,7 +87,7 @@
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
 						</https_redirect_fix>
-						<real_ip translate="label comment">
+						<real_ip>
 							<label>Use X-Real-IP Header</label>
 							<comment>If there is a proxy in front of varnish(e.g. https) and it is not using proxy-protocol (varnish 4.1 only) to communicate with varnish, set this to Enable to replace client.ip with IP from X-Real-IP when comparing to ACLs.</comment>
 							<frontend_type>select</frontend_type>
@@ -97,7 +97,7 @@
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
 						</real_ip>
-						<varnish_debug translate="label">
+						<varnish_debug>
 							<label>Enable Debug Info</label>
 							<comment>It is a major security vulnerability, to leave this enabled on production sites</comment>
 							<frontend_type>select</frontend_type>
@@ -107,7 +107,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</varnish_debug>
-						<varnish_log_commands translate="label">
+						<varnish_log_commands>
 							<label>Enable Varnish Command Logging</label>
 							<comment>Log all commands sent to Varnish by Turpentine in the log specified (custom if enabled). Caution - can cause logs to grow quickly!</comment>
 							<frontend_type>select</frontend_type>
@@ -117,7 +117,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</varnish_log_commands>
-						<block_debug translate="label">
+						<block_debug>
 							<label>Enable Block Logging</label>
 							<comment>Log block names for adding ESI, only enable when needed to avoid performance hit</comment>
 							<frontend_type>select</frontend_type>
@@ -127,7 +127,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</block_debug>
-						<ajax_messages translate="label">
+						<ajax_messages>
 							<label>Enable AJAX Flash Messages</label>
 							<comment>Enable fixing the messages block to load via AJAX, disable if you already have an extension that does this</comment>
 							<frontend_type>select</frontend_type>
@@ -137,7 +137,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</ajax_messages>
-						<fix_product_toolbar translate="label">
+						<fix_product_toolbar>
 							<label>Fix Product List Toolbar</label>
 							<comment>Enable this to prevent caching the visitor's view preferences of the product list</comment>
 							<frontend_type>select</frontend_type>
@@ -147,7 +147,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</fix_product_toolbar>
-						<crawler_enable translate="label">
+						<crawler_enable>
 							<label>Enable Site Crawler</label>
 							<comment>Enable to allow Turpentine to automatically warm the cache</comment>
 							<frontend_type>select</frontend_type>
@@ -157,7 +157,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</crawler_enable>
-						<crawler_debug translate="label">
+						<crawler_debug>
 							<label>Enable Crawler Debug</label>
 							<comment>Enable debug info from the site crawler</comment>
 							<frontend_type>select</frontend_type>
@@ -170,7 +170,7 @@
 								<crawler_enable>1</crawler_enable>
 							</depends>
 						</crawler_debug>
-						<crawler_batchsize translate="label">
+						<crawler_batchsize>
 							<label>Crawler Batch Size</label>
 							<comment>Number of URLs to crawl per batch, when 0 requests will not be batched</comment>
 							<sort_order>90</sort_order>
@@ -181,7 +181,7 @@
 								<crawler_enable>1</crawler_enable>
 							</depends>
 						</crawler_batchsize>
-						<crawler_batchwait translate="label">
+						<crawler_batchwait>
 							<label>Crawler Batch Wait</label>
 							<comment>Time in seconds to wait between batches</comment>
 							<sort_order>100</sort_order>
@@ -194,14 +194,14 @@
 						</crawler_batchwait>
 					</fields>
 				</general>
-				<logging translate="label">
+				<logging>
 					<label>Logging</label>
 					<sort_order>15</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
 					<show_in_store>0</show_in_store>
 					<fields>
-						<use_custom_log_file translate="label,comment">
+						<use_custom_log_file>
 							<label>Use custom log file</label>
 							<comment>Log to custom log file rather than system.log</comment>
 							<frontend_type>select</frontend_type>
@@ -211,7 +211,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</use_custom_log_file>
-						<custom_log_file_name translate="label,comment">
+						<custom_log_file_name>
 							<label>Custom log file name</label>
 							<sort_order>20</sort_order>
 							<comment>Only enter a file name, no paths.</comment>
@@ -224,14 +224,14 @@
 						</custom_log_file_name>
 					</fields>
 				</logging>
-				<servers translate="label">
+				<servers>
 					<label>Servers</label>
 					<sort_order>20</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
 					<show_in_store>0</show_in_store>
 					<fields>
-						<version translate="label">
+						<version>
 							<label>Varnish Version</label>
 							<frontend_type>select</frontend_type>
 							<source_model>turpentine/config_select_version</source_model>
@@ -240,7 +240,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</version>
-						<server_list translate="label">
+						<server_list>
 							<label>Server List</label>
 							<frontend_type>textarea</frontend_type>
 							<comment>Should be a list of HOST:PORT pairs of the Varnish management interfaces, one per line</comment>
@@ -249,7 +249,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</server_list>
-						<auth_key translate="label">
+						<auth_key>
 							<label>Varnish Authentication Key</label>
 							<comment>Authentication key for Varnish CLI access. This should be the exact contents of the secret file (if used), newlines can be written as \n</comment>
 							<sort_order>25</sort_order>
@@ -257,7 +257,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</auth_key>
-						<config_file translate="label">
+						<config_file>
 							<label>Config File Location</label>
 							<comment>Specify where the Varnish VCL file should be saved</comment>
 							<sort_order>30</sort_order>
@@ -265,7 +265,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</config_file>
-						<custom_include_file_top translate="label">
+						<custom_include_file_top>
 							<label>Custom VCL File - Top</label>
 							<comment>If this file exists, its content will be prepended to the VCL.</comment>
 							<sort_order>40</sort_order>
@@ -273,7 +273,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</custom_include_file_top>
-						<custom_include_file translate="label">
+						<custom_include_file>
 							<label>Custom VCL File - Bottom</label>
 							<comment>If this file exists, its content will be appended to the VCL.</comment>
 							<sort_order>41</sort_order>
@@ -293,7 +293,7 @@
 				</servers>
 			</groups>
 		</turpentine_varnish>
-		<turpentine_vcl translate="label">
+		<turpentine_vcl>
 			<label>Turpentine Caching Options</label>
 			<tab>Nexcessnet_Turpentine</tab>
 			<sort_order>62</sort_order>
@@ -301,14 +301,14 @@
 			<show_in_website>0</show_in_website>
 			<show_in_store>0</show_in_store>
 			<groups>
-				<backend translate="label">
+				<backend>
 					<label>Backend</label>
 					<sort_order>5</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
 					<show_in_store>0</show_in_store>
 					<fields>
-						<load_balancing translate="label">
+						<load_balancing>
 							<label>Load Balancing</label>
 							<frontend_type>select</frontend_type>
 							<source_model>turpentine/config_select_loadBalancing</source_model>
@@ -317,7 +317,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</load_balancing>
-						<backend_host translate="label">
+						<backend_host>
 							<label>Backend Host</label>
 							<sort_order>10</sort_order>
 							<show_in_default>1</show_in_default>
@@ -327,7 +327,7 @@
 								<load_balancing>no</load_balancing>
 							</depends>
 						</backend_host>
-						<backend_port translate="label">
+						<backend_port>
 							<label>Backend Port</label>
 							<validate>validate-greater-than-zero</validate>
 							<sort_order>20</sort_order>
@@ -338,7 +338,7 @@
 								<load_balancing>no</load_balancing>
 							</depends>
 						</backend_port>
-						<backend_nodes translate="label comment">
+						<backend_nodes>
 							<label>Backend Server List</label>
 							<frontend_type>textarea</frontend_type>
 							<comment>A list of HOST:PORT pairs of the backend web servers, one per line</comment>
@@ -350,7 +350,7 @@
 								<load_balancing separator="|">yes|yes_admin</load_balancing>
 							</depends>
 						</backend_nodes>
-						<backend_probe_url translate="label comment">
+						<backend_probe_url>
 							<label>Backend Check URL</label>
 							<comment>URL where Varnish can probe if a node is available. Leave empty to disable probing.</comment>
 							<sort_order>23</sort_order>
@@ -361,7 +361,7 @@
 								<load_balancing separator="|">yes|yes_admin</load_balancing>
 							</depends>
 						</backend_probe_url>
-						<backend_probe_timeout translate="label comment">
+						<backend_probe_timeout>
 							<label>Backend Probe Timeout</label>
 							<comment>Maximum timeout for requests. If the request takes longer than the maximum timeout, it will be marked as a failed response.</comment>
 							<sort_order>24</sort_order>
@@ -372,7 +372,7 @@
 								<load_balancing separator="|">yes|yes_admin</load_balancing>
 							</depends>
 						</backend_probe_timeout>
-						<backend_probe_interval translate="label comment">
+						<backend_probe_interval>
 							<label>Backend Probe Interval</label>
 							<comment>How often to check a backend.</comment>
 							<sort_order>25</sort_order>
@@ -383,7 +383,7 @@
 								<load_balancing separator="|">yes|yes_admin</load_balancing>
 							</depends>
 						</backend_probe_interval>
-						<backend_probe_window translate="label comment">
+						<backend_probe_window>
 							<label>Backend Probe Window</label>
 							<comment>Total number of responses in a window of health.</comment>
 							<sort_order>26</sort_order>
@@ -394,7 +394,7 @@
 								<load_balancing separator="|">yes|yes_admin</load_balancing>
 							</depends>
 						</backend_probe_window>
-						<backend_probe_threshold translate="label comment">
+						<backend_probe_threshold>
 							<label>Backend Probe Threshold</label>
 							<comment>Number of needed successful responses in the backend probe window.</comment>
 							<sort_order>27</sort_order>
@@ -405,7 +405,7 @@
 								<load_balancing separator="|">yes|yes_admin</load_balancing>
 							</depends>
 						</backend_probe_threshold>
-						<backend_nodes_admin translate="label">
+						<backend_nodes_admin>
 							<label>Backend Server List for Admin</label>
 							<frontend_type>textarea</frontend_type>
 							<sort_order>28</sort_order>
@@ -416,7 +416,7 @@
 								<load_balancing>yes_admin</load_balancing>
 							</depends>
 						</backend_nodes_admin>
-						<backend_probe_url_admin translate="label">
+						<backend_probe_url_admin>
 							<label>Backend Check URL for Admin</label>
 							<sort_order>29</sort_order>
 							<show_in_default>1</show_in_default>
@@ -426,7 +426,7 @@
 								<load_balancing>yes_admin</load_balancing>
 							</depends>
 						</backend_probe_url_admin>
-						<frontend_timeout translate="label">
+						<frontend_timeout>
 							<label>Frontend Timeout</label>
 							<validate>validate-greater-than-zero</validate>
 							<sort_order>30</sort_order>
@@ -435,7 +435,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</frontend_timeout>
-						<admin_timeout translate="label">
+						<admin_timeout>
 							<label>Admin Timeout</label>
 							<validate>validate-greater-than-zero</validate>
 							<sort_order>40</sort_order>
@@ -444,7 +444,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</admin_timeout>
-						<crawlers translate="label">
+						<crawlers>
 							<label>Crawler IP Addresses</label>
 							<sort_order>50</sort_order>
 							<comment>Comma-separated list of IP addresses that should bypass Turpentine's frontend cookie requirement. Also useful for performance testing tools as they also typically don't support cookies. Note - if you are using something like Pound to terminate SSL before Varnish, setting this to the same IP could cause users to end up sharing the crawler session.</comment>
@@ -452,7 +452,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</crawlers>
-						<crawler_user_agents translate="label">
+						<crawler_user_agents>
 							<label>Crawler User Agents</label>
 							<sort_order>60</sort_order>
 							<comment>Comma-separated list of User-Agents (regexes) to serve cached pages to on initial visit</comment>
@@ -462,14 +462,14 @@
 						</crawler_user_agents>
 					</fields>
 				</backend>
-				<normalization translate="label">
+				<normalization>
 					<label>Normalization Options</label>
 					<sort_order>15</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
 					<show_in_store>0</show_in_store>
 					<fields>
-						<encoding translate="label">
+						<encoding>
 							<label>Normalize Encoding</label>
 							<comment>Simplify the Accept-Encoding header recieved from clients</comment>
 							<frontend_type>select</frontend_type>
@@ -479,7 +479,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</encoding>
-						<user_agent translate="label">
+						<user_agent>
 							<label>Normalize User-Agent</label>
 							<comment>Simplify the User-Agent header recieved from clients</comment>
 							<frontend_type>select</frontend_type>
@@ -489,7 +489,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</user_agent>
-						<user_agent_mobile_regexp translate="label">
+						<user_agent_mobile_regexp>
 							<label>Regexp for Mobile User-Agent</label>
 							<comment>See for example http://magebase.com/magento-tutorials/magento-design-exceptions-explained/</comment>
 							<sort_order>25</sort_order>
@@ -500,7 +500,7 @@
 								<user_agent>1</user_agent>
 							</depends>
 						</user_agent_mobile_regexp>
-						<host translate="label">
+						<host>
 							<label>Normalize Host</label>
 							<comment>Force requests to be for a specific domain name, will probably break most multi-store setups</comment>
 							<frontend_type>select</frontend_type>
@@ -510,7 +510,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</host>
-						<host_target translate="label">
+						<host_target>
 							<label>Normalized Host Target</label>
 							<comment>Domain to force requests to, defaults to the domain in the base URL</comment>
 							<depends>
@@ -521,7 +521,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</host_target>
-						<cookie_regex translate="label">
+						<cookie_regex>
 							<label>Normalize Cookie Regex</label>
 							<comment>Cookie regex to match to override initial cookie domain</comment>
 							<sort_order>50</sort_order>
@@ -529,7 +529,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</cookie_regex>
-						<cookie_target translate="label">
+						<cookie_target>
 							<label>Normalized Cookie Target</label>
 							<comment>Domain to force cookies to which the regex matches</comment>
 							<sort_order>60</sort_order>
@@ -539,14 +539,14 @@
 						</cookie_target>
 					</fields>
 				</normalization>
-				<ttls translate="label">
+				<ttls>
 					<label>TTLs</label>
 					<sort_order>20</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
 					<show_in_store>0</show_in_store>
 					<fields>
-						<grace_period translate="label">
+						<grace_period>
 							<label>Grace Period (seconds)</label>
 							<comment>Time for using dirty/expired entries while new copies are fetched and hit_for_pass timeout</comment>
 							<validate>validate-greater-than-zero</validate>
@@ -555,7 +555,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</grace_period>
-						<default_ttl translate="label">
+						<default_ttl>
 							<label>Default Page TTL (seconds)</label>
 							<validate>validate-greater-than-zero</validate>
 							<sort_order>10</sort_order>
@@ -563,7 +563,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</default_ttl>
-						<url_ttls translate="label">
+						<url_ttls>
 							<label>URL-based TTLs</label>
 							<frontend_type>textarea</frontend_type>
 							<comment>List of regex (relative to Magento root) and TTL (in seconds) comma-separated pairs (one per line)</comment>
@@ -572,7 +572,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</url_ttls>
-						<static_ttl translate="label">
+						<static_ttl>
 							<label>Static File TTL (seconds)</label>
 							<validate>validate-greater-than-zero</validate>
 							<sort_order>30</sort_order>
@@ -582,14 +582,14 @@
 						</static_ttl>
 					</fields>
 				</ttls>
-				<urls translate="label">
+				<urls>
 					<label>URL-based Caching</label>
 					<sort_order>30</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
 					<show_in_store>0</show_in_store>
 					<fields>
-						<url_blacklist translate="label">
+						<url_blacklist>
 							<label>URL Blacklist</label>
 							<frontend_type>textarea</frontend_type>
 							<comment>List of relative URLs to exclude from caching. The admin section and API are automatically included</comment>
@@ -598,7 +598,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</url_blacklist>
-						<bypass_cache_store_url translate="label">
+						<bypass_cache_store_url>
 							<label>Bypass Varnish if base URL is not found within a store?</label>
 							<comment>If enabled any URL in the client that does not start with a store URL will bypass the cache</comment>
 							<frontend_type>select</frontend_type>
@@ -610,14 +610,14 @@
 						</bypass_cache_store_url>
 					</fields>
 				</urls>
-				<params translate="label">
+				<params>
 					<label>Parameter-based Caching</label>
 					<sort_order>40</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
 					<show_in_store>0</show_in_store>
 					<fields>
-						<get_params translate="label">
+						<get_params>
 							<label>GET Parameters</label>
 							<comment>Comma-separated list of GET variables that prevent caching</comment>
 							<sort_order>10</sort_order>
@@ -625,7 +625,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</get_params>
-						<ignore_get_params translate="label">
+						<ignore_get_params>
 							<label>Ignore GET Parameters</label>
 							<comment>Comma-separated list of GET variables that will be ignored for caching</comment>
 							<frontend_type>textarea</frontend_type>
@@ -634,7 +634,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</ignore_get_params>
-						<transfer_unmodified_url translate="label">
+						<transfer_unmodified_url>
 							<label>Transfer unmodified URL to Backend Server</label>
 							<comment>By default the backend server (webserver / magento) gets a modified URL (without ignored get parameters). As a result the ignored parameters can not be used by the backend server for uncachable requests, for example a redirect. By activating this option the backend server gets the the unmodified url, but the cache still uses the modified url for lookups.</comment>
 							<frontend_type>select</frontend_type>
@@ -646,14 +646,14 @@
 						</transfer_unmodified_url>
 					</fields>
 				</params>
-				<static translate="label">
+				<static>
 					<label>Static Caching</label>
 					<sort_order>45</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
 					<show_in_store>0</show_in_store>
 					<fields>
-						<force_static translate="label">
+						<force_static>
 							<label>Force Static Asset Caching</label>
 							<comment>Always cache static assets</comment>
 							<frontend_type>select</frontend_type>
@@ -663,7 +663,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</force_static>
-						<exts translate="label">
+						<exts>
 							<label>Static Asset Extensions</label>
 							<comment>Comma-separated list of static asset file extensions</comment>
 							<depends>
@@ -674,7 +674,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</exts>
-						<simple_hash translate="label">
+						<simple_hash>
 							<label>Use Simple Hash</label>
 							<comment>Always serve the same version of a static file. Ignore domain, cookies and browser version. Saves memory and lowers cache misses.</comment>
 							<depends>
@@ -689,14 +689,14 @@
 						</simple_hash>
 					</fields>
 				</static>
-				<customers translate="label">
+				<customers>
 					<label>Customers Group Caching</label>
 					<sort_order>50</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
 					<show_in_store>0</show_in_store>
 					<fields>
-						<customer_group translate="label">
+						<customer_group>
 							<label>Customer Group</label>
 							<comment>Select customer group for different cache content</comment>
 							<frontend_type>multiselect</frontend_type>
@@ -708,14 +708,14 @@
 						</customer_group>
 					</fields>
 				</customers>
-				<maintenance translate="label">
+				<maintenance>
 					<label>Maintenance mode</label>
 					<sort_order>46</sort_order>
 					<show_in_default>1</show_in_default>
 					<show_in_website>0</show_in_website>
 					<show_in_store>0</show_in_store>
 					<fields>
-						<enable translate="label">
+						<enable>
 							<label>Enable Maintenance Mode</label>
 							<frontend_type>select</frontend_type>
 							<source_model>adminhtml/system_config_source_enabledisable</source_model>
@@ -725,7 +725,7 @@
 							<show_in_website>0</show_in_website>
 							<show_in_store>0</show_in_store>
 						</enable>
-						<custom_vcl_synth translate="label">
+						<custom_vcl_synth>
 							<label>Custom HTML content of vcl synth (error) sub</label>
 							<frontend_type>textarea</frontend_type>
 							<comment>Enter full HTML page content</comment>
