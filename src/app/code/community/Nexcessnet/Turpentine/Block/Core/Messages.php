@@ -15,10 +15,11 @@
  */
 
 class Nexcessnet_Turpentine_Block_Core_Messages extends Mage_Core_Block_Messages {
+
     /**
      * Sentinel value to see if getHtml was passed a specific message type,
      * can't use null because that is the default so no way to tell between
-     * the default and  not actually calling it
+     * the default and not actually calling it
      */
     const NO_SINGLE_RENDER_TYPE = -1;
 
@@ -53,15 +54,6 @@ class Nexcessnet_Turpentine_Block_Core_Messages extends Mage_Core_Block_Messages
         'core',
         'newsletter',
     ];
-
-    /**
-     * Storage for used types of message storages
-     *
-     * Added for compatibility with Magento 1.5
-     *
-     * @var array
-     */
-    protected $_usedStorageTypes = ['core/session'];
 
     public function _prepareLayout() {
         if ($this->_fixMessages()) {

@@ -410,13 +410,12 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
      */
     protected function _loadLayoutXml() {
         $design = Mage::getDesign();
-        $layoutXml = Mage::getSingleton('core/layout')
+        return Mage::getSingleton('core/layout')
             ->getUpdate()
             ->getFileLayoutUpdatesXml(
                 $design->getArea(),
                 $design->getPackageName(),
                 $design->getTheme('layout'),
                 Mage::app()->getStore()->getId() );
-        return $layoutXml;
     }
 }
