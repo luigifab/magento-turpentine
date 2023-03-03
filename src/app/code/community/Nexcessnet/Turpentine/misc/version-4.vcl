@@ -20,8 +20,29 @@ vcl 4.0;
 // Custom C Code
 
 C{
-    // @source app/code/community/Nexcessnet/Turpentine/misc/uuid.c
-    {{custom_c_code}}
+    #include <stdlib.h>
+    #include <stdio.h>
+    #include <time.h>
+    #include <pthread.h>
+    static pthread_mutex_t lrand_mutex = PTHREAD_MUTEX_INITIALIZER;
+    void generate_uuid(char* buf) {
+        pthread_mutex_lock(&lrand_mutex);
+        long a = lrand48();
+        long b = lrand48();
+        long c = lrand48();
+        long d = lrand48();
+        pthread_mutex_unlock(&lrand_mutex);
+        // SID must match this regex for Kount compat /^\w{1,32}$/
+        sprintf(buf, "{{om_cookie_name}}=%08lx%04lx%04lx%04lx%04lx%08lx",
+            a,
+            b & 0xffff,
+            (b & ((long)0x0fff0000) >> 16) | 0x4000,
+            (c & 0x0fff) | 0x8000,
+            (c & (long)0xffff0000) >> 16,
+            d
+        );
+        return;
+    }
 }C
 
 ////////////////////////////////////////////////////////////
@@ -55,9 +76,9 @@ import directors;
 {{generate_session_start}}
 
 sub generate_session {
-    // generate a UUID and add `om_frontend=$UUID` to the Cookie header, or use SID from SID URL param
+    // generate a UUID and add `{{om_cookie_name}}=$UUID` to the Cookie header, or use SID from SID URL param
     if (req.url ~ ".*[&?]SID=([^&]+).*") {
-        set req.http.X-Varnish-Faked-Session = regsub(req.url, ".*[&?]SID=([^&]+).*", "om_frontend=\1");
+        set req.http.X-Varnish-Faked-Session = regsub(req.url, ".*[&?]SID=([^&]+).*", "{{om_cookie_name}}=\1");
     }
     else {
         C{
@@ -72,7 +93,7 @@ sub generate_session {
         }C
     }
     if (req.http.Cookie) {
-        // client sent us cookies, just not a om_frontend cookie
+        // client sent us cookies, just not a {{om_cookie_name}} cookie
         // try not to blow away the extra cookies
         std.collect(req.http.Cookie);
         set req.http.Cookie = req.http.X-Varnish-Faked-Session + "; " + req.http.Cookie;
@@ -114,9 +135,9 @@ sub vcl_recv {
 
     // Fix ESI URLs broken by Mod_PageSpeed
     if (req.url ~ "https?: ") {
-        set req.http.Host = regsub( req.url, "^.*https?: ([\w\.\-]+(\s?\:[0-9]+)?).*$", "\1");
-        set req.url = regsub( req.url, "^.*https?: ([\w\.\-]+(\s?\:[0-9]*)?)", "");
-        set req.url = regsuball( req.url, " ", "/");
+        set req.http.Host = regsub(req.url, "^.*https?: ([\w\.\-]+(\s?\:[0-9]+)?).*$", "\1");
+        set req.url = regsub(req.url, "^.*https?: ([\w\.\-]+(\s?\:[0-9]*)?)", "");
+        set req.url = regsuball(req.url, " ", "/");
     }
 
     // ESI request should not be included in the profile.
@@ -166,7 +187,7 @@ sub vcl_recv {
     {{normalize_user_agent}}
     {{normalize_host}}
 
-    // check if the request is for part of magento
+    // check if the request is for part of Magento
     if (req.url ~ "{{url_base_regex}}") {
 
         // set this so Turpentine can see the request passed through Varnish
@@ -177,12 +198,10 @@ sub vcl_recv {
             return (pipe);
         }
         if (req.http.Cookie ~ "\bcurrency=") {
-            set req.http.X-Varnish-Currency = regsub(
-                req.http.Cookie, ".*\bcurrency=([^;]*).*", "\1");
+            set req.http.X-Varnish-Currency = regsub(req.http.Cookie, ".*\bcurrency=([^;]*).*", "\1");
         }
         if (req.http.Cookie ~ "\bstore=") {
-            set req.http.X-Varnish-Store = regsub(
-                req.http.Cookie, ".*\bstore=([^;]*).*", "\1");
+            set req.http.X-Varnish-Store = regsub(req.http.Cookie, ".*\bstore=([^;]*).*", "\1");
         }
 
         // looks like an ESI request, add some extra vars for further processing
@@ -198,19 +217,18 @@ sub vcl_recv {
 
         {{allowed_hosts}}
 
-        // no om_frontend cookie was sent to us AND this is not an ESI or AJAX call
-        if (req.http.Cookie !~ "om_frontend=" && !req.http.X-Varnish-Esi-Method) {
+        // no {{om_cookie_name}} cookie was sent to us AND this is not an ESI or AJAX call
+        if (req.http.Cookie !~ "{{om_cookie_name}}=" && !req.http.X-Varnish-Esi-Method) {
             if ({{real_ip}} ~ crawler_acl || req.http.User-Agent ~ "^(?:{{crawler_user_agent_regex}})$") {
                 // it's a crawler, give it a fake cookie
-                set req.http.Cookie = "om_frontend=crawler-session";
+                set req.http.Cookie = "{{om_cookie_name}}=crawler-session";
             }
             else {
                 // it's a real user, make up a new session for them
                 {{generate_session}}
             }
         }
-        if ({{force_cache_static}} &&
-            req.url ~ ".*\.(?:{{static_extensions}})(?=\?|&|$)") {
+        if ({{force_cache_static}} && req.url ~ ".*\.(?:{{static_extensions}})(?=\?|&|$)") {
             // don't need cookies for static assets
             unset req.http.Cookie;
             unset req.http.X-Varnish-Faked-Session;
@@ -253,8 +271,13 @@ sub vcl_recv {
         // everything else checks out, try and pull from the cache
         return (hash);
     }
-    // else it's not part of magento so do default handling (doesn't help
-    // things underneath magento but we can't detect that)
+    // else it's not part of Magento so do default handling (doesn't help
+    // things underneath Magento but we can't detect that)
+    else {
+        // return 444;
+        unset req.http.connection;
+        return (pipe);
+    }
 }
 
 sub vcl_pipe {
@@ -264,11 +287,8 @@ sub vcl_pipe {
     set bereq.http.Connection = "close";
 }
 
-// sub vcl_pass {
-//     return (pass);
-// }
-
 sub vcl_hash {
+
     std.log("vcl_hash start");
 
     // For static files we keep the hash simple and don't add the domain.
@@ -320,9 +340,9 @@ sub vcl_hash {
         hash_data("s=" + req.http.X-Varnish-Store + "&c=" + req.http.X-Varnish-Currency);
         std.log("hash_data - Store and Currency: " + "s=" + req.http.X-Varnish-Store + "&c=" + req.http.X-Varnish-Currency);
     }
-    if (req.http.X-Varnish-Esi-Access == "private" && req.http.Cookie ~ "om_frontend=") {
-        std.log("hash_data - om_frontend cookie: " + regsub(req.http.Cookie, "^.*?om_frontend=([^;]*);*.*$", "\1"));
-        hash_data(regsub(req.http.Cookie, "^.*?om_frontend=([^;]*);*.*$", "\1"));
+    if (req.http.X-Varnish-Esi-Access == "private" && req.http.Cookie ~ "{{om_cookie_name}}=") {
+        std.log("hash_data - {{om_cookie_name}} cookie: " + regsub(req.http.Cookie, "^.*?{{om_cookie_name}}=([^;]*);*.*$", "\1"));
+        hash_data(regsub(req.http.Cookie, "^.*?{{om_cookie_name}}=([^;]*);*.*$", "\1"));
         {{advanced_session_validation}}
     }
     if (req.http.X-Varnish-Esi-Access == "customer_group" && req.http.Cookie ~ "customer_group=") {
@@ -333,6 +353,7 @@ sub vcl_hash {
 }
 
 sub vcl_backend_response {
+
     // set the grace period
     set beresp.grace = {{grace_period}}s;
 
@@ -340,7 +361,7 @@ sub vcl_backend_response {
     set beresp.http.X-Varnish-Host = bereq.http.host;
     set beresp.http.X-Varnish-URL = bereq.url;
 
-    // if it's part of magento...
+    // if it's part of Magento
     if (bereq.url ~ "{{url_base_regex}}") {
         // we handle the Vary stuff ourselves for now, we'll want to actually
         // use this eventually for compatibility with downstream proxies
@@ -387,12 +408,12 @@ sub vcl_backend_response {
                 }
                 else if (bereq.http.X-Varnish-Esi-Method) {
                     // it's a ESI request
-                    if (bereq.http.X-Varnish-Esi-Access == "private" && bereq.http.Cookie ~ "om_frontend=") {
+                    if (bereq.http.X-Varnish-Esi-Access == "private" && bereq.http.Cookie ~ "{{om_cookie_name}}=") {
                         // set this header so we can ban by session from Turpentine
-                        set beresp.http.X-Varnish-Session = regsub(bereq.http.Cookie, "^.*?om_frontend=([^;]*);*.*$", "\1");
+                        set beresp.http.X-Varnish-Session = regsub(bereq.http.Cookie, "^.*?{{om_cookie_name}}=([^;]*);*.*$", "\1");
                     }
                     if (bereq.http.X-Varnish-Esi-Method == "ajax" && bereq.http.X-Varnish-Esi-Access == "public") {
-                        set beresp.http.Cache-Control = "max-age=" + regsub( bereq.url, ".*/{{esi_ttl_param}}/(\d+)/.*", "\1");
+                        set beresp.http.Cache-Control = "max-age=" + regsub(bereq.url, ".*/{{esi_ttl_param}}/(\d+)/.*", "\1");
                     }
                     set beresp.ttl = std.duration(
                         regsub(
@@ -424,8 +445,7 @@ sub vcl_deliver {
     if (req.http.X-Varnish-Faked-Session) {
         // need to set the set-cookie header since we just made it out of thin air
         {{generate_session_expires}}
-        set resp.http.Set-Cookie = req.http.X-Varnish-Faked-Session +
-            "; expires=" + resp.http.X-Varnish-Cookie-Expires + "; path=/";
+        set resp.http.Set-Cookie = req.http.X-Varnish-Faked-Session + "; expires=" + resp.http.X-Varnish-Cookie-Expires + "; path=/";
         if (req.http.Host) {
             if (req.http.User-Agent ~ "^(?:{{crawler_user_agent_regex}})$") {
                 // it's a crawler, no need to share cookies

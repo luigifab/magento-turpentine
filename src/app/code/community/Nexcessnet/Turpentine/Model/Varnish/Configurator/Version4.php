@@ -14,12 +14,10 @@
  * GNU General Public License (GPL) for more details.
  */
 
-class Nexcessnet_Turpentine_Model_Varnish_Configurator_Version4
-    extends Nexcessnet_Turpentine_Model_Varnish_Configurator_Abstract {
+class Nexcessnet_Turpentine_Model_Varnish_Configurator_Version4 extends Nexcessnet_Turpentine_Model_Varnish_Configurator_Abstract {
 
-    const VCL_TEMPLATE_FILE = 'version-4.vcl';
-    const VCL_VERSION = '4';
-
+    public const VCL_TEMPLATE_FILE = 'version-4.vcl';
+    public const VCL_VERSION = '4';
 
     /**
      * Generate the Varnish 4.0-compatible VCL

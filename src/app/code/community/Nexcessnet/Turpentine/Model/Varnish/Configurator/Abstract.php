@@ -16,7 +16,14 @@
 
 abstract class Nexcessnet_Turpentine_Model_Varnish_Configurator_Abstract {
 
-    const VCL_CUSTOM_C_CODE_FILE = 'uuid.c';
+    /**
+     * The socket this configurator is based on
+     * @var Nexcessnet_Turpentine_Model_Varnish_Admin_Socket
+     */
+    protected $_socket = null;
+
+    protected $_options = ['vcl_template' => null];
+    abstract public function generate($doClean = true);
 
     /**
      * Get the correct version of a configurator from a socket
@@ -27,53 +34,23 @@ abstract class Nexcessnet_Turpentine_Model_Varnish_Configurator_Abstract {
     public static function getFromSocket($socket) {
         try {
             $version = $socket->getVersion();
-        } catch (Mage_Core_Exception $e) {
-            Mage::getSingleton('core/session')
-                ->addError('Error determining Varnish version: '.
-                    $e->getMessage());
+        }
+        catch (Mage_Core_Exception $e) {
+            Mage::getSingleton('core/session')->addError('Error determining Varnish version: '.$e->getMessage());
             return null;
         }
         switch ($version) {
             case '4.0':
             case '4.1':
-                return Mage::getModel(
-                    'turpentine/varnish_configurator_version4',
-                    ['socket' => $socket] );
-
-            case '3.0':
-                return Mage::getModel(
-                    'turpentine/varnish_configurator_version3',
-                        ['socket' => $socket] );
-            case '2.1':
-                return Mage::getModel(
-                    'turpentine/varnish_configurator_version2',
-                        ['socket' => $socket] );
+                return Mage::getModel('turpentine/varnish_configurator_version4', ['socket' => $socket]);
             default:
-                Mage::throwException('Unsupported Varnish version');
+                Mage::throwException('Unsupported Varnish version: '.$version);
         }
     }
-
-    /**
-     * The socket this configurator is based on
-     *
-     * @var Nexcessnet_Turpentine_Model_Varnish_Admin_Socket
-     */
-    protected $_socket = null;
-    /**
-     * options array
-     *
-     * @var array
-     */
-    protected $_options = [
-        'vcl_template'  => null,
-    ];
 
     public function __construct($options = []) {
         $this->_options = array_merge($this->_options, $options);
     }
-
-    abstract public function generate($doClean = true);
-    // abstract protected function _getTemplateVars();
 
     /**
      * Save the generated config to the file specified in Magento config
@@ -134,7 +111,6 @@ abstract class Nexcessnet_Turpentine_Model_Varnish_Configurator_Abstract {
             ['root_dir' => Mage::getBaseDir()] );
     }
 
-
     /**
      * Get the custom VCL template, if it exists
      * Returns 'null' if the file doesn't exist
@@ -148,7 +124,6 @@ abstract class Nexcessnet_Turpentine_Model_Varnish_Configurator_Abstract {
         );
         if (is_file($filePath)) { return $filePath; } else { return null; }
     }
-
 
     /**
      * Format a template string, replacing {{keys}} with the appropriate values
@@ -391,8 +366,7 @@ EOS;
             Mage::getStoreConfig('turpentine_vcl/params/get_params')));
     }
 
-    protected function _getIgnoreGetParameters()
-    {
+    protected function _getIgnoreGetParameters() {
         /** @var Nexcessnet_Turpentine_Helper_Data $helper */
         $helper = Mage::helper('turpentine');
         $ignoredParameters = $helper->cleanExplode(',', Mage::getStoreConfig('turpentine_vcl/params/ignore_get_params'));
@@ -402,8 +376,7 @@ EOS;
     /**
      * @return boolean
      */
-    protected function _sendUnModifiedUrlToBackend()
-    {
+    protected function _sendUnModifiedUrlToBackend() {
         return Mage::getStoreConfigFlag('turpentine_vcl/params/transfer_unmodified_url');
     }
 
@@ -427,7 +400,6 @@ EOS;
             ? '-- */' : '';
     }
 
-
     /**
      * Get the Generate Session
      *
@@ -437,7 +409,6 @@ EOS;
         return Mage::getStoreConfigFlag('turpentine_varnish/general/vcl_fix')
             ? 'return (pipe);' : 'call generate_session;';
     }
-
 
     /**
      * Get the Generate Session Expires
@@ -985,7 +956,6 @@ EOS;
         return $tpl;
     }
 
-
     protected function _getHostNames() {
 
         $baseUrl = $this->_stripHost(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB));
@@ -1009,7 +979,7 @@ EOS;
         return $hosts;
     }
 
-    protected function _stripHost ($baseUrl){
+    protected function _stripHost($baseUrl) {
         return  rtrim(str_replace(['http://', 'https://'], '', $baseUrl), '/');
     }
 
@@ -1018,8 +988,8 @@ EOS;
      *
      * @return string
      */
-    protected function _vcl_sub_synth()
-    {
+    protected function _vcl_sub_synth() {
+
         if (( ! $this->_getDebugIps()) || ! Mage::getStoreConfig('turpentine_vcl/maintenance/custom_vcl_synth')) {
             return false;
         }
@@ -1059,8 +1029,8 @@ EOS;
      *
      * @return string
      */
-    protected function _vcl_sub_synth_https_fix()
-    {
+    protected function _vcl_sub_synth_https_fix() {
+
         $tpl = $this->_vcl_sub_synth();
 
         if ( ! $tpl) {
@@ -1093,8 +1063,8 @@ sub vcl_synth {
      *
      * @return string
      */
-    protected function _vcl_sub_set_cookie_domain()
-    {
+    protected function _vcl_sub_set_cookie_domain() {
+
         $tpl = '';
         /** @var Mage_Core_Model_Store $store */
         $domain2cookie = [];
@@ -1132,6 +1102,7 @@ EOS;
      */
     protected function _getTemplateVars() {
         $vars = [
+            'om_cookie_name'    => 'om_frontend',
             'default_backend'   => $this->_getDefaultBackend(),
             'admin_backend'     => $this->_getAdminBackend(),
             'admin_frontname'   => $this->_getAdminFrontname(),
@@ -1169,8 +1140,6 @@ EOS;
             'crawler_user_agent_regex'  => $this->_getCrawlerUserAgents(),
             'debug_acl'     => $this->_vcl_acl('debug_acl',
                 $this->_getDebugIps()),
-            'custom_c_code' => file_get_contents(
-                $this->_getVclTemplateFilename(self::VCL_CUSTOM_C_CODE_FILE) ),
             'esi_private_ttl'   => Mage::helper('turpentine/esi')
                 ->getDefaultEsiTtl(),
             'real_ip' => $this->_getRealIp(),
