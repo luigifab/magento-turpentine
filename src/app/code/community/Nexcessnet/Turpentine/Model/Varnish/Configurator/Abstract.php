@@ -180,8 +180,7 @@ abstract class Nexcessnet_Turpentine_Model_Varnish_Configurator_Abstract {
      * @return string
      */
     protected function _getNormalizeHostTarget() {
-        $configHost = trim(Mage::getStoreConfig(
-            'turpentine_vcl/normalization/host_target' ));
+        $configHost = Mage::getStoreConfig('turpentine_vcl/normalization/host_target');
         if ($configHost) {
             return $configHost;
         } else {
@@ -830,8 +829,7 @@ EOS;
 set req.http.Host = "{{normalize_host_target}}";
 
 EOS;
-        return $this->_formatTemplate($tpl, [
-            'normalize_host_target' => $this->_getNormalizeHostTarget() ]);
+        return $this->_formatTemplate($tpl, ['normalize_host_target' => $this->_getNormalizeHostTarget()]);
     }
 
     /**
@@ -840,8 +838,7 @@ EOS;
      * @return string
      */
     protected function _getNormalizeCookieTarget() {
-        return trim(Mage::getStoreConfig(
-            'turpentine_vcl/normalization/cookie_target' ));
+        return Mage::getStoreConfig('turpentine_vcl/normalization/cookie_target');
     }
 
     /**
@@ -850,8 +847,7 @@ EOS;
      * @return string
      */
     protected function _getNormalizeCookieRegex() {
-        return trim(Mage::getStoreConfig(
-            'turpentine_vcl/normalization/cookie_regex' ));
+        return Mage::getStoreConfig('turpentine_vcl/normalization/cookie_regex');
     }
 
     /**
@@ -860,8 +856,7 @@ EOS;
      * @return string
      */
     protected function _getMobileUserAgentRegex() {
-        return trim(Mage::getStoreConfig(
-            'turpentine_vcl/normalization/user_agent_mobile_regexp' ));
+        return Mage::getStoreConfig('turpentine_vcl/normalization/user_agent_mobile_regexp');
     }
 
     /**
@@ -870,7 +865,7 @@ EOS;
      * @return string
      */
     protected function _vcl_sub_maintenance_allowed_ips() {
-        if (( ! $this->_getDebugIps()) || ! Mage::getStoreConfig('turpentine_vcl/maintenance/custom_vcl_synth')) {
+        if ((!$this->_getDebugIps()) || !Mage::getStoreConfig('turpentine_vcl/maintenance/custom_vcl_synth')) {
             return false;
         }
 

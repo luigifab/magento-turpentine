@@ -222,7 +222,7 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
      * @return string
      */
     public function getDefaultEsiTtl() {
-        $defaultLifeTime = trim(Mage::getStoreConfig('web/cookie/cookie_lifetime'));
+        $defaultLifeTime = (int) Mage::getStoreConfig('web/cookie/cookie_lifetime');
         if ($defaultLifeTime < 60) {
             $defaultLifeTime = ini_get('session.gc_maxlifetime');
         }
