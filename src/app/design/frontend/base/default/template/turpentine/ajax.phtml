@@ -14,13 +14,12 @@
  * GNU General Public License (GPL) for more details.
  */
 
-$debugEnabled = (bool)Mage::helper( 'turpentine/esi' )->getEsiDebugEnabled();
-$blockTag = sprintf( 'turpentine-esi-block-%s',
-    Mage::helper( 'turpentine/data' )->secureHash( $this->getNameInLayout() ) );
+$debugEnabled = (bool) Mage::helper('turpentine/esi')->getEsiDebugEnabled();
+$blockTag = sprintf('turpentine-esi-block-%s', Mage::helper('turpentine/data')->secureHash($this->getNameInLayout()));
 
-if( $debugEnabled ) {
-    echo sprintf( '<!-- AJAX START [%s] -->', $this->getNameInLayout() ) . PHP_EOL;
-}
+if ($debugEnabled)
+	echo sprintf('<!-- AJAX START [%s] -->', $this->getNameInLayout()).PHP_EOL;
+
 /**
  * Note that the new content will be inside the "turpentine-esi-block" div
  * which could possible alter how things are displayed. If this turns out to
@@ -29,57 +28,30 @@ if( $debugEnabled ) {
  *
  * The 10 ms delay after page load is to make sure the Ajax call is
  * executed async so it does not delay DOMContentLoaded. Better for Google.
- *
- * @link http://prototypejs.org/doc/latest/ajax/index.html
- * @link http://prototypejs.org/doc/latest/ajax/Ajax/Request/index.html
- * @link http://prototypejs.org/doc/latest/dom/Element/replace/index.html
- * @link http://madrobby.github.com/scriptaculous/effect-appear/
- *
- * @link http://api.jquery.com/jQuery.ajax/
- * @link http://api.jquery.com/fadeIn/
  */
-$_prototypeFunction = $debugEnabled ? 'onComplete' : 'onSuccess';
-$_jQueryFunction = $debugEnabled ? 'always' : 'done';
+$prototypeFunction = $debugEnabled ? 'onComplete' : 'onSuccess';
 echo <<<HTML
-<div id="$blockTag" style="display: none">
+<div id="$blockTag" style="display:none;">
     <script type="text/javascript">
-        (function() {
-            var blockTag = {$this->helper('core')->jsonEncode($blockTag)}, esiUrl = {$this->helper('core')->jsonEncode($this->getEsiUrl())};
-            if (typeof Ajax === 'object' && typeof Ajax.Updater === 'function'
-                && (typeof Event === 'function' || (typeof Event === 'object' && typeof Event.observe === 'function'))
-            ) {
-                Event.observe( window, "load", function() { setTimeout( function() {
-                    new Ajax.Updater(
-                        blockTag,
-                        esiUrl,
-                        {
-                            method: "get",
-                            evalScripts: true,
-                            {$_prototypeFunction}: function() {
-                                $(blockTag).appear({
-                                    duration: 0.3
-                                });
-                            }
-                        }
-                    );
-                }, 10 ); } );
-            } else if (typeof jQuery === 'function') {
-                jQuery(document).ready( function() { setTimeout( function() {
-                    jQuery.ajax(
-                        {
-                            url: esiUrl,
-                            type: "get",
-                            dataType: "html"
-                        }
-                    ).{$_jQueryFunction}(function(data) {
-                        jQuery('#'+blockTag).html(data).fadeIn(300);
-                    });
-                }, 10 ); } );
-            }
-        })();
+    (function() {
+        var blockTag = {$this->helper('core')->jsonEncode($blockTag)}, esiUrl = {$this->helper('core')->jsonEncode($this->getEsiUrl())};
+        window.addEventListener("load", function() { setTimeout(function () {
+            new Ajax.Updater(
+                blockTag,
+                esiUrl,
+                {
+                    method: "get",
+                    evalScripts: true,
+                    $prototypeFunction: function () {
+                        $(blockTag).appear({ duration: 0.3 });
+                    }
+                }
+            );
+        }, 10); } );
+    })();
     </script>
 </div>
 HTML;
-if( $debugEnabled ) {
-    echo sprintf( '<!-- AJAX END [%s] -->', $this->getNameInLayout() ) . PHP_EOL;
-}
+
+if ($debugEnabled)
+	echo sprintf('<!-- AJAX END [%s] -->', $this->getNameInLayout()).PHP_EOL;

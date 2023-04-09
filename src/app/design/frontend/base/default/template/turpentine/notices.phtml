@@ -15,18 +15,13 @@
  */
 ?>
 
-<?php if($this->helper( 'turpentine/varnish' )->shouldDisplayNotice()): ?>
-    <div class="varnish-global-notice">
-        <div class="notice-inner">
-            <p>
-                <strong><?php echo $this->__('The cookie that allows bypassing Varnish is present in your browser.'); ?></strong><br />
-                <?php echo $this->__('Remember that this navigation mode should be only activated for testing. You will suffer a decline in overall performance until you delete this cookie.'); ?>
-            </p>
-        </div>
-    </div>
-    <style>
-        .varnish-global-notice { border:1px solid #cfcfcf; border-width:0 0 1px; background:#ffff90; font-size:12px; line-height:1.25; text-align:center; color:#2f2f2f; }
-        .varnish-global-notice .notice-inner { width:860px; margin:0 auto; padding:12px 0 12px 0px; text-align:left; }
-        .varnish-global-notice .notice-inner p { margin:0; padding:10px; }
-    </style>
-<?php endif; ?>
+<?php if ($this->helper('turpentine/varnish')->shouldDisplayNotice()): ?>
+	<div class="varnish-global-notice">
+		<div class="notice-inner">
+			<p>
+				<strong><?php echo $this->__('The cookie that allows bypassing Varnish is present in your browser.') ?></strong>
+				<br /><?php echo $this->__('Remember that this navigation mode should be only activated for testing. You will suffer a decline in overall performance until you delete this cookie.') ?>
+			</p>
+		</div>
+	</div>
+<?php endif ?>
