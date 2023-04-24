@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=7.2.0",
-        "openmage/magento-lts": ">=19.4.0"
+        "openmage/magento-lts": ">=19.4.0 || main-dev || next-dev"
     },
     "minimum-stability": "dev",
     "extra": {

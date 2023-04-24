@@ -15,20 +15,21 @@
  */
 
 class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
-    const ESI_DATA_PARAM            = 'data';
-    const ESI_TTL_PARAM             = 'ttl';
-    const ESI_CACHE_TYPE_PARAM      = 'access';
-    const ESI_SCOPE_PARAM           = 'scope';
-    const ESI_METHOD_PARAM          = 'method';
-    const ESI_HMAC_PARAM            = 'hmac';
-    const MAGE_CACHE_NAME           = 'turpentine_esi_blocks';
+
+    const ESI_DATA_PARAM       = 'data';
+    const ESI_TTL_PARAM        = 'ttl';
+    const ESI_CACHE_TYPE_PARAM = 'access';
+    const ESI_SCOPE_PARAM      = 'scope';
+    const ESI_METHOD_PARAM     = 'method';
+    const ESI_HMAC_PARAM       = 'hmac';
+    const MAGE_CACHE_NAME      = 'turpentine_esi_blocks';
 
     /**
      * Cache for layout XML
      *
      * @var Mage_Core_Model_Layout_Element|SimpleXMLElement
      */
-    protected $_layoutXml = null;
+    protected $_layoutXml = [];
 
     /**
      * Get whether ESI includes are enabled or not
@@ -202,18 +203,45 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
 
     /**
      * Get the list of events that should cause the ESI cache to be cleared
+     * New: Now you can dispathEvent from backend to refresh frontend cache
      *
      * @return string[]
      */
     public function getCacheClearEvents() {
-        $cacheKey = $this->getCacheClearEventsCacheKey();
-        $events = @unserialize(Mage::app()->loadCache($cacheKey));
-        if (is_null($events) || $events === false) {
-            $events = $this->_loadEsiCacheClearEvents();
-            Mage::app()->saveCache(serialize($events), $cacheKey,
-                ['LAYOUT_GENERAL_CACHE_TAG']);
+
+        $allEvents = [];
+
+        if (Mage::app()->getStore()->isAdmin()) {
+            $stores  = Mage::getResourceModel('core/store_collection')->addFieldToFilter('is_active', 1)->setLoadDefault(true); // with admin
+            $onetime = [];
+            foreach ($stores as $storeId => $store) {
+                $area    = ($storeId == 0) ? 'adminhtml' : 'frontend';
+                $package = Mage::getStoreConfig('design/package/name', $storeId);
+                $theme   = Mage::getStoreConfig('design/theme/layout', $storeId) ?? Mage::getStoreConfig('design/theme/default', $storeId);
+                if (!in_array($area.$package.$theme, $onetime)) {
+                    $onetime[]   = $area.$package.$theme;
+                    $frontDesign = ($storeId == 0) ? null : Mage::getDesign()->setStore($store)->setArea($area)->setPackageName($package)->setTheme($theme);
+                    $cacheKey    = $this->getCacheClearEventsCacheKey($frontDesign);
+                    $events      = @unserialize(Mage::app()->loadCache($cacheKey));
+                    if (is_null($events) || $events === false) {
+                        $events = $this->_loadEsiCacheClearEvents($frontDesign);
+                        Mage::app()->saveCache(serialize($events), $cacheKey, ['LAYOUT_GENERAL_CACHE_TAG']);
+                        $allEvents = array_merge($allEvents, $events);
+                    } else {
+                        $allEvents = array_merge($allEvents, $events);
+                    }
+                }
+            }
+        } else {
+            $cacheKey  = $this->getCacheClearEventsCacheKey();
+            $allEvents = @unserialize(Mage::app()->loadCache($cacheKey));
+            if (is_null($allEvents) || $allEvents === false) {
+                $allEvents = $this->_loadEsiCacheClearEvents();
+                Mage::app()->saveCache(serialize($allEvents), $cacheKey, ['LAYOUT_GENERAL_CACHE_TAG']);
+            }
         }
-        return array_merge($this->getDefaultCacheClearEvents(), $events);
+
+        return array_merge($this->getDefaultCacheClearEvents(), $allEvents);
     }
 
     /**
@@ -255,58 +283,63 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
      *
      * This is cached because it's expensive to load for each ESI'd block
      *
+     * @param  $frontDesign, from admin to refresh front blocks, it's the frontend design
      * @return Mage_Core_Model_Layout_Element|SimpleXMLElement
      */
-    public function getLayoutXml() {
-        if (is_null($this->_layoutXml)) {
+    public function getLayoutXml($frontDesign = null) {
+        $design = $frontDesign ?? Mage::getDesign();
+        $cache  = $design->getStore()->getId();
+        if (!isset($this->_layoutXml[$cache])) {
             if ($useCache = Mage::app()->useCache('layout')) {
-                $cacheKey = $this->getFileLayoutUpdatesXmlCacheKey();
-                $this->_layoutXml = simplexml_load_string(
-                    Mage::app()->loadCache($cacheKey) );
+                $cacheKey = $this->getFileLayoutUpdatesXmlCacheKey($frontDesign);
+                $this->_layoutXml[$cache] = simplexml_load_string(
+                    Mage::app()->loadCache($cacheKey));
             }
             // this check is redundant if the layout cache is disabled
-            if ( ! $this->_layoutXml) {
-                $this->_layoutXml = $this->_loadLayoutXml();
+            if (empty($this->_layoutXml[$cache])) {
+                $this->_layoutXml[$cache] = $this->_loadLayoutXml($frontDesign);
                 if ($useCache) {
-                    Mage::app()->saveCache($this->_layoutXml->asXML(),
+                    Mage::app()->saveCache($this->_layoutXml[$cache]->asXML(),
                         $cacheKey, ['LAYOUT_GENERAL_CACHE_TAG']);
                 }
             }
         }
-        return $this->_layoutXml;
+        return $this->_layoutXml[$cache];
     }
 
     /**
      * Get the cache key for the cache clear events
      *
+     * @param  $frontDesign, from admin to refresh front blocks, it's the frontend design
      * @return string
      */
-    public function getCacheClearEventsCacheKey() {
-        $design = Mage::getDesign();
+    public function getCacheClearEventsCacheKey($frontDesign = null) {
+        $design = $frontDesign ?? Mage::getDesign();
         return Mage::helper('turpentine/data')
             ->getCacheKeyHash([
                 'FILE_LAYOUT_ESI_CACHE_EVENTS',
                 $design->getArea(),
                 $design->getPackageName(),
                 $design->getTheme('layout'),
-                Mage::app()->getStore()->getId(),
+                $frontDesign ? $frontDesign->getStore()->getId() : Mage::app()->getStore()->getId(),
             ]);
     }
 
     /**
      * Get the cache key for the file layouts xml
      *
+     * @param  $frontDesign, from admin to refresh front blocks, it's the frontend design
      * @return string
      */
-    public function getFileLayoutUpdatesXmlCacheKey() {
-        $design = Mage::getDesign();
+    public function getFileLayoutUpdatesXmlCacheKey($frontDesign = null) {
+        $design = $frontDesign ?? Mage::getDesign();
         return Mage::helper('turpentine/data')
             ->getCacheKeyHash([
                 'FILE_LAYOUT_UPDATES_XML',
                 $design->getArea(),
                 $design->getPackageName(),
                 $design->getTheme('layout'),
-                Mage::app()->getStore()->getId(),
+                $frontDesign ? $frontDesign->getStore()->getId() : Mage::app()->getStore()->getId(),
             ]);
     }
 
@@ -387,12 +420,12 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
     /**
      * Load the ESI cache clear events from the layout
      *
+     * @param  $frontDesign, from admin to refresh front blocks, it's the frontend design
      * @return array
      */
-    protected function _loadEsiCacheClearEvents() {
-        $layoutXml = $this->getLayoutXml();
-        $events = $layoutXml->xpath(
-            '//action[@method=\'setEsiOptions\']/params/flush_events/*' );
+    protected function _loadEsiCacheClearEvents($frontDesign = null) {
+        $layoutXml = $this->getLayoutXml($frontDesign);
+        $events = $layoutXml->xpath('//action[@method=\'setEsiOptions\']/params/flush_events/*');
         if ($events) {
             $events = array_unique(array_map(function ($e) {
                 return (string)$e->getName();
@@ -406,16 +439,17 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
     /**
      * Load the layout's XML structure, bypassing any caching
      *
+     * @param  $frontDesign, from admin to refresh front blocks, it's the frontend design
      * @return Mage_Core_Model_Layout_Element
      */
-    protected function _loadLayoutXml() {
-        $design = Mage::getDesign();
+    protected function _loadLayoutXml($frontDesign = null) {
+        $design = $frontDesign ?? Mage::getDesign();
         return Mage::getSingleton('core/layout')
             ->getUpdate()
             ->getFileLayoutUpdatesXml(
                 $design->getArea(),
                 $design->getPackageName(),
                 $design->getTheme('layout'),
-                Mage::app()->getStore()->getId() );
+                $frontDesign ? $frontDesign->getStore()->getId() : Mage::app()->getStore()->getId());
     }
 }
