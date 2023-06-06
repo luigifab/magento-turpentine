@@ -212,15 +212,16 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
         $allEvents = [];
 
         if (Mage::app()->getStore()->isAdmin()) {
-            $stores  = Mage::getResourceModel('core/store_collection')->addFieldToFilter('is_active', 1)->setLoadDefault(true); // with admin
             $onetime = [];
+            $stores  = Mage::getResourceModel('core/store_collection')->addFieldToFilter('is_active', 1)->setLoadDefault(true); // with admin
             foreach ($stores as $storeId => $store) {
                 $area    = ($storeId == 0) ? 'adminhtml' : 'frontend';
                 $package = Mage::getStoreConfig('design/package/name', $storeId);
                 $theme   = Mage::getStoreConfig('design/theme/layout', $storeId) ?? Mage::getStoreConfig('design/theme/default', $storeId);
                 if (!in_array($area.$package.$theme, $onetime)) {
                     $onetime[]   = $area.$package.$theme;
-                    $frontDesign = ($storeId == 0) ? null : Mage::getDesign()->setStore($store)->setArea($area)->setPackageName($package)->setTheme($theme);
+                    $frontDesign = ($storeId == 0) ? null : Mage::getModel('core/design_package') // not Mage::getDesign()
+                        ->setStore($store)->setArea($area)->setPackageName($package)->setTheme($theme);
                     $cacheKey    = $this->getCacheClearEventsCacheKey($frontDesign);
                     $events      = @unserialize(Mage::app()->loadCache($cacheKey));
                     if (is_null($events) || $events === false) {
