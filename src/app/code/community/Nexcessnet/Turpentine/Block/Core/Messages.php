@@ -131,17 +131,6 @@ class Nexcessnet_Turpentine_Block_Core_Messages extends Mage_Core_Block_Messages
     }
 
     /**
-     * Add used storage type
-     *
-     * Method added for compatibility with Magento 1.5
-     *
-     * @param string $type
-     */
-    public function addStorageType($type) {
-        $this->_usedStorageTypes[] = $type;
-    }
-
-    /**
      * Load layout options
      *
      * @param string $methodCalled
