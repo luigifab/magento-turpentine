@@ -204,6 +204,7 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
     /**
      * Get the list of events that should cause the ESI cache to be cleared
      * New: Now you can dispathEvent from backend to refresh frontend cache
+     *  but only for POST actions, because it's time consuming, depending on number of store view
      *
      * @return string[]
      */
@@ -211,7 +212,7 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
 
         $allEvents = [];
 
-        if (Mage::app()->getStore()->isAdmin()) {
+        if (!empty($_POST) && Mage::app()->getStore()->isAdmin()) {
             $onetime = [];
             $stores  = Mage::getResourceModel('core/store_collection')->addFieldToFilter('is_active', 1)->setLoadDefault(true); // with admin
             foreach ($stores as $storeId => $store) {
