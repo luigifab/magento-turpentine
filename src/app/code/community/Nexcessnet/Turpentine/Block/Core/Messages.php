@@ -21,7 +21,7 @@ class Nexcessnet_Turpentine_Block_Core_Messages extends Mage_Core_Block_Messages
      * can't use null because that is the default so no way to tell between
      * the default and not actually calling it
      */
-    const NO_SINGLE_RENDER_TYPE = -1;
+    public const NO_SINGLE_RENDER_TYPE = -1;
 
     /**
      * Hold the message type to call getHtml with

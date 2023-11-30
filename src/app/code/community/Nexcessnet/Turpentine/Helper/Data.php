@@ -20,7 +20,7 @@ class Nexcessnet_Turpentine_Helper_Data extends Mage_Core_Helper_Abstract {
      * Contains a newly generated v4 uuid whenever read, possibly not available
      * on all kernels
      */
-    const UUID_SOURCE = '/proc/sys/kernel/random/uuid';
+    public const UUID_SOURCE = '/proc/sys/kernel/random/uuid';
 
     /**
      * Compression level for serialization compression
@@ -28,19 +28,19 @@ class Nexcessnet_Turpentine_Helper_Data extends Mage_Core_Helper_Abstract {
      * Testing showed no significant (size) difference between levels 1 and 9
      * so using 1 since it's faster
      */
-    const COMPRESSION_LEVEL = 1;
+    public const COMPRESSION_LEVEL = 1;
 
     /**
      * Hash algorithm to use in various cryptographic methods
      */
-    const HASH_ALGORITHM = 'sha256';
+    public const HASH_ALGORITHM = 'sha256';
 
     /**
      * Cookie name for the Varnish bypass
      *
      * @var string
      */
-    const BYPASS_COOKIE_NAME = 'varnish_bypass';
+    public const BYPASS_COOKIE_NAME = 'varnish_bypass';
 
     /**
      * encryption singleton thing

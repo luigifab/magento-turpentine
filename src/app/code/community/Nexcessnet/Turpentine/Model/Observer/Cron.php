@@ -21,14 +21,14 @@ class Nexcessnet_Turpentine_Model_Observer_Cron extends Varien_Event_Observer {
      *
      * @var int
      */
-    const MAX_CRAWL_TIME = 300;
+    public const MAX_CRAWL_TIME = 300;
 
     /**
      * Amount of time of execution time to leave for other cron processes
      *
      * @var int
      */
-    const EXEC_TIME_BUFFER = 15;
+    public const EXEC_TIME_BUFFER = 15;
 
     /**
      * Crawl available URLs in the queue until we get close to max_execution_time

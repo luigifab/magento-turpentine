@@ -16,7 +16,7 @@
 
 class Nexcessnet_Turpentine_Helper_Varnish extends Mage_Core_Helper_Abstract {
 
-    const MAGE_CACHE_NAME = 'turpentine_pages';
+    public const MAGE_CACHE_NAME = 'turpentine_pages';
 
     /**
      * Get whether Varnish caching is enabled or not

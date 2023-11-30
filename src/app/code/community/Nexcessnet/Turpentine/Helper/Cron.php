@@ -21,7 +21,7 @@ class Nexcessnet_Turpentine_Helper_Cron extends Mage_Core_Helper_Abstract {
      *
      * @var string
      */
-    const CRAWLER_URLS_CACHE_ID = 'turpentine_crawler_url_queue';
+    public const CRAWLER_URLS_CACHE_ID = 'turpentine_crawler_url_queue';
 
     /**
      * Crawler client singleton

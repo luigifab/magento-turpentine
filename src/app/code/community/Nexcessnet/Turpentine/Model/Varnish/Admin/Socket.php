@@ -61,29 +61,32 @@
 class Nexcessnet_Turpentine_Model_Varnish_Admin_Socket {
 
     // possible command return codes, from vcli.h
-    const CODE_SYNTAX       = 100;
-    const CODE_UNKNOWN      = 101;
-    const CODE_UNIMPL       = 102;
-    const CODE_TOOFEW       = 104;
-    const CODE_TOOMANY      = 105;
-    const CODE_PARAM        = 106;
-    const CODE_AUTH         = 107;
-    const CODE_OK           = 200;
-    const CODE_CANT         = 300;
-    const CODE_COMMS        = 400;
-    const CODE_CLOSE        = 500;
+    public const CODE_SYNTAX  = 100;
+    public const CODE_UNKNOWN = 101;
+    public const CODE_UNIMPL  = 102;
+    public const CODE_TOOFEW  = 104;
+    public const CODE_TOOMANY = 105;
+    public const CODE_PARAM   = 106;
+    public const CODE_AUTH    = 107;
+    public const CODE_OK      = 200;
+    public const CODE_CANT    = 300;
+    public const CODE_COMMS   = 400;
+    public const CODE_CLOSE   = 500;
 
-    const READ_CHUNK_SIZE   = 1024;
-    // varnish default, can only be changed at Varnish startup time
-    // if data to write is over this limit the actual run-time limit is checked
-    // and used
-    const CLI_CMD_LENGTH_LIMIT = 16384;
+    public const READ_CHUNK_SIZE = 1024;
+
+    /**
+     * varnish default, can only be changed at Varnish startup time
+     * if data to write is over this limit the actual run-time limit is checked and used
+     * @var int
+     */
+    public const CLI_CMD_LENGTH_LIMIT = 16384;
 
     /**
      * Regexp to detect the varnish version number
      * @var string
      */
-    const REGEXP_VARNISH_VERSION = '/^varnish\-(?P<vmajor>\d+)\.(?P<vminor>\d+)\.(?P<vsub>\d+) revision (?P<vhash>[0-9a-f]+)$/';
+    public const REGEXP_VARNISH_VERSION = '/^varnish\-(?P<vmajor>\d+)\.(?P<vminor>\d+)\.(?P<vsub>\d+) revision (?P<vhash>[0-9a-f]+)$/';
 
     /**
      * VCL config versions, should match config select values

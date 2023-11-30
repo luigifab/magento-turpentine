@@ -134,7 +134,7 @@ abstract class Nexcessnet_Turpentine_Model_Varnish_Configurator_Abstract {
      * @return string
      */
     protected function _formatTemplate($template, array $vars) {
-        $needles = array_map(function ($k) {
+        $needles = array_map(static function ($k) {
             return '{{' . $k . '}}';
         }, array_keys($vars));
         $replacements = array_values($vars);
@@ -239,7 +239,7 @@ EOS;
      */
     public function getBaseUrlPathRegex() {
         $pattern = '^(%s)(?:(?:index|litespeed)\\.php/)?';
-        return sprintf($pattern, implode('|', array_map(function ($x) {
+        return sprintf($pattern, implode('|', array_map(static function ($x) {
             return preg_quote($x, '|');
         }, $this->_getBaseUrlPaths())));
     }
@@ -264,7 +264,7 @@ EOS;
             }
         }
         $paths = array_unique($paths);
-        usort($paths, function ($a, $b) {
+        usort($paths, static function ($a, $b) {
             return strlen($b) - strlen($a);
         });
         return array_values($paths);
@@ -762,7 +762,7 @@ acl {{name}} {
     {{hosts}}
 }
 EOS;
-        $fmtHost = function ($h) {
+        $fmtHost = static function ($h) {
             return sprintf('"%s";', $h);
         };
         $vars = [

@@ -16,13 +16,13 @@
 
 class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
 
-    const ESI_DATA_PARAM       = 'data';
-    const ESI_TTL_PARAM        = 'ttl';
-    const ESI_CACHE_TYPE_PARAM = 'access';
-    const ESI_SCOPE_PARAM      = 'scope';
-    const ESI_METHOD_PARAM     = 'method';
-    const ESI_HMAC_PARAM       = 'hmac';
-    const MAGE_CACHE_NAME      = 'turpentine_esi_blocks';
+    public const ESI_DATA_PARAM       = 'data';
+    public const ESI_TTL_PARAM        = 'ttl';
+    public const ESI_CACHE_TYPE_PARAM = 'access';
+    public const ESI_SCOPE_PARAM      = 'scope';
+    public const ESI_METHOD_PARAM     = 'method';
+    public const ESI_HMAC_PARAM       = 'hmac';
+    public const MAGE_CACHE_NAME      = 'turpentine_esi_blocks';
 
     /**
      * Cache for layout XML

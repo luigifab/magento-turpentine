@@ -16,8 +16,8 @@
 
 class Nexcessnet_Turpentine_Model_Varnish_Admin {
 
-    const MASK_ESI_SYNTAX       = 0x2;
-    const URL_ESI_SYNTAX_FIX    = 'https://github.com/nexcess/magento-turpentine/wiki/FAQ#wiki-i-upgraded-to-turpentine-06-and-are-the-add-to-cart-buttons-look-broken';
+    public const MASK_ESI_SYNTAX    = 0x2;
+    public const URL_ESI_SYNTAX_FIX = 'https://github.com/nexcess/magento-turpentine/wiki/FAQ#wiki-i-upgraded-to-turpentine-06-and-are-the-add-to-cart-buttons-look-broken';
 
     /**
      * Flush all Magento URLs in Varnish cache
