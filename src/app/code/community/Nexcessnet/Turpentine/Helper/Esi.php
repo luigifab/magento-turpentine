@@ -224,7 +224,8 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
                     $frontDesign = ($storeId == 0) ? null : Mage::getModel('core/design_package') // not Mage::getDesign()
                         ->setStore($store)->setArea($area)->setPackageName($package)->setTheme($theme);
                     $cacheKey    = $this->getCacheClearEventsCacheKey($frontDesign);
-                    $events      = @unserialize(Mage::app()->loadCache($cacheKey));
+                    $cacheData   = $cacheKey ? Mage::app()->loadCache($cacheKey) : null;
+                    $events      = $cacheData ? @unserialize($cacheData) : null;
                     if (is_null($events) || $events === false) {
                         $events = $this->_loadEsiCacheClearEvents($frontDesign);
                         Mage::app()->saveCache(serialize($events), $cacheKey, ['LAYOUT_GENERAL_CACHE_TAG']);
@@ -236,7 +237,8 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
             }
         } else {
             $cacheKey  = $this->getCacheClearEventsCacheKey();
-            $allEvents = @unserialize(Mage::app()->loadCache($cacheKey));
+            $cacheData = $cacheKey ? Mage::app()->loadCache($cacheKey) : null;
+            $allEvents = $cacheData ? @unserialize($cacheData) : null;
             if (is_null($allEvents) || $allEvents === false) {
                 $allEvents = $this->_loadEsiCacheClearEvents();
                 Mage::app()->saveCache(serialize($allEvents), $cacheKey, ['LAYOUT_GENERAL_CACHE_TAG']);
@@ -289,13 +291,12 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
      * @return Mage_Core_Model_Layout_Element|SimpleXMLElement
      */
     public function getLayoutXml($frontDesign = null) {
-        $design = $frontDesign ?? Mage::getDesign();
-        $cache  = $design->getStore()->getId();
+        $cache = $frontDesign ? $frontDesign->getStore()->getId() : Mage::app()->getStore()->getId();
         if (!isset($this->_layoutXml[$cache])) {
             if ($useCache = Mage::app()->useCache('layout')) {
-                $cacheKey = $this->getFileLayoutUpdatesXmlCacheKey($frontDesign);
-                $this->_layoutXml[$cache] = simplexml_load_string(
-                    Mage::app()->loadCache($cacheKey));
+                $cacheKey  = $this->getFileLayoutUpdatesXmlCacheKey($frontDesign);
+                $cacheData = $cacheKey ? Mage::app()->loadCache($cacheKey) : null;
+                $this->_layoutXml[$cache] = empty($cacheData) ? false : simplexml_load_string($cacheData);
             }
             // this check is redundant if the layout cache is disabled
             if (empty($this->_layoutXml[$cache])) {
@@ -429,7 +430,7 @@ class Nexcessnet_Turpentine_Helper_Esi extends Mage_Core_Helper_Abstract {
         $layoutXml = $this->getLayoutXml($frontDesign);
         $events = $layoutXml->xpath('//action[@method=\'setEsiOptions\']/params/flush_events/*');
         if ($events) {
-            $events = array_unique(array_map(function ($e) {
+            $events = array_unique(array_map(static function ($e) {
                 return (string)$e->getName();
             }, $events));
         } else {
